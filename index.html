@@ -112,6 +112,10 @@ input,textarea{font:inherit;color:inherit}
 #callName{font-size:22px;font-weight:600}
 #callState{opacity:.9;margin-top:4px}
 #callData{font-size:12px;opacity:.8;margin-top:6px}
+#callDbg{font-size:11px;opacity:.7;margin-top:4px;min-height:14px;padding:0 16px;text-align:center}
+.media{position:relative}
+.dl{position:absolute;right:6px;bottom:6px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:17px;line-height:34px;padding:0;cursor:pointer}
+#viewer .dl{position:fixed;right:16px;top:16px;bottom:auto;width:44px;height:44px;line-height:44px;font-size:22px;z-index:121}
 #localV{position:absolute;right:12px;top:calc(12px + env(safe-area-inset-top));width:96px;height:128px;object-fit:cover;border-radius:12px;background:#222;border:2px solid rgba(255,255,255,.5);transform:scaleX(-1)}
 #call.audioOnly #localV,#call.noVideoSelf #localV{display:none}
 #callBtns{position:absolute;left:0;right:0;bottom:0;padding:16px 10px calc(26px + env(safe-area-inset-bottom));display:flex;justify-content:center;flex-wrap:wrap;gap:14px;background:linear-gradient(transparent,rgba(0,0,0,.65))}
@@ -205,6 +209,7 @@ input,textarea{font:inherit;color:inherit}
     <div id="callName"></div>
     <div id="callState"></div>
     <div id="callData"></div>
+    <div id="callDbg"></div>
   </div>
   <div id="callBtns">
     <button class="cb" id="cMute"><span>🎤</span><small>মাইক</small></button>
@@ -230,10 +235,33 @@ input,textarea{font:inherit;color:inherit}
 /* ===================== কনফিগ ===================== */
 var SUPABASE_URL = 'https://vsmlokcwbvrlgjlkqots.supabase.co';
 var SUPABASE_KEY = 'sb_publishable_uuiOMHnTyaWiHCREAzaXUQ_P_PAVIph';
-var ICE = { iceServers: [
-  { urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] },
-  { urls: ['turn:openrelay.metered.ca:80', 'turn:openrelay.metered.ca:443', 'turn:openrelay.metered.ca:443?transport=tcp'], username: 'openrelayproject', credential: 'openrelayproject' }
-] };
+/* কল ঠিকমতো লাগাতে রিলে (TURN) সার্ভার লাগে। Metered-এ ফ্রি অ্যাকাউন্ট খুলে এই দুটো ঘর পূরণ করুন */
+var TURN_APP = '';   /* Metered অ্যাপের নাম (yourname.metered.live এর yourname অংশ) */
+var TURN_KEY = '';   /* Metered API key */
+var STUN_ONLY = { iceServers: [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }] };
+var iceCache = null;
+async function getIce(){
+  if (window.__ICE_OVERRIDE) return window.__ICE_OVERRIDE;
+  if (iceCache && iceCache.exp > Date.now()) return iceCache.cfg;
+  if (TURN_APP && TURN_KEY) {
+    try {
+      var ctl = new AbortController(), tm = setTimeout(function(){ ctl.abort(); }, 5000);
+      var r = await fetch('https://' + TURN_APP + '.metered.live/api/v1/turn/credentials?apiKey=' + encodeURIComponent(TURN_KEY), { signal: ctl.signal });
+      clearTimeout(tm);
+      if (r.ok) {
+        var list = await r.json();
+        if (Array.isArray(list) && list.length) {
+          iceCache = { cfg: { iceServers: list }, exp: Date.now() + 20 * 60000 };
+          lsSet('ice_cache', iceCache);
+          return iceCache.cfg;
+        }
+      }
+    } catch(e){}
+    var old = lsGet('ice_cache', null);
+    if (old && old.cfg && old.exp > Date.now() - 6 * 3600000) return old.cfg;
+  }
+  return STUN_ONLY;
+}
 var MAX_VIDEO_MB = 45;
 
 /* ===================== সাধারণ কাজ ===================== */
@@ -350,6 +378,7 @@ async function enter(user){
   try { await loadProfiles(); } catch(e){}
   renderHeader();
   startRealtime();
+  getIce().catch(function(){});
   await loadRecent();
   flushOutbox();
   markSeen();
@@ -486,14 +515,34 @@ async function getUrl(path){
   urlCache[path] = { url: r.data.signedUrl, exp: Date.now() + 3300000 };
   return r.data.signedUrl;
 }
+async function downloadFile(m, btn){
+  var old = btn && btn.textContent;
+  try {
+    if (btn) btn.textContent = '…';
+    var u = m.localUrl || await getUrl(m.media_path);
+    var blob = await (await fetch(u)).blob();
+    var ext = (m.media_path || '').split('.').pop();
+    if (!ext || ext.length > 5) ext = m.media_type === 'video' ? 'mp4' : 'jpg';
+    var name = 'chat-' + (m.media_type === 'video' ? 'video-' : 'photo-') + Date.now() + '.' + ext;
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+    toast('ডাউনলোড হয়েছে');
+  } catch(e){ toast('ডাউনলোড করা যায়নি'); }
+  if (btn) btn.textContent = old;
+}
+var viewerMsg = null;
 function mediaEl(m){
   var box = el('div', 'media');
+  var dl = el('button', 'dl', '⬇'); dl.title = 'ডাউনলোড';
+  dl.onclick = function(ev){ ev.stopPropagation(); downloadFile(m, dl); };
   if (m.media_type === 'image') {
     var img = el('img'); img.alt = 'ছবি'; img.loading = 'lazy';
     if (m.localUrl) img.src = m.localUrl;
     else getUrl(m.media_path).then(function(u){ img.src = u; }, function(){ img.alt = 'ছবি আনা যায়নি'; });
-    img.onclick = function(){ if (img.src) { $('viewer').firstElementChild.src = img.src; $('viewer').classList.remove('hidden'); } };
-    box.appendChild(img);
+    img.onclick = function(){ if (img.src) { viewerMsg = m; $('viewer').firstElementChild.src = img.src; $('viewer').classList.remove('hidden'); } };
+    box.appendChild(img); box.appendChild(dl);
   } else if (m.media_type === 'video') {
     var ph = el('div', 'vph');
     ph.appendChild(el('b', '', '▶'));
@@ -506,7 +555,7 @@ function mediaEl(m){
         box.replaceChild(v, ph);
       } catch(e){ ph.lastChild.textContent = 'ভিডিও আনা যায়নি, আবার ট্যাপ করুন'; }
     };
-    box.appendChild(ph);
+    box.appendChild(ph); box.appendChild(dl);
   }
   return box;
 }
@@ -728,18 +777,42 @@ async function getMedia(){
   call.local = await navigator.mediaDevices.getUserMedia(c);
   $('localV').srcObject = call.local;
 }
-function makePC(){
-  var pc = new RTCPeerConnection(ICE); call.pc = pc;
+var ICE_BN = { new: 'শুরু', checking: 'যাচাই হচ্ছে', connected: 'সংযুক্ত', completed: 'সংযুক্ত', failed: 'ব্যর্থ', disconnected: 'বিচ্ছিন্ন', closed: 'বন্ধ' };
+function dbg(){
+  if (!call || !call.pc || call.state === 'connected') { $('callDbg').textContent = ''; return; }
+  var c = call.cand || { host: 0, srflx: 0, relay: 0 };
+  var relay = c.relay ? 'আছে ✔' : (call.hasTurn ? 'পাওয়া যায়নি ✗' : 'সেট করা নেই ✗');
+  $('callDbg').textContent = 'নেটওয়ার্ক: ' + (ICE_BN[call.pc.iceConnectionState] || call.pc.iceConnectionState) + ' · রিলে সার্ভার: ' + relay;
+}
+function failText(c){
+  if (!c.hasTurn) return 'কল লাগেনি: রিলে সার্ভার সেট করা নেই';
+  if (!c.cand || !c.cand.relay) return 'কল লাগেনি: রিলে সার্ভারে পৌঁছানো যায়নি';
+  return 'কল লাগেনি: নেটওয়ার্ক সংযোগ আটকে আছে';
+}
+async function makePC(){
+  var cfg = await getIce();
+  var pc = new RTCPeerConnection(cfg); call.pc = pc;
+  call.cand = { host: 0, srflx: 0, relay: 0 };
+  call.hasTurn = (cfg.iceServers || []).some(function(s){ return [].concat(s.urls).some(function(u){ return /^turns?:/.test(u); }); });
   call.local.getTracks().forEach(function(t){ pc.addTrack(t, call.local); });
-  pc.onicecandidate = function(e){ if (e.candidate && call) sendSignal('ice', { callId: call.id, candidate: e.candidate.toJSON() }); };
+  pc.onicecandidate = function(e){
+    if (!e.candidate || !call || call.pc !== pc) return;
+    var m = / typ (\w+)/.exec(e.candidate.candidate || ''), ty = e.candidate.type || (m && m[1]);
+    if (ty && call.cand[ty] != null) call.cand[ty]++;
+    dbg();
+    var cid = call.id, cj = e.candidate.toJSON();
+    (call.gate || Promise.resolve()).then(function(){ return sendSignal('ice', { callId: cid, candidate: cj }); });
+  };
+  pc.oniceconnectionstatechange = dbg;
   pc.ontrack = function(e){ $('remoteV').srcObject = e.streams[0]; $('remoteV').play().catch(function(){}); };
   pc.onconnectionstatechange = function(){
     if (!call || call.pc !== pc) return;
     var s = pc.connectionState;
     if (s === 'connected') { clearTimeout(call.discT); onConnected(); }
-    else if (s === 'disconnected') { call.discT = setTimeout(function(){ if (call && call.pc === pc && pc.connectionState !== 'connected') endCall(true, 'সংযোগ ছিঁড়ে গেছে'); }, 9000); $('callState').textContent = 'সংযোগ দুর্বল…'; }
-    else if (s === 'failed') endCall(true, 'কল লাগেনি। নেট বা নেটওয়ার্ক পরীক্ষা করুন');
+    else if (s === 'disconnected') { call.discT = setTimeout(function(){ if (call && call.pc === pc && pc.connectionState !== 'connected') endCall(true, 'সংযোগ ছিঁড়ে গেছে', 'failed'); }, 9000); $('callState').textContent = 'সংযোগ দুর্বল…'; }
+    else if (s === 'failed') endCall(true, failText(call), 'failed');
   };
+  call.connT = setTimeout(function(){ if (call && call.pc === pc && call.state !== 'connected') endCall(true, failText(call), 'failed'); }, 30000);
 }
 function applyCaps(){
   if (!call || !call.pc) return;
@@ -761,6 +834,7 @@ function applyCaps(){
 function onConnected(){
   if (call.state === 'connected') return;
   call.state = 'connected'; call.startedAt = Date.now();
+  clearTimeout(call.connT); $('callDbg').textContent = '';
   $('call').classList.add('connected');
   applyCaps();
   call.timer = setInterval(updateCallStats, 1000);
@@ -773,10 +847,15 @@ async function updateCallStats(){
   if (!call.statTick) call.statTick = 0;
   if (call.statTick++ % 3) return;
   try {
-    var rep = await call.pc.getStats(), tot = 0, found = false;
-    rep.forEach(function(r){ if (r.type === 'transport') { tot += (r.bytesSent || 0) + (r.bytesReceived || 0); found = true; } });
+    var rep = await call.pc.getStats(), tot = 0, found = false, path = '', byId2 = {}, selPair = null;
+    rep.forEach(function(r){
+      byId2[r.id] = r;
+      if (r.type === 'transport') { tot += (r.bytesSent || 0) + (r.bytesReceived || 0); found = true; if (r.selectedCandidatePairId) selPair = r.selectedCandidatePairId; }
+    });
     if (!found) rep.forEach(function(r){ if (r.type === 'inbound-rtp') tot += r.bytesReceived || 0; if (r.type === 'outbound-rtp') tot += r.bytesSent || 0; });
-    $('callData').textContent = 'ডেটা খরচ: ' + fmtMB(tot);
+    var pr = selPair && byId2[selPair], lc = pr && byId2[pr.localCandidateId], rc = pr && byId2[pr.remoteCandidateId];
+    if (lc && rc) path = (lc.candidateType === 'relay' || rc.candidateType === 'relay') ? ' · রিলে দিয়ে' : ' · সরাসরি';
+    $('callData').textContent = 'ডেটা খরচ: ' + fmtMB(tot) + path;
   } catch(e){}
 }
 function callUI(show){
@@ -798,16 +877,20 @@ async function startCall(video){
   call = { id: uuid(), role: 'caller', video: !!video, state: 'calling', pendingIce: [], saver: !!settings.saver, facing: 'user' };
   callUI(true); $('callState').textContent = 'ডাকা হচ্ছে…';
   try { await getMedia(); } catch(e){ endCall(false, 'মাইক বা ক্যামেরার অনুমতি দিন'); return; }
+  var openGate, c0 = call;
+  call.gate = new Promise(function(r){ openGate = r; });
   try {
-    makePC();
+    await makePC();
     var off = await call.pc.createOffer();
     off.sdp = tweakOpus(off.sdp);
     await call.pc.setLocalDescription(off);
     await sendSignal('offer', { callId: call.id, video: call.video, sdp: off.sdp });
+    openGate();
     var id = call.id;
     call.ringT = setTimeout(function(){ if (call && call.id === id && call.state === 'calling') endCall(true, 'কেউ ধরেননি'); }, 45000);
-  } catch(e){ endCall(true, 'কল শুরু করা যায়নি'); }
+  } catch(e){ openGate(); if (call === c0) endCall(true, 'কল শুরু করা যায়নি'); }
 }
+var earlyIce = {};
 function showIncoming(){
   var nm = peer ? peer.name : 'কেউ';
   $('inName').textContent = nm; $('inAv').textContent = Array.from(nm)[0];
@@ -822,10 +905,15 @@ async function onSignal(s){
   var p = s.payload || {};
   if (s.kind === 'offer') {
     if (call) { sendSignal('end', { callId: p.callId, reason: 'busy' }); return; }
-    call = { id: p.callId, role: 'callee', video: !!p.video, state: 'ringing', offerSdp: p.sdp, pendingIce: [], saver: !!settings.saver, facing: 'user' };
+    call = { id: p.callId, role: 'callee', video: !!p.video, state: 'ringing', offerSdp: p.sdp, pendingIce: (earlyIce[p.callId] || []).slice(), saver: !!settings.saver, facing: 'user' };
+    delete earlyIce[p.callId];
     var id = p.callId;
     call.ringT = setTimeout(function(){ if (call && call.id === id && call.state === 'ringing') { endCall(false, 'মিসড কল'); } }, 46000);
     showIncoming(); return;
+  }
+  if ((!call || call.id !== p.callId) && s.kind === 'ice') {
+    (earlyIce[p.callId] = earlyIce[p.callId] || []).push(p.candidate);
+    return;
   }
   if (!call || call.id !== p.callId) return;
   if (s.kind === 'answer' && call.role === 'caller' && call.pc) {
@@ -835,7 +923,9 @@ async function onSignal(s){
     if (call.pc && call.pc.remoteDescription) call.pc.addIceCandidate(p.candidate).catch(function(){});
     else call.pendingIce.push(p.candidate);
   } else if (s.kind === 'end') {
-    endCall(false, p.reason === 'busy' ? 'অন্যজন আরেক কলে আছেন' : (call.state === 'ringing' ? 'মিসড কল' : 'কল শেষ'));
+    endCall(false, p.reason === 'busy' ? 'অন্যজন আরেক কলে আছেন'
+      : p.reason === 'failed' ? 'অন্যপাশে সংযোগ হয়নি। আবার চেষ্টা করুন'
+      : (call.state === 'ringing' ? 'মিসড কল' : 'কল শেষ'));
   }
 }
 function flushIce(){ if (!call || !call.pc) return; call.pendingIce.splice(0).forEach(function(c){ call.pc.addIceCandidate(c).catch(function(){}); }); }
@@ -844,22 +934,26 @@ async function acceptCall(){
   stopRing(); clearTimeout(call.ringT); $('incoming').classList.add('hidden');
   call.state = 'connecting'; callUI(true); $('callState').textContent = 'সংযোগ হচ্ছে…';
   try { await getMedia(); } catch(e){ endCall(true, 'মাইক বা ক্যামেরার অনুমতি দিন'); return; }
+  var openGate, c0 = call;
+  call.gate = new Promise(function(r){ openGate = r; });
   try {
-    makePC();
+    await makePC();
     await call.pc.setRemoteDescription({ type: 'offer', sdp: call.offerSdp });
     flushIce();
     var ans = await call.pc.createAnswer();
     ans.sdp = tweakOpus(ans.sdp);
     await call.pc.setLocalDescription(ans);
     await sendSignal('answer', { callId: call.id, sdp: ans.sdp });
-  } catch(e){ endCall(true, 'কল লাগেনি'); }
+    openGate();
+  } catch(e){ openGate(); if (call === c0) endCall(true, 'কল লাগেনি', 'failed'); }
 }
 function declineCall(){ if (call && call.state === 'ringing') endCall(true, ''); }
-function endCall(notify, msg){
+function endCall(notify, msg, reason){
   if (!call) return;
   var c = call; call = null;
-  stopRing(); clearTimeout(c.ringT); clearTimeout(c.discT); clearInterval(c.timer);
-  if (notify) sendSignal('end', { callId: c.id, reason: 'hangup' });
+  stopRing(); clearTimeout(c.ringT); clearTimeout(c.discT); clearTimeout(c.connT); clearInterval(c.timer);
+  $('callDbg').textContent = '';
+  if (notify) sendSignal('end', { callId: c.id, reason: reason || 'hangup' });
   try { if (c.pc) c.pc.close(); } catch(e){}
   try { if (c.local) c.local.getTracks().forEach(function(t){ t.stop(); }); } catch(e){}
   try { if (wakeLock) { wakeLock.release(); wakeLock = null; } } catch(e){}
@@ -923,6 +1017,11 @@ $('btnEmoji').onclick = function(){ $('emojiPanel').classList.toggle('hidden'); 
 $('btnAttach').onclick = function(){ $('file').click(); };
 $('file').onchange = async function(){ var fs = Array.from(this.files || []); this.value = ''; for (var i = 0; i < fs.length; i++) await sendMedia(fs[i]); };
 $('viewer').onclick = function(){ this.classList.add('hidden'); };
+(function(){
+  var b = el('button', 'dl', '⬇'); b.title = 'ডাউনলোড';
+  b.onclick = function(ev){ ev.stopPropagation(); if (viewerMsg) downloadFile(viewerMsg, b); };
+  $('viewer').appendChild(b);
+})();
 $('toBottom').onclick = function(){ toBottom(); this.classList.add('hidden'); };
 $('list').addEventListener('scroll', function(){ if (nearBottom()) $('toBottom').classList.add('hidden'); });
 $('btnMenu').onclick = function(){ $('setName').value = myProf ? myProf.name : ''; buildWallSwatches(); $('setSaver').checked = !!settings.saver; $('settings').classList.remove('hidden'); };
