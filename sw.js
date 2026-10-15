@@ -1,4 +1,4 @@
-var V = 'chat-v3';
+var V = 'chat-v4';
 var SHELL = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', function (e) {
