@@ -302,7 +302,9 @@ mark{background:#fde68a;color:#000;border-radius:3px}
       <h3>ব্যাকআপ</h3>
       <button class="btn alt" id="backupBtn">পুরো চ্যাট টেক্সট ফাইলে ডাউনলোড</button>
       <h3>নোটিফিকেশন</h3>
+      <div id="pushStat" style="color:var(--muted);font-size:13px;margin:4px 0 8px"></div>
       <button class="btn alt" id="notifBtn">নোটিফিকেশন চালু করুন</button>
+      <button class="btn alt" id="pushTest">🔔 টেস্ট নোটিফিকেশন (১০ সেকেন্ড পরে)</button>
       <button class="btn alt danger" id="logout">লগআউট</button>
       <button class="btn alt" id="closeSet">বন্ধ করুন</button>
       <div id="verLine" style="text-align:center;color:var(--muted);font-size:12px;margin-top:10px"></div>
@@ -362,6 +364,7 @@ mark{background:#fde68a;color:#000;border-radius:3px}
 /* ===================== কনফিগ ===================== */
 var SUPABASE_URL = 'https://vsmlokcwbvrlgjlkqots.supabase.co';
 var SUPABASE_KEY = 'sb_publishable_uuiOMHnTyaWiHCREAzaXUQ_P_PAVIph';
+var VAPID_PUBLIC = 'BB8H0KoZJBbN5SniWKTVEGkEa3rKUwzAQdsmtOnxWbCY_cHOHRJu7VM8qXTGODPxtSZ9Wk_iNJxZH1spwE19C6k';
 /* কল ঠিকমতো লাগাতে রিলে (TURN) সার্ভার লাগে। Metered-এ ফ্রি অ্যাকাউন্ট খুলে এই দুটো ঘর পূরণ করুন */
 var TURN_APP = 'jakwan';   /* Metered অ্যাপের নাম (yourname.metered.live এর yourname অংশ) */
 var TURN_KEY = 'fc8dc4a9741fa2392ce2e25c23c7977ae103';   /* Metered API key */
@@ -401,7 +404,7 @@ function uuid(){
 function lsGet(k, d){ try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } }
 function lsSet(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
 var toastT;
-function toast(t){ var b = $('toast'); b.textContent = t; b.classList.remove('hidden'); clearTimeout(toastT); toastT = setTimeout(function(){ b.classList.add('hidden'); }, 3200); }
+function toast(t, ms){ var b = $('toast'); b.textContent = t; b.classList.remove('hidden'); clearTimeout(toastT); toastT = setTimeout(function(){ b.classList.add('hidden'); }, ms || 3200); }
 function bn(n){ return String(n).replace(/\d/g, function(d){ return '০১২৩৪৫৬৭৮৯'[d]; }); }
 function fmtTime(iso){ try { return new Date(iso).toLocaleTimeString('bn-BD', { hour: 'numeric', minute: '2-digit' }); } catch(e){ return ''; } }
 function dayKey(iso){ return new Date(iso).toDateString(); }
@@ -541,6 +544,8 @@ async function enter(user){
   getIce().catch(function(){});
   await loadRecent();
   quickProbe();
+  ensurePush();
+  checkPendingCall();
   flushOutbox();
   markSeen();
   sweepExpired();
@@ -1137,6 +1142,7 @@ async function onSignal(s){
   if (Date.now() - new Date(s.created_at).getTime() > 60000) return;
   var p = s.payload || {};
   if (s.kind === 'offer') {
+    if (call && call.id === p.callId) return;
     if (call) { sendSignal('end', { callId: p.callId, reason: 'busy' }); return; }
     call = { id: p.callId, role: 'callee', video: !!p.video, state: 'ringing', offerSdp: p.sdp, pendingIce: (earlyIce[p.callId] || []).slice(), saver: !!settings.saver, facing: 'user' };
     delete earlyIce[p.callId];
@@ -1848,7 +1854,7 @@ $('lockOut').onclick = async function(){
 if (lockCfg) showLock('verify');
 
 /* ---------- সংস্করণ ও স্বয়ংক্রিয় পরীক্ষা ---------- */
-var APP_VER = 'v4 · ১৬ অক্টোবর';
+var APP_VER = 'v5 · ১৭ অক্টোবর (নোটিফিকেশন)';
 async function runChecks(){
   var res = [];
   function add(ok, label, detail){ res.push({ ok: ok, label: label, detail: detail || '' }); }
@@ -1875,6 +1881,8 @@ async function runChecks(){
   add(!!(window.crypto && crypto.subtle), 'অ্যাপ লক', (window.crypto && crypto.subtle) ? 'চলবে' : 'https ছাড়া চলে না');
   add(!!window.PublicKeyCredential, 'ফিঙ্গারপ্রিন্ট', window.PublicKeyCredential ? 'ফোন সমর্থন করে' : 'এই ব্রাউজারে নেই');
   add(('Notification' in window) && Notification.permission === 'granted', 'নোটিফিকেশনের অনুমতি', ('Notification' in window) ? Notification.permission : 'নেই');
+  var ps = await pushStatus();
+  add(ps.ok, 'অ্যাপ বন্ধ থাকলে নোটিফিকেশন', ps.text);
   return res;
 }
 function openChecks(){
@@ -1910,6 +1918,7 @@ function buildAccentSw(){
   });
 }
 function openSettings(){
+  try { refreshPushStat(); } catch(e){}
   $('setName').value = myProf ? myProf.name : '';
   buildWallSwatches(); buildAccentSw();
   $('setSaver').checked = !!settings.saver;
@@ -1997,11 +2006,79 @@ $('wpFile').onchange = async function(){
     rd.readAsDataURL(b);
   } catch(e){ toast('ছবি নেওয়া যায়নি'); }
 };
+function b64uToU8(b){ b = b.replace(/-/g,'+').replace(/_/g,'/'); while (b.length % 4) b += '='; var r = atob(b), a = new Uint8Array(r.length); for (var i = 0; i < r.length; i++) a[i] = r.charCodeAt(i); return a; }
+function pushSupported(){ return ('serviceWorker' in navigator) && ('PushManager' in window) && ('Notification' in window); }
+async function pushReg(){ return await navigator.serviceWorker.ready; }
+async function savePushSub(sub){
+  var j = sub.toJSON(), k = j.keys || {};
+  var r = await sb.from('push_subs').upsert({ endpoint: sub.endpoint, user_id: me.id, p256dh: k.p256dh, auth: k.auth }, { onConflict: 'endpoint' });
+  if (r.error) throw r.error;
+}
+async function enablePush(){
+  if (!pushSupported()) throw new Error('এই ব্রাউজারে নোটিফিকেশন চলে না');
+  var p = Notification.permission;
+  if (p !== 'granted') p = await Notification.requestPermission();
+  if (p !== 'granted') throw new Error('অনুমতি দেওয়া হয়নি (ফোনের সেটিংস থেকে নোটিফিকেশন চালু করুন)');
+  var reg = await pushReg();
+  var sub = await reg.pushManager.getSubscription();
+  if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64uToU8(VAPID_PUBLIC) });
+  await savePushSub(sub);
+  return sub;
+}
+async function pushStatus(){
+  if (!pushSupported()) return { ok: false, text: 'এই ব্রাউজারে সমর্থন নেই' };
+  if (Notification.permission === 'denied') return { ok: false, text: 'ফোনে নোটিফিকেশন বন্ধ করা আছে' };
+  if (Notification.permission !== 'granted') return { ok: false, text: 'এখনো চালু করা হয়নি' };
+  try {
+    var sub = await (await pushReg()).pushManager.getSubscription();
+    if (!sub) return { ok: false, text: 'অনুমতি আছে, কিন্তু নিবন্ধন হয়নি' };
+    var r = await sb.from('push_subs').select('endpoint').eq('endpoint', sub.endpoint);
+    if (r.error) return { ok: false, text: r.error.message + ' → push_setup.sql চালান' };
+    if (!r.data || !r.data.length) return { ok: false, text: 'সার্ভারে নিবন্ধন হয়নি' };
+    return { ok: true, text: 'চালু আছে' };
+  } catch(e){ return { ok: false, text: (e && e.message) || 'জানা যায়নি' }; }
+}
+async function refreshPushStat(){
+  var st = await pushStatus();
+  $('pushStat').textContent = (st.ok ? '✅ ' : '⚠️ ') + 'অ্যাপ বন্ধ থাকলে নোটিফিকেশন: ' + st.text;
+}
+async function ensurePush(){
+  try { if (pushSupported() && Notification.permission === 'granted') await enablePush(); } catch(e){}
+}
 $('notifBtn').onclick = async function(){
-  if (!('Notification' in window)) { toast('এই ব্রাউজারে নোটিফিকেশন নেই'); return; }
-  var p = await Notification.requestPermission();
-  toast(p === 'granted' ? 'নোটিফিকেশন চালু হয়েছে' : 'অনুমতি দেওয়া হয়নি');
+  try { await enablePush(); toast('নোটিফিকেশন চালু হয়েছে ✅'); }
+  catch(e){ toast((e && e.message) || 'চালু করা যায়নি'); }
+  refreshPushStat();
 };
+$('pushTest').onclick = async function(){
+  try {
+    await enablePush();
+    var ses = await sb.auth.getSession();
+    var tok = ses.data && ses.data.session && ses.data.session.access_token;
+    var res = await fetch(SUPABASE_URL + '/functions/v1/notify', { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY, Authorization: 'Bearer ' + tok }, body: JSON.stringify({ delay: 10 }) });
+    var j = await res.json().catch(function(){ return {}; });
+    if (res.status === 404) throw new Error('notify ফাংশন বানানো হয়নি');
+    if (!res.ok || j.ok === false) throw new Error((j.step ? j.step + ': ' : '') + (j.error || ('ত্রুটি ' + res.status)));
+    toast('এখন অ্যাপ বন্ধ করে দিন (হোম বাটন নয়, সব অ্যাপ থেকে সরান)। ১০ সেকেন্ডে নোটিফিকেশন আসবে', 6000);
+  } catch(e){ toast((e && e.message) || 'পাঠানো যায়নি', 5000); }
+};
+async function checkPendingCall(){
+  try {
+    if (call) return;
+    var since = new Date(Date.now() - 45000).toISOString();
+    var r = await sb.from('signals').select('*').gt('created_at', since).order('created_at', { ascending: true });
+    if (r.error || !r.data) return;
+    var rows = r.data.filter(function(s){ return s.sender !== me.id; });
+    var offers = rows.filter(function(s){ return s.kind === 'offer'; });
+    if (!offers.length) return;
+    var off = offers[offers.length - 1], id = (off.payload || {}).callId;
+    var closed = rows.some(function(s){ return s.kind === 'end' && (s.payload || {}).callId === id; });
+    var mineAns = r.data.some(function(s){ return s.sender === me.id && s.kind === 'answer' && (s.payload || {}).callId === id; });
+    if (closed || mineAns) return;
+    await onSignal(off);
+    rows.filter(function(s){ return s.kind === 'ice' && (s.payload || {}).callId === id; }).forEach(function(s){ onSignal(s); });
+  } catch(e){}
+}
 $('logout').onclick = async function(){
   if (!confirm('লগআউট করবেন?')) return;
   try { await sb.auth.signOut(); } catch(e){}

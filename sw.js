@@ -1,4 +1,4 @@
-var V = 'chat-v5';
+var V = 'chat-v6';
 var SHELL = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', function (e) {
@@ -41,6 +41,28 @@ self.addEventListener('notificationclick', function (e) {
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (list) {
       if (list.length) return list[0].focus();
       return self.clients.openWindow('./');
+    })
+  );
+});
+
+// অ্যাপ বন্ধ থাকলে সার্ভার থেকে নোটিফিকেশন আসে
+self.addEventListener('push', function (e) {
+  var d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (x) { d = { title: 'আমাদের চ্যাট', body: e.data ? e.data.text() : '' }; }
+  e.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (list) {
+      var seen = list.some(function (c) { return c.visibilityState === 'visible'; });
+      if (seen && d.tag !== 'test') return;
+      var call = d.kind === 'call';
+      return self.registration.showNotification(d.title || 'আমাদের চ্যাট', {
+        body: d.body || '',
+        tag: d.tag || 'msg',
+        icon: 'icon-192.png',
+        badge: 'icon-192.png',
+        vibrate: call ? [300, 150, 300, 150, 300] : [120],
+        requireInteraction: call,
+        renotify: true
+      });
     })
   );
 });
