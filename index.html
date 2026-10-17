@@ -444,6 +444,8 @@ body.noanim .row.new,body.noanim .row.new .bubble{animation:none!important}
       <select id="setBS" style="width:100%"></select>
       <h3>ছবির ডিজাইন</h3>
       <select id="setPH" style="width:100%"></select>
+      <div class="line"><div>ডিজাইন দুজনের ফোনে একসাথে<small>একজন বদলালে অন্যজনের ফোনেও বদলে যাবে (ফন্ট, রং, ডিজাইন, থিম)</small></div><input type="checkbox" id="setSync"></div>
+      <button class="btn alt" id="syncNow">📤 এখনকার ডিজাইন সাথীর ফোনে পাঠান</button>
       <h3>চ্যাটের ব্যাকগ্রাউন্ড</h3>
       <div class="sw" id="wpSw"></div>
       <button class="btn alt" id="wpPick">নিজের ছবি বেছে নিন</button>
@@ -711,7 +713,7 @@ async function enter(user){
   try { await loadProfiles(); } catch(e){}
   renderHeader();
   startRealtime();
-  startNotesRt(); loadNotes();
+  startNotesRt(); loadNotes(); loadShared(); startStyleRt();
   if (!window.__bgStarted) { window.__bgStarted = true; startPrayerWatch(); setInterval(sweepExpired, 60000); }
   updateSendBtn();
   getIce().catch(function(){});
@@ -1138,7 +1140,7 @@ function buildWallSwatches(){
   WALLS.forEach(function(w){
     var b = el('button', settings.wp === w.id ? 'on' : ''); b.setAttribute('aria-label', w.label); b.title = w.label;
     b.style.background = w.css || 'var(--bg)';
-    b.onclick = function(){ settings.wp = w.id; lsSet('settings', settings); applyWallpaper(); buildWallSwatches(); };
+    b.onclick = function(){ settings.wp = w.id; lsSet('settings', settings); applyWallpaper(); buildWallSwatches(); pushShared(); };
     box.appendChild(b);
   });
 }
@@ -2102,7 +2104,7 @@ $('lockOut').onclick = async function(){
 if (lockCfg) showLock('verify');
 
 /* ---------- সংস্করণ ও স্বয়ংক্রিয় পরীক্ষা ---------- */
-var APP_VER = 'v7 · ১৭ অক্টোবর (ফন্ট, রং ও ছবির ডিজাইন)';
+var APP_VER = 'v9 · ১৭ অক্টোবর (ব্যাকগ্রাউন্ড সিঙ্ক)';
 async function runChecks(){
   var res = [];
   function add(ok, label, detail){ res.push({ ok: ok, label: label, detail: detail || '' }); }
@@ -2111,6 +2113,8 @@ async function runChecks(){
   add(!r.error, 'মেসেজের নতুন ঘর (রিপ্লাই, রিঅ্যাকশন, পিন, এডিট, ফাইল, ভয়েস, লোকেশন)', r.error ? r.error.message + ' → migration.sql চালান' : 'ঠিক আছে');
   var rp = await sb.rpc('react_msg', { mid: '00000000-0000-0000-0000-000000000000', emo: null });
   add(!rp.error, 'রিঅ্যাকশন ফাংশন', rp.error ? rp.error.message + ' → migration.sql চালান' : 'ঠিক আছে');
+  var as = await sb.from('app_style').select('id').limit(1);
+  add(!as.error, 'ডিজাইন সিঙ্ক টেবিল', as.error ? as.error.message + ' → style_sync.sql চালান' : 'ঠিক আছে');
   var nt = await sb.from('notes').select('id').limit(1);
   add(!nt.error, 'নোট ও কাউন্টডাউন টেবিল', nt.error ? nt.error.message + ' → migration.sql চালান' : 'ঠিক আছে');
   var own = msgs.filter(function(m){ return m.sender === me.id && !m.pending && !m.media_type; })[0];
@@ -2161,7 +2165,7 @@ function buildAccentSw(){
   ACCENTS.forEach(function(a){
     var b = el('button', (settings.accent || 'teal') === a.id ? 'on' : ''); b.type = 'button'; b.title = a.label; b.setAttribute('aria-label', a.label);
     b.style.background = a.a;
-    b.onclick = function(){ settings.accent = a.id; lsSet('settings', settings); applyTheme(); buildAccentSw(); };
+    b.onclick = function(){ settings.accent = a.id; lsSet('settings', settings); applyTheme(); buildAccentSw(); pushShared(); };
     box.appendChild(b);
   });
 }
@@ -2178,15 +2182,15 @@ function openSettings(){
   $('setBio').checked = !!(lockCfg && lockCfg.bio);
   $('setTtl').value = String(settings.ttl || 0);
   $('setPray').checked = !!settings.prayerRemind;
-  fillRing(); fillAppear(); $('ringTest').textContent = '▶ শুনে দেখুন';
+  $('setSync').checked = !settings.syncOff; fillRing(); fillAppear(); $('ringTest').textContent = '▶ শুনে দেখুন';
   $('verLine').textContent = 'অ্যাপের সংস্করণ: ' + APP_VER;
   $('settings').classList.remove('hidden');
 }
 Array.from($('themeSeg').children).forEach(function(b){
-  b.onclick = function(){ settings.theme = b.dataset.v; lsSet('settings', settings); applyTheme(); Array.from($('themeSeg').children).forEach(function(x){ x.classList.toggle('on', x === b); }); };
+  b.onclick = function(){ settings.theme = b.dataset.v; lsSet('settings', settings); applyTheme(); pushShared(); Array.from($('themeSeg').children).forEach(function(x){ x.classList.toggle('on', x === b); }); };
 });
-$('setFont').oninput = function(){ settings.font = +this.value; $('fontVal').textContent = bn(this.value); lsSet('settings', settings); applyTheme(); };
-$('setAnim').onchange = function(){ settings.anim = this.checked; lsSet('settings', settings); applyTheme(); };
+$('setFont').oninput = function(){ settings.font = +this.value; $('fontVal').textContent = bn(this.value); lsSet('settings', settings); applyTheme(); pushShared(); };
+$('setAnim').onchange = function(){ settings.anim = this.checked; lsSet('settings', settings); applyTheme(); pushShared(); };
 $('setLock').onchange = function(){
   if (!(window.crypto && crypto.subtle)) { toast('এই ব্রাউজারে পিন লক চলবে না'); this.checked = !!lockCfg; return; }
   $('settings').classList.add('hidden');
@@ -2243,7 +2247,7 @@ function colSw(boxId, key){
   TCOL.forEach(function(c){
     var b = el('button', (settings[key] || '') === c ? 'on' : ''); b.type = 'button'; b.title = c || 'অটো';
     b.style.background = c || 'linear-gradient(135deg,#16211e 50%,#fff 50%)';
-    b.onclick = function(){ settings[key] = c; lsSet('settings', settings); applyTheme(); colSw(boxId, key); };
+    b.onclick = function(){ settings[key] = c; lsSet('settings', settings); applyTheme(); colSw(boxId, key); pushShared(); };
     box.appendChild(b);
   });
 }
@@ -2253,11 +2257,73 @@ function fillAppear(){
   colSw('tmSw', 'tm'); colSw('ttSw', 'tt'); updFfPrev();
 }
 $('setFF').onchange = function(){
-  settings.ff = this.value; lsSet('settings', settings); applyTheme(); updFfPrev();
+  settings.ff = this.value; lsSet('settings', settings); applyTheme(); updFfPrev(); pushShared();
   if (this.value === 'SutonnyOMJ') toast('সুতন্নি ওএমজে চলতে SutonnyOMJ.ttf ফাইলটি index.html-এর পাশে রাখতে হবে', 6000);
 };
-$('setBS').onchange = function(){ settings.bs = this.value; lsSet('settings', settings); applyTheme(); };
-$('setPH').onchange = function(){ settings.ph = this.value; lsSet('settings', settings); applyTheme(); };
+$('setBS').onchange = function(){ settings.bs = this.value; lsSet('settings', settings); applyTheme(); pushShared(); };
+$('setPH').onchange = function(){ settings.ph = this.value; lsSet('settings', settings); applyTheme(); pushShared(); };
+/* ---------- দুজনের ডিজাইন সিঙ্ক ---------- */
+var SHARED_KEYS = ['ff', 'bs', 'ph', 'accent', 'theme', 'wp', 'font', 'anim', 'tm', 'tt'];
+var styleCh = null, styleTs = 0, pushT = null, pushWarned = false;
+function pushShared(force){
+  if (!sb || !me || settings.syncOff || !navigator.onLine) return;
+  clearTimeout(pushT);
+  pushT = setTimeout(async function(){
+    var d = { by: me.id };
+    SHARED_KEYS.forEach(function(k){ if (settings[k] !== undefined) d[k] = settings[k]; });
+    if (d.wp === 'custom') { if (settings.wpPath) d.wpPath = settings.wpPath; else delete d.wp; }
+    var ts = Date.now(); styleTs = ts;
+    try {
+      var r = await sb.from('app_style').upsert({ id: 'main', data: d, updated_by: me.id, updated_at: new Date(ts).toISOString() }, { onConflict: 'id' });
+      if (r.error) throw r.error;
+      if (force === true) toast('সাথীর ফোনে ডিজাইন পাঠানো হয়েছে ✅');
+    } catch(e){
+      if (force === true || !pushWarned) { pushWarned = true; toast('ডিজাইন সিঙ্ক হয়নি: ' + ((e && e.message) || '') + ' — Supabase-এ style_sync.sql চালান', 5000); }
+    }
+  }, 500);
+}
+function applyShared(row){
+  if (!row || !row.data || !me || settings.syncOff) return;
+  var d = row.data, mine = row.updated_by === me.id, t = Date.parse(row.updated_at) || 0;
+  if (mine && styleTs && t <= styleTs) return;
+  SHARED_KEYS.forEach(function(k){ if (k === 'tm' || k === 'tt' || d[k] === undefined) return; if (k === 'wp' && d.wp === 'custom') return; settings[k] = d[k]; });
+  if (d.wp === 'custom' && d.wpPath && d.wpPath !== settings.wpPath) fetchWall(d.wpPath);
+  if ('tm' in d || 'tt' in d) { settings.tm = (mine ? d.tm : d.tt) || ''; settings.tt = (mine ? d.tt : d.tm) || ''; }
+  lsSet('settings', settings); applyTheme(); applyWallpaper();
+  if (!mine) toast('সাথী ডিজাইন বদলেছেন ✨', 2500);
+}
+async function shareWall(blob){
+  if (!sb || !me || settings.syncOff || !navigator.onLine) return;
+  try {
+    var old = settings.wpPath, path = me.id + '/wp-' + Date.now() + '.jpg';
+    var up = await sb.storage.from('media').upload(path, blob, { contentType: 'image/jpeg', upsert: false });
+    if (up.error) throw up.error;
+    settings.wpPath = path; lsSet('settings', settings);
+    if (old && old.indexOf(me.id + '/') === 0) sb.storage.from('media').remove([old]).then(function(){}, function(){});
+    pushShared();
+  } catch(e){ toast('ব্যাকগ্রাউন্ড সাথীর ফোনে যায়নি: ' + ((e && e.message) || ''), 4500); }
+}
+async function fetchWall(path){
+  try {
+    var r = await sb.storage.from('media').createSignedUrl(path, 600);
+    if (r.error) throw r.error;
+    var blob = await (await fetch(r.data.signedUrl)).blob();
+    var rd = new FileReader();
+    rd.onload = function(){ settings.wp = 'custom'; settings.wpImg = rd.result; settings.wpPath = path; lsSet('settings', settings); applyWallpaper(); };
+    rd.readAsDataURL(blob);
+  } catch(e){}
+}
+async function loadShared(){
+  try { var r = await sb.from('app_style').select('*').eq('id', 'main').maybeSingle(); if (!r.error && r.data) applyShared(r.data); } catch(e){}
+}
+function startStyleRt(){
+  try {
+    if (styleCh) sb.removeChannel(styleCh);
+    styleCh = sb.channel('style-' + me.id).on('postgres_changes', { event: '*', schema: 'public', table: 'app_style' }, function(p){ applyShared(p.new); }).subscribe();
+  } catch(e){}
+}
+$('setSync').onchange = function(){ settings.syncOff = !this.checked; lsSet('settings', settings); if (this.checked) { loadShared(); } };
+$('syncNow').onclick = function(){ if (settings.syncOff) { toast('আগে "একসাথে বদলাবে" চালু করুন'); return; } if (settings.wp === 'custom' && settings.wpImg && !settings.wpPath) { fetch(settings.wpImg).then(function(r){ return r.blob(); }).then(function(b){ return shareWall(b); }).then(function(){ pushShared(true); }); return; } pushShared(true); };
 $('backupBtn').onclick = backupChat;
 $('checkBtn').onclick = function(){ $('settings').classList.add('hidden'); openChecks(); };
 
@@ -2300,7 +2366,7 @@ $('wpFile').onchange = async function(){
   try {
     var b = await compressImage(f, 900, 0.7);
     var rd = new FileReader();
-    rd.onload = function(){ settings.wp = 'custom'; settings.wpImg = rd.result; lsSet('settings', settings); applyWallpaper(); buildWallSwatches(); toast('ব্যাকগ্রাউন্ড বদলেছে'); };
+    rd.onload = function(){ settings.wp = 'custom'; settings.wpImg = rd.result; lsSet('settings', settings); applyWallpaper(); buildWallSwatches(); toast('ব্যাকগ্রাউন্ড বদলেছে'); shareWall(b); };
     rd.readAsDataURL(b);
   } catch(e){ toast('ছবি নেওয়া যায়নি'); }
 };
