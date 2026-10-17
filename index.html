@@ -50,6 +50,7 @@ input,textarea{font:inherit;color:inherit}
 #peerStatus{font-size:12px;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ib{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
 .ib:active{background:rgba(255,255,255,.2)}
+#sqlBar{background:#b91c1c;color:#fff;font-size:13px;text-align:center;padding:6px 10px;cursor:pointer}
 #netBar{background:#b45309;color:#fff;font-size:13px;text-align:center;padding:5px 8px}
 
 /* ---------- মেসেজ ---------- */
@@ -85,6 +86,8 @@ input,textarea{font:inherit;color:inherit}
 #bar .ib{color:var(--muted);width:42px;height:42px}
 #msg{flex:1;resize:none;border:1px solid var(--line);background:var(--bg);border-radius:20px;padding:10px 14px;max-height:110px;outline:none;line-height:1.35}
 #send{background:var(--accent);color:var(--on-accent);width:42px;height:42px;border-radius:50%;font-size:18px;flex:none}
+
+
 
 /* ---------- সেটিংস ---------- */
 .sheetWrap{position:absolute;inset:0;z-index:40;background:rgba(0,0,0,.45);display:flex;align-items:flex-end}
@@ -241,6 +244,7 @@ mark{background:#fde68a;color:#000;border-radius:3px}
     <button class="ib" id="btnVideo" aria-label="ভিডিও কল">🎥</button>
     <button class="ib" id="btnMenu" aria-label="সেটিংস">⋮</button>
   </div>
+  <div id="sqlBar" class="hidden">⚠️ নতুন ফিচার চালু করতে Supabase-এ migration.sql চালাতে হবে। এখানে ট্যাপ করে দেখুন</div>
   <div id="netBar" class="hidden">নেট নেই। মেসেজ লিখে রাখুন, নেট এলে নিজে থেকে যাবে।</div>
   <div id="pinBar" class="hidden"></div>
   <div id="cdBar" class="hidden"></div>
@@ -293,12 +297,15 @@ mark{background:#fde68a;color:#000;border-radius:3px}
         <select id="setTtl"><option value="0">বন্ধ</option><option value="1">১ ঘণ্টা</option><option value="24">১ দিন</option><option value="168">৭ দিন</option><option value="720">৩০ দিন</option></select></div>
       <h3>সালাত</h3>
       <div class="line"><div>সালাতের সময় স্মরণ<small>অ্যাপ খোলা বা পেছনে চালু থাকলে নোটিফিকেশন আসবে</small></div><input type="checkbox" id="setPray"></div>
+      <h3>সমস্যা খুঁজুন</h3>
+      <button class="btn alt" id="checkBtn">🔧 সবকিছু ঠিক আছে কিনা পরীক্ষা করুন</button>
       <h3>ব্যাকআপ</h3>
       <button class="btn alt" id="backupBtn">পুরো চ্যাট টেক্সট ফাইলে ডাউনলোড</button>
       <h3>নোটিফিকেশন</h3>
       <button class="btn alt" id="notifBtn">নোটিফিকেশন চালু করুন</button>
       <button class="btn alt danger" id="logout">লগআউট</button>
       <button class="btn alt" id="closeSet">বন্ধ করুন</button>
+      <div id="verLine" style="text-align:center;color:var(--muted);font-size:12px;margin-top:10px"></div>
     </div>
   </div>
 
@@ -533,6 +540,7 @@ async function enter(user){
   updateSendBtn();
   getIce().catch(function(){});
   await loadRecent();
+  quickProbe();
   flushOutbox();
   markSeen();
   sweepExpired();
@@ -596,7 +604,7 @@ function startPresenceTimer(){
 }
 
 /* ===================== মেসেজ লোড ও সংরক্ষণ ===================== */
-function saveCache(){ lsSet('msgcache_' + me.id, msgs.filter(function(m){ return !m.pending && !m.localUrl; }).slice(-150)); }
+function saveCache(){ lsSet('msgcache_' + me.id, msgs.filter(function(m){ return !m.pending && !m.localUrl && !m.failed; }).slice(-150)); }
 async function loadRecent(){
   try {
     var r = await sb.from('messages').select('*').order('created_at', { ascending: false }).limit(150);
@@ -657,6 +665,7 @@ async function markSeen(){
 /* ===================== মেসেজ দেখানো ===================== */
 var CALL_ICON = { audio: '📞', video: '🎥' };
 function tickOf(m){
+  if (m.failed) return ['⚠️ যায়নি', ''];
   if (m.pending) return ['🕓', ''];
   if (m.read_at) return ['✓✓', 'read'];
   if (m.delivered_at) return ['✓✓', ''];
@@ -815,9 +824,21 @@ async function flushOutbox(){
       outbox.shift(); saveOutbox();
       var m = byId[o.id]; if (m) { m.pending = false; updateRow(m); }
     }
-  } catch(e){ /* পরে আবার চেষ্টা হবে */ }
+  } catch(e){
+    if (e && e.code && outbox.length) {
+      /* সার্ভার মেসেজটি স্থায়ীভাবে নাকচ করেছে: আটকে না রেখে বাদ দিই, যাতে পরের মেসেজ যেতে পারে */
+      var bad = outbox.shift(); saveOutbox();
+      var bm = byId[bad.id]; if (bm) { bm.pending = false; bm.failed = true; updateRow(bm); }
+      toast('মেসেজ যায়নি: ' + (e.message || '') + sqlHint(e));
+      flushing = false; saveCache(); setTimeout(flushOutbox, 200); return;
+    }
+  }
   flushing = false;
   saveCache();
+}
+function sqlHint(e){
+  var t = ((e && (e.message || '')) + ' ' + (e && (e.code || ''))).toLowerCase();
+  return /column|pgrst204|42703|schema cache|function|42883|relation|42p01/.test(t) ? ' — Supabase-এ migration.sql চালানো হয়নি' : '';
 }
 async function delMsg(m){
   if (!confirm('এই মেসেজ মুছে ফেলবেন? দুজনের ফোন থেকেই মুছে যাবে।')) return;
@@ -875,7 +896,7 @@ async function uploadSend(o){
   byId[id] = m; msgs.push(m); appendRow(m);
   try {
     var path = me.id + '/' + id + '.' + o.ext;
-    var up = await sb.storage.from('media').upload(path, o.blob, { contentType: o.ctype, upsert: false });
+    var up = await sb.storage.from('media').upload(path, o.blob, { contentType: (o.ctype || 'application/octet-stream').split(';')[0], upsert: false });
     if (up.error) throw up.error;
     var row = { id: id, media_path: path, media_type: o.media_type, created_at: m.created_at };
     if (o.meta) row.meta = o.meta;
@@ -886,7 +907,7 @@ async function uploadSend(o){
     m.media_path = path; m.uploading = false; m.pending = false; updateRow(m);
   } catch(e){
     if (byId[id]) onMsgDelete({ id: id });
-    toast('পাঠানো যায়নি: ' + ((e && e.message) || 'আবার চেষ্টা করুন'));
+    toast('পাঠানো যায়নি: ' + ((e && e.message) || 'আবার চেষ্টা করুন') + sqlHint(e));
   }
 }
 
@@ -1330,7 +1351,7 @@ async function openOnce(m){
     m.opened_at = now; viewerMsg = null; viewerOnce = m;
     $('viewer').firstElementChild.src = u; $('viewer').classList.add('once'); $('viewer').classList.remove('hidden');
     updateRow(m);
-  } catch(e){ toast('ছবি খোলা যায়নি'); }
+  } catch(e){ toast('ছবি খোলা যায়নি: ' + ((e && e.message) || '') + sqlHint(e)); }
 }
 function closeViewer(){
   $('viewer').classList.add('hidden');
@@ -1384,12 +1405,12 @@ async function react(m, e){
   if (next) m.reactions[me.id] = next; else delete m.reactions[me.id];
   updateRow(m);
   var r = await sb.rpc('react_msg', { mid: m.id, emo: next });
-  if (r && r.error) { m.reactions = old; updateRow(m); toast('রিঅ্যাকশন যায়নি। নতুন SQL চালানো হয়েছে কি?'); }
+  if (r && r.error) { m.reactions = old; updateRow(m); toast('রিঅ্যাকশন যায়নি: ' + (r.error.message || '') + sqlHint(r.error)); }
 }
 async function togglePin(m){
   var v = !m.pinned;
   var r = await sb.from('messages').update({ pinned: v }).eq('id', m.id);
-  if (r.error) { toast('পিন হয়নি। নতুন SQL চালানো হয়েছে কি?'); return; }
+  if (r.error) { toast('পিন হয়নি: ' + (r.error.message || '') + sqlHint(r.error)); return; }
   m.pinned = v; updateRow(m); saveCache();
 }
 var pinCur = 0;
@@ -1431,7 +1452,7 @@ async function saveEdit(body){
   if (!navigator.onLine) { toast('এডিট করতে নেট লাগবে'); return; }
   var t = new Date().toISOString();
   var r = await sb.from('messages').update({ body: body, edited_at: t }).eq('id', m.id);
-  if (r.error) { toast('এডিট হয়নি। নতুন SQL চালানো হয়েছে কি?'); return; }
+  if (r.error) { toast('এডিট হয়নি: ' + (r.error.message || '') + sqlHint(r.error)); return; }
   m.body = body; m.edited_at = t; updateRow(m); saveCache(); cancelEdit();
 }
 
@@ -1464,7 +1485,7 @@ async function startRec(){
       if (r.cancel) return;
       var dur = Math.round((Date.now() - r.t0) / 1000);
       if (dur < 1) { toast('খুব ছোট হয়ে গেছে'); return; }
-      sendVoice(new Blob(r.chunks, { type: r.mt }), dur);
+      sendVoice(new Blob(r.chunks, { type: (r.mt || 'audio/webm').split(';')[0] }), dur);
     };
     mr.start(1000);
     $('bar').classList.add('hidden'); $('rec').classList.remove('hidden'); $('recT').textContent = fmtDur(0);
@@ -1477,7 +1498,7 @@ async function startRec(){
 function stopRec(cancel){ if (!rec) return; rec.cancel = !!cancel; try { rec.mr.stop(); } catch(e){} }
 async function sendVoice(blob, dur){
   var mp4 = /mp4/.test(blob.type);
-  await uploadSend({ blob: blob, ext: mp4 ? 'm4a' : 'webm', ctype: blob.type || 'audio/webm', media_type: 'audio', meta: String(dur) });
+  await uploadSend({ blob: blob, ext: mp4 ? 'm4a' : 'webm', ctype: (blob.type || 'audio/webm').split(';')[0], media_type: 'audio', meta: String(dur) });
 }
 
 /* ---------- ক্লিপ বাটনের মেনু, লোকেশন ---------- */
@@ -1611,7 +1632,7 @@ function startNotesRt(){
 }
 async function noteDo(p){
   var r = await p;
-  if (r && r.error) toast('নোট কাজ করছে না। নতুন SQL চালানো হয়েছে কি?');
+  if (r && r.error) toast('নোট কাজ করছে না: ' + (r.error.message || '') + sqlHint(r.error));
   loadNotes();
 }
 function openNotes(){
@@ -1826,6 +1847,58 @@ $('lockOut').onclick = async function(){
 };
 if (lockCfg) showLock('verify');
 
+/* ---------- সংস্করণ ও স্বয়ংক্রিয় পরীক্ষা ---------- */
+var APP_VER = 'v4 · ১৬ অক্টোবর';
+async function runChecks(){
+  var res = [];
+  function add(ok, label, detail){ res.push({ ok: ok, label: label, detail: detail || '' }); }
+  add(true, 'অ্যাপের সংস্করণ', APP_VER);
+  var r = await sb.from('messages').select('reply_to,reactions,edited_at,pinned,view_once,opened_at,meta').limit(1);
+  add(!r.error, 'মেসেজের নতুন ঘর (রিপ্লাই, রিঅ্যাকশন, পিন, এডিট, ফাইল, ভয়েস, লোকেশন)', r.error ? r.error.message + ' → migration.sql চালান' : 'ঠিক আছে');
+  var rp = await sb.rpc('react_msg', { mid: '00000000-0000-0000-0000-000000000000', emo: null });
+  add(!rp.error, 'রিঅ্যাকশন ফাংশন', rp.error ? rp.error.message + ' → migration.sql চালান' : 'ঠিক আছে');
+  var nt = await sb.from('notes').select('id').limit(1);
+  add(!nt.error, 'নোট ও কাউন্টডাউন টেবিল', nt.error ? nt.error.message + ' → migration.sql চালান' : 'ঠিক আছে');
+  var own = msgs.filter(function(m){ return m.sender === me.id && !m.pending && !m.media_type; })[0];
+  if (own) {
+    var ed = await sb.from('messages').update({ edited_at: own.edited_at || null }).eq('id', own.id).select('id');
+    add(!ed.error && ed.data && ed.data.length === 1, 'নিজের মেসেজ এডিটের অনুমতি', ed.error ? ed.error.message : (ed.data && ed.data.length === 1 ? 'ঠিক আছে' : 'অনুমতি নেই → migration.sql চালান'));
+  }
+  try {
+    var up = await sb.storage.from('media').upload(me.id + '/_check.txt', new Blob(['ok'], { type: 'text/plain' }), { contentType: 'text/plain', upsert: true });
+    if (up.error) throw up.error;
+    sb.storage.from('media').remove([me.id + '/_check.txt']).then(function(){}, function(){});
+    add(true, 'ফাইল আপলোড (স্টোরেজ)', 'ঠিক আছে');
+  } catch(e){ add(false, 'ফাইল আপলোড (স্টোরেজ)', (e && e.message) || 'হয়নি'); }
+  add(!!(window.MediaRecorder && navigator.mediaDevices), 'ভয়েস রেকর্ড', window.MediaRecorder ? 'ফোনে চলবে' : 'এই ব্রাউজারে নেই');
+  add(!!navigator.geolocation, 'লোকেশন', navigator.geolocation ? 'ফোনে চলবে' : 'এই ব্রাউজারে নেই');
+  add(!!(window.crypto && crypto.subtle), 'অ্যাপ লক', (window.crypto && crypto.subtle) ? 'চলবে' : 'https ছাড়া চলে না');
+  add(!!window.PublicKeyCredential, 'ফিঙ্গারপ্রিন্ট', window.PublicKeyCredential ? 'ফোন সমর্থন করে' : 'এই ব্রাউজারে নেই');
+  add(('Notification' in window) && Notification.permission === 'granted', 'নোটিফিকেশনের অনুমতি', ('Notification' in window) ? Notification.permission : 'নেই');
+  return res;
+}
+function openChecks(){
+  openPanel('সবকিছু ঠিক আছে কিনা', function(b){
+    b.appendChild(el('div', 'muted', 'পরীক্ষা চলছে…'));
+    runChecks().then(function(list){
+      b.textContent = '';
+      list.forEach(function(x){
+        var row = el('div', 'it'); row.style.cssText = 'padding:10px 4px;border-bottom:1px solid var(--line)';
+        row.appendChild(el('div', '', (x.ok ? '✅ ' : '❌ ') + x.label));
+        var d = el('small', '', x.detail); d.style.cssText = 'display:block;color:var(--muted);font-size:12px;word-break:break-word'; row.appendChild(d);
+        b.appendChild(row);
+      });
+    }, function(e){ b.textContent = ''; b.appendChild(el('div', 'muted', 'পরীক্ষা করা যায়নি (নেট দেখুন): ' + ((e && e.message) || ''))); });
+  });
+}
+async function quickProbe(){
+  try {
+    var r = await sb.from('messages').select('reply_to,reactions,edited_at,pinned,view_once,opened_at,meta').limit(1);
+    $('sqlBar').classList.toggle('hidden', !r.error);
+  } catch(e){}
+}
+$('sqlBar').onclick = openChecks;
+
 /* ---------- সেটিংস ---------- */
 function buildAccentSw(){
   var box = $('acSw'); box.textContent = '';
@@ -1848,6 +1921,7 @@ function openSettings(){
   $('setBio').checked = !!(lockCfg && lockCfg.bio);
   $('setTtl').value = String(settings.ttl || 0);
   $('setPray').checked = !!settings.prayerRemind;
+  $('verLine').textContent = 'অ্যাপের সংস্করণ: ' + APP_VER;
   $('settings').classList.remove('hidden');
 }
 Array.from($('themeSeg').children).forEach(function(b){
@@ -1878,6 +1952,7 @@ $('setPray').onchange = async function(){
   if (this.checked) loadPrayer(false);
 };
 $('backupBtn').onclick = backupChat;
+$('checkBtn').onclick = function(){ $('settings').classList.add('hidden'); openChecks(); };
 
 /* ===================== ইভেন্ট ===================== */
 $('aGo').onclick = doAuth;
