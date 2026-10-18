@@ -517,6 +517,45 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 #sugBar .sg-c{flex:none;width:74px;height:74px;border-radius:14px;overflow:hidden;border:2px solid var(--accent);padding:0;background:#222;box-shadow:var(--shadow);transition:transform .12s}
 #sugBar .sg-c:active{transform:scale(.92)}
 #sugBar .sg-c img{width:100%;height:100%;display:block;object-fit:cover}
+
+/* ===== স্বাগত পাতা: আরও রং ===== */
+@keyframes spTw2{0%,100%{opacity:.2;transform:scale(.6) rotate(0)}50%{opacity:1;transform:scale(1.25) rotate(25deg)}}
+#splash{background-image:var(--pat),radial-gradient(circle at 10% 6%,#c9f0dc 0,transparent 44%),radial-gradient(circle at 94% 22%,#e3d3ff 0,transparent 42%),radial-gradient(circle at 8% 58%,#ffe0cc 0,transparent 40%),radial-gradient(circle at 92% 60%,#cdeafe 0,transparent 42%),radial-gradient(circle at 14% 92%,#ffd3e3 0,transparent 46%),radial-gradient(circle at 86% 90%,#fff0b8 0,transparent 44%)}
+.sp-bunt{position:absolute;top:0;left:0;width:100%;height:64px;transform-origin:50% 0;animation:spSway 6s ease-in-out infinite;filter:drop-shadow(0 3px 4px rgba(0,0,0,.12));z-index:2}
+.sp-waves{position:absolute;left:0;right:0;bottom:0;width:100%;height:150px}
+.sp-tw{position:absolute;animation:spTw2 3s ease-in-out infinite}
+.sp-flower{top:30px}
+.sp-willow{top:20px}
+.sp-moon{position:relative}
+.sp-moon::before{content:"";position:absolute;left:50%;bottom:-6px;width:270px;height:135px;margin-left:-135px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 130'%3E%3Cpath d='M10 130A120 120 0 0 1 250 130' fill='none' stroke='%23fb7185' stroke-width='10' stroke-opacity='.5'/%3E%3Cpath d='M21 130A109 109 0 0 1 239 130' fill='none' stroke='%23fb923c' stroke-width='10' stroke-opacity='.5'/%3E%3Cpath d='M32 130A98 98 0 0 1 228 130' fill='none' stroke='%23fbbf24' stroke-width='10' stroke-opacity='.5'/%3E%3Cpath d='M43 130A87 87 0 0 1 217 130' fill='none' stroke='%234ade80' stroke-width='10' stroke-opacity='.5'/%3E%3Cpath d='M54 130A76 76 0 0 1 206 130' fill='none' stroke='%2338bdf8' stroke-width='10' stroke-opacity='.5'/%3E%3Cpath d='M65 130A65 65 0 0 1 195 130' fill='none' stroke='%23a78bfa' stroke-width='10' stroke-opacity='.5'/%3E%3C/svg%3E") center/contain no-repeat;z-index:-1}
+.sp-bism{background:linear-gradient(90deg,#0f766e,#2563eb,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.sp-orn b{font-size:15px;letter-spacing:1px}
+.sp-hello{color:#be185d;font-weight:600}
+.sp-card .ar2{background:linear-gradient(90deg,#059669,#7c3aed,#db2777);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.sp-card small{color:#c2410c}
+.sp-btns{background:none}
+#spGo{background:linear-gradient(135deg,#10b981,#06b6d4);box-shadow:0 8px 22px rgba(6,182,212,.4)}
+#spNew{color:#a21caf;background:linear-gradient(135deg,#fff,#fdf2ff);border:2px solid #d946ef;box-shadow:0 8px 22px rgba(217,70,239,.25)}
+
+/* ===== স্বাগত পাতা: হার্ট ও প্রজাপতি (v17) ===== */
+@keyframes hFloat{0%,100%{transform:translate(0,0) rotate(var(--r0))}50%{transform:translate(var(--dx),var(--dy)) rotate(var(--r1))}}
+@keyframes hBeat{0%,100%{transform:scale(1)}14%{transform:scale(1.14)}28%{transform:scale(1)}42%{transform:scale(1.09)}}
+@keyframes hRise{0%{transform:translateY(0) scale(.5);opacity:0}12%{opacity:.85}100%{transform:translateY(-112vh) scale(1.1);opacity:0}}
+@keyframes bFlap{from{transform:scaleX(1)}to{transform:scaleX(.18)}}
+@keyframes bPath{0%{transform:translate(-14vw,var(--y0)) rotate(8deg)}20%{transform:translate(22vw,calc(var(--y0) - 9vh)) rotate(-12deg)}40%{transform:translate(48vw,calc(var(--y0) + 6vh)) rotate(10deg)}60%{transform:translate(72vw,calc(var(--y0) - 8vh)) rotate(-8deg)}80%{transform:translate(96vw,calc(var(--y0) + 5vh)) rotate(10deg)}100%{transform:translate(118vw,calc(var(--y0) - 6vh)) rotate(-6deg)}}
+#splash{background-color:#fff;background-image:radial-gradient(circle at 12% 8%,#ffe4ea 0,transparent 42%),radial-gradient(circle at 92% 30%,#fff0f3 0,transparent 40%),radial-gradient(circle at 10% 70%,#fff0f3 0,transparent 40%),radial-gradient(circle at 90% 96%,#ffdce4 0,transparent 42%)}
+.sp-moon::before{display:none}
+.sp-h{position:absolute;filter:drop-shadow(0 5px 6px rgba(120,20,40,.28));animation:hFloat var(--t) ease-in-out var(--d) infinite}
+.sp-h svg{display:block;width:100%;height:auto;animation:hBeat var(--b) ease-in-out var(--d) infinite}
+.sp-hr{position:absolute;bottom:-40px;animation:hRise var(--t) linear var(--d) infinite;opacity:0}
+.sp-hr svg{display:block;width:100%;height:auto}
+.sp-bf{position:absolute;left:0;top:0;width:var(--w);animation:bPath var(--t) linear var(--d) infinite;will-change:transform}
+.sp-bf svg{display:block;width:100%;height:auto;overflow:visible}
+.sp-bf .wg{transform-origin:50px 40px;animation:bFlap .3s ease-in-out infinite alternate}
+.sp-bism,.sp-ar,.sp-card .ar2,.sp-ahlan{filter:drop-shadow(0 1px 0 rgba(255,255,255,.9))}
+.sp-card{background:linear-gradient(rgba(255,255,255,.92),rgba(255,255,255,.92)) padding-box,linear-gradient(135deg,#e11d48,#fb7185,#e11d48) border-box}
+#spGo{background:linear-gradient(135deg,#f43f5e,#be123c);box-shadow:0 8px 22px rgba(225,29,72,.38)}
+#spNew{color:#be123c;background:#fff;border:2px solid #fb7185;box-shadow:0 8px 22px rgba(225,29,72,.16)}
 </style>
 </head>
 <body>
@@ -679,25 +718,12 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   </div>
 </div>
 <div id="splash">
-  <div class="sp-fx"><div class="sp-allah">ﷲ</div><svg id="spWillow" class="sp-willow" viewBox="0 0 300 380"></svg><svg class="sp-flower" viewBox="0 0 200 340" fill="none"><g transform="rotate(180 100 170)"><g stroke-linecap="round">
-<path d="M92 340C90 270 86 210 98 128" stroke="#d62828" stroke-width="4"/><path d="M106 340C108 270 118 200 103 128" stroke="#e5383b" stroke-width="3.2"/><path d="M99 340C100 280 100 220 100 130" stroke="#b91c1c" stroke-width="2.4"/>
-<path d="M95 255C70 236 38 236 10 252 40 262 74 262 95 255Z" fill="#2f5d3a" stroke="none"/><path d="M12 252C40 248 70 252 94 255" stroke="#a7c4a0" stroke-width=".8"/>
-<path d="M92 205C66 188 36 192 14 208 42 214 70 214 92 205Z" fill="#3b6b44" stroke="none"/><path d="M16 208C42 202 66 204 90 205" stroke="#a7c4a0" stroke-width=".8"/>
-<path d="M104 245C130 230 158 232 186 246 158 256 128 256 104 245Z" fill="#2f5d3a" stroke="none"/><path d="M184 246C158 242 130 244 106 245" stroke="#a7c4a0" stroke-width=".8"/>
-<path d="M102 292C124 280 148 282 172 296 148 302 122 302 102 292Z" fill="#3b6b44" stroke="none"/>
-<path d="M92 300C70 288 46 290 24 304 46 310 70 310 92 300Z" fill="#2f5d3a" stroke="none"/></g>
-<g transform="translate(100 100)">
-<g stroke="#e63946" stroke-width=".9" fill="#fff">
-<path transform="rotate(0)" d="M0 0C-34-22-40-62-2-70 38-64 34-24 0 0Z"/><path transform="rotate(72)" d="M0 0C-34-22-40-62-2-70 38-64 34-24 0 0Z"/><path transform="rotate(144)" d="M0 0C-34-22-40-62-2-70 38-64 34-24 0 0Z"/><path transform="rotate(216)" d="M0 0C-34-22-40-62-2-70 38-64 34-24 0 0Z"/><path transform="rotate(288)" d="M0 0C-34-22-40-62-2-70 38-64 34-24 0 0Z"/></g>
-<g stroke="#b9b9b9" stroke-width=".5" opacity=".8"><path d="M0 -8V-60M-6-10L-22-52M6-10L22-52"/><path transform="rotate(72)" d="M0 -8V-60M-6-10L-22-52M6-10L22-52"/><path transform="rotate(144)" d="M0 -8V-60M-6-10L-22-52M6-10L22-52"/><path transform="rotate(216)" d="M0 -8V-60M-6-10L-22-52M6-10L22-52"/><path transform="rotate(288)" d="M0 -8V-60M-6-10L-22-52M6-10L22-52"/></g>
-<g fill="#e11d2e"><path d="M0 0C-7-10-6-26 0-32 6-26 7-10 0 0Z"/><path transform="rotate(45)" d="M0 0C-7-10-6-26 0-32 6-26 7-10 0 0Z"/><path transform="rotate(90)" d="M0 0C-7-10-6-26 0-32 6-26 7-10 0 0Z"/><path transform="rotate(135)" d="M0 0C-7-10-6-26 0-32 6-26 7-10 0 0Z"/><path transform="rotate(180)" d="M0 0C-7-10-6-26 0-32 6-26 7-10 0 0Z"/><path transform="rotate(225)" d="M0 0C-7-10-6-26 0-32 6-26 7-10 0 0Z"/><path transform="rotate(270)" d="M0 0C-7-10-6-26 0-32 6-26 7-10 0 0Z"/><path transform="rotate(315)" d="M0 0C-7-10-6-26 0-32 6-26 7-10 0 0Z"/></g>
-<g stroke="#f6e4d0" stroke-width="1.2"><path d="M0 0L-10-14M0 0L-3-18M0 0L6-16M0 0L12-10M0 0L-14-6"/></g>
-<g fill="#fff3e0"><circle cx="-10" cy="-14" r="2"/><circle cx="-3" cy="-18" r="2"/><circle cx="6" cy="-16" r="2"/><circle cx="12" cy="-10" r="2"/><circle cx="-14" cy="-6" r="2"/></g></g></g></svg><i class="sp-pet" style="left:60%;width:15px;height:11px;background:#a7f3d0;--dx:45px;--r:380deg;animation-duration:23s;animation-delay:-6s"></i><i class="sp-pet" style="left:26%;width:15px;height:11px;background:#a7f3d0;--dx:-23px;--r:168deg;animation-duration:21s;animation-delay:-9s"></i><i class="sp-pet" style="left:21%;width:9px;height:11px;background:#ddd6fe;--dx:-60px;--r:322deg;animation-duration:21s;animation-delay:-20s"></i><i class="sp-pet" style="left:81%;width:14px;height:8px;background:#fbcfe8;--dx:-67px;--r:390deg;animation-duration:15s;animation-delay:-1s"></i><i class="sp-pet" style="left:7%;width:10px;height:8px;background:#fbcfe8;--dx:-63px;--r:357deg;animation-duration:19s;animation-delay:-14s"></i><i class="sp-pet" style="left:78%;width:15px;height:8px;background:#fbcfe8;--dx:-11px;--r:270deg;animation-duration:21s;animation-delay:-0s"></i><i class="sp-pet" style="left:87%;width:9px;height:10px;background:#ddd6fe;--dx:1px;--r:328deg;animation-duration:22s;animation-delay:-2s"></i><i class="sp-pet" style="left:93%;width:11px;height:9px;background:#c4b5fd;--dx:61px;--r:267deg;animation-duration:14s;animation-delay:-2s"></i><i class="sp-pet" style="left:75%;width:15px;height:7px;background:#a7f3d0;--dx:-43px;--r:268deg;animation-duration:20s;animation-delay:-2s"></i><i class="sp-pet" style="left:5%;width:15px;height:7px;background:#c4b5fd;--dx:-17px;--r:146deg;animation-duration:21s;animation-delay:-12s"></i><i class="sp-pet" style="left:93%;width:12px;height:10px;background:#f9a8d4;--dx:-20px;--r:258deg;animation-duration:19s;animation-delay:-2s"></i><svg class="sp-mon a" viewBox="0 0 100 84"><g class="w"><path d="M50 42C38 8 6 2 4 26c0 14 26 20 46 16z" fill="#f59e0b" stroke="#1f1306" stroke-width="2.4"/><path d="M50 46C40 68 20 76 14 62c-2-8 18-16 36-16z" fill="#fbbf24" stroke="#1f1306" stroke-width="2.4"/><path d="M50 42L14 22M50 42L10 38M50 46L22 60" stroke="#1f1306" stroke-width="1.6"/><circle cx="12" cy="20" r="2.2" fill="#fff"/><circle cx="8" cy="30" r="2" fill="#fff"/></g><g class="w" style="transform:scaleX(-1);transform-origin:50px 42px"><path d="M50 42C38 8 6 2 4 26c0 14 26 20 46 16z" fill="#f59e0b" stroke="#1f1306" stroke-width="2.4"/><path d="M50 46C40 68 20 76 14 62c-2-8 18-16 36-16z" fill="#fbbf24" stroke="#1f1306" stroke-width="2.4"/><path d="M50 42L14 22M50 42L10 38M50 46L22 60" stroke="#1f1306" stroke-width="1.6"/><circle cx="12" cy="20" r="2.2" fill="#fff"/><circle cx="8" cy="30" r="2" fill="#fff"/></g><ellipse cx="50" cy="48" rx="3.4" ry="18" fill="#1f1306"/><path d="M48 30C44 20 40 16 36 14M52 30C56 20 60 16 64 14" stroke="#1f1306" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg><svg class="sp-mon b" viewBox="0 0 100 84"><g class="w"><path d="M50 42C38 8 6 2 4 26c0 14 26 20 46 16z" fill="#f59e0b" stroke="#1f1306" stroke-width="2.4"/><path d="M50 46C40 68 20 76 14 62c-2-8 18-16 36-16z" fill="#fbbf24" stroke="#1f1306" stroke-width="2.4"/><path d="M50 42L14 22M50 42L10 38M50 46L22 60" stroke="#1f1306" stroke-width="1.6"/><circle cx="12" cy="20" r="2.2" fill="#fff"/><circle cx="8" cy="30" r="2" fill="#fff"/></g><g class="w" style="transform:scaleX(-1);transform-origin:50px 42px"><path d="M50 42C38 8 6 2 4 26c0 14 26 20 46 16z" fill="#f59e0b" stroke="#1f1306" stroke-width="2.4"/><path d="M50 46C40 68 20 76 14 62c-2-8 18-16 36-16z" fill="#fbbf24" stroke="#1f1306" stroke-width="2.4"/><path d="M50 42L14 22M50 42L10 38M50 46L22 60" stroke="#1f1306" stroke-width="1.6"/><circle cx="12" cy="20" r="2.2" fill="#fff"/><circle cx="8" cy="30" r="2" fill="#fff"/></g><ellipse cx="50" cy="48" rx="3.4" ry="18" fill="#1f1306"/><path d="M48 30C44 20 40 16 36 14M52 30C56 20 60 16 64 14" stroke="#1f1306" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></div>
+  <div class="sp-fx" id="spFx"></div>
   <div class="sp-moon">☪</div>
   <div class="sp-bism">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
   <div class="sp-ar">أَهْلاً وَسَهْلاً</div>
   <div class="sp-ahlan">আহলান সাহলান</div>
-  <div class="sp-orn"><span></span><b>✦</b><span></span></div>
+  <div class="sp-orn"><span></span><b>🌷 ✦ 🌸 ✦ 🌼</b><span></span></div>
   <div class="sp-names"><span class="gr">যাকওয়ান</span> <i class="hrt">♥️</i> <span class="gr">সাদিয়া</span></div>
   <div class="sp-hello" id="spHello"></div>
   <div class="sp-card"><div class="ar2" id="spAr2"></div><div id="spStatus"></div><small id="spRef"></small></div>
@@ -731,7 +757,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   </div>
   <div class="tb2">
     <button data-c="undo" aria-label="আনডু">↶</button><button data-c="redo" aria-label="রিডু">↷</button><button data-c="bold"><b>B</b></button><button data-c="italic"><i>I</i></button><button data-c="underline"><u>U</u></button>
-    <button data-c="insertUnorderedList" aria-label="বুলেট তালিকা">•≡</button><button data-c="insertOrderedList" aria-label="নম্বর তালিকা">১.</button><button id="a4H" aria-label="শিরোনাম"><b>H</b></button><button data-c="insertHorizontalRule" aria-label="আড়াআড়ি দাগ">―</button><button id="a4Rtl" aria-label="আরবি ডান-থেকে-বামে">ع</button><button data-c="justifyLeft">⇤</button><button data-c="justifyCenter">↔</button><button data-c="justifyRight">⇥</button><button data-c="justifyFull" aria-label="দুই পাশে সমান"><svg width="18" height="16" viewBox="0 0 18 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 3h14M2 8h14M2 13h14"/></svg></button><button id="a4Gap" aria-label="ফাঁকা লাইন যোগ করুন"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2h12M3 5h8M3 13h12M3 16h8"/><path d="M9 7.5v3M7.5 9h3" stroke-width="1.6"/></svg></button>
+    <button data-c="insertUnorderedList" aria-label="বুলেট তালিকা">•≡</button><button data-c="insertOrderedList" aria-label="নম্বর তালিকা">১.</button><button id="a4H" aria-label="শিরোনাম"><b>H</b></button><button data-c="insertHorizontalRule" aria-label="আড়াআড়ি দাগ">―</button><button id="a4Rtl" aria-label="আরবি ডান-থেকে-বামে">ع</button><button data-c="justifyLeft">⇤</button><button data-c="justifyCenter">↔</button><button data-c="justifyRight">⇥</button><button data-c="justifyFull" aria-label="দুই পাশে সমান"><svg width="18" height="16" viewBox="0 0 18 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 3h14M2 8h14M2 13h14"/></svg></button><button id="a4Gap" aria-label="ফাঁকা লাইন যোগ করুন"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 2h12M3 5h8M3 13h12M3 16h8"/><path d="M9 7.5v3M7.5 9h3" stroke-width="1.6"/></svg></button><button id="a4LUp" aria-label="লাইন ওপরে নিন" title="লাইন ওপরে">⬆</button><button id="a4LDn" aria-label="লাইন নিচে নিন" title="লাইন নিচে">⬇</button><button id="a4LSel" aria-label="লাইন সিলেক্ট করুন" title="লাইন সিলেক্ট">▭ লাইন</button>
     <select id="a4Ff" aria-label="ফন্ট"><option value="Hind Siliguri" style="font-family:'Hind Siliguri','Hind Siliguri'">হিন্দ সিলিগুড়ি (ডিফল্ট)</option><option value="SutonnyOMJ" style="font-family:'SutonnyOMJ','Hind Siliguri'">সুতন্নি ওএমজে (ফাইল লাগে)</option><option value="Bornomala" style="font-family:'Bornomala','Hind Siliguri'">বর্ণমালা (ফাইল লাগে)</option><option value="Kalpurush" style="font-family:'Kalpurush','Hind Siliguri'">কালপুরুষ (ফাইল লাগে)</option><option value="Nikosh" style="font-family:'Nikosh','Hind Siliguri'">নিকষ (ফাইল লাগে)</option><option value="SolaimanLipi" style="font-family:'SolaimanLipi','Hind Siliguri'">সোলায়মান লিপি (ফাইল লাগে)</option><option value="Noto Sans Bengali" style="font-family:'Noto Sans Bengali','Hind Siliguri'">নোটো সানস বাংলা</option><option value="Noto Serif Bengali" style="font-family:'Noto Serif Bengali','Hind Siliguri'">নোটো সেরিফ (বইয়ের মতো)</option><option value="Anek Bangla" style="font-family:'Anek Bangla','Hind Siliguri'">আনেক বাংলা</option><option value="Mina" style="font-family:'Mina','Hind Siliguri'">মিনা (নরম ও পরিষ্কার)</option><option value="Baloo Da 2" style="font-family:'Baloo Da 2','Hind Siliguri'">বালু দা (গোলগাল)</option><option value="Tiro Bangla" style="font-family:'Tiro Bangla','Hind Siliguri'">তিরো বাংলা (ক্লাসিক)</option><option value="Atma" style="font-family:'Atma','Hind Siliguri'">আত্মা (মজার ধাঁচ)</option><option value="Amiri" style="font-family:'Amiri'">আমিরি (আরবি, সুন্দর)</option><option value="Noto Naskh Arabic" style="font-family:'Noto Naskh Arabic'">নোটো নাসখ (আরবি)</option><option value="Scheherazade New" style="font-family:'Scheherazade New'">শেহেরাজাদ (কুরআনের ধাঁচ)</option><option value="Aref Ruqaa" style="font-family:'Aref Ruqaa'">আরিফ রুকআ (আরবি ক্যালিগ্রাফি)</option><option value="Noto Nastaliq Urdu" style="font-family:'Noto Nastaliq Urdu'">নোটো নাস্তালিক (উর্দু)</option><option value="Gulzar" style="font-family:'Gulzar'">গুলজার (উর্দু, নাস্তালিক)</option><option value="Lateef" style="font-family:'Lateef'">লতীফ (উর্দু/সিন্ধি)</option><option value="Galada" style="font-family:'Galada','Hind Siliguri'">গালাদা (হাতের লেখার মতো)</option></select>
     <button id="a4Min">A−</button><span class="sz" id="a4Sz">20</span><button id="a4Pls">A+</button>
     <button id="a4Tc" aria-label="লেখার রং" style="border-bottom:4px solid #c0392b"><b>A</b></button><button id="a4Hl" aria-label="হাইলাইট" style="border-bottom:4px solid #facc15">🖍</button>
@@ -2596,7 +2622,7 @@ function colorSettings(){
   });
 }
 /* ---------- সংস্করণ ও স্বয়ংক্রিয় পরীক্ষা ---------- */
-var APP_VER = 'v15 · ১৭ অক্টোবর (লাভ, প্রজাপতি, ইমুজি, সাজেশন)';
+var APP_VER = 'v17 · ১৮ অক্টোবর (হার্ট ও প্রজাপতির স্বাগত পাতা)';
 async function runChecks(){
   var res = [];
   function add(ok, label, detail){ res.push({ ok: ok, label: label, detail: detail || '' }); }
@@ -2999,6 +3025,34 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   var AR = ['وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً', 'رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ', 'خَيْرُكُمْ خَيْرُكُمْ لِأَهْلِهِ', 'بَارَكَ اللَّهُ لَكُمَا وَبَارَكَ عَلَيْكُمَا وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ'];
   var LI = Math.floor(Date.now() / 864e5) % LINES.length, L = LINES[LI];
   $('spAr2').textContent = AR[LI] || '';
+
+  (function fx(){
+    var box = $('spFx'); if (!box) return;
+    var seed = 11; function R(){ seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    var HP = 'M50 90C18 66 4 46 4 28 4 14 15 5 28 5c9 0 17 5 22 13 5-8 13-13 22-13 13 0 24 9 24 23 0 18-14 38-46 62z';
+    function heart(c1, c2, dots, uid){
+      var d = '';
+      for (var k = 0; k < dots; k++) d += '<circle cx="' + (22 + R() * 56).toFixed(0) + '" cy="' + (16 + R() * 40).toFixed(0) + '" r="' + (1.4 + R() * 1.3).toFixed(1) + '" fill="' + c2 + '" opacity=".75"/>';
+      return '<svg viewBox="0 0 100 96"><defs><linearGradient id="hg' + uid + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + c1 + '"/><stop offset="1" stop-color="' + c2 + '"/></linearGradient></defs><path d="' + HP + '" fill="url(#hg' + uid + ')"/><path d="M26 16C18 18 14 26 15 34" stroke="#fff" stroke-opacity=".5" stroke-width="3" fill="none" stroke-linecap="round"/>' + d + '</svg>';
+    }
+    var spots = [[4,3,64],[70,2,52],[40,0,34],[84,16,40],[-4,19,40],[88,36,58],[-6,44,52],[78,56,36],[2,64,46],[60,66,62],[26,74,34],[86,76,44],[14,84,60],[50,88,40],[-2,30,26],[92,60,28]];
+    var cols = [['#ff5a73','#c1121f'],['#ffffff','#f3c4cc'],['#ff7b8f','#d90429'],['#ffffff','#ffd9df'],['#f43f5e','#9f1239']];
+    var html = '';
+    spots.forEach(function(p, i){
+      var c = cols[i % cols.length];
+      html += '<div class="sp-h" style="left:' + p[0] + '%;top:' + p[1] + '%;width:' + p[2] + 'px;--dx:' + ((R() - .5) * 26).toFixed(0) + 'px;--dy:' + ((R() - .5) * 34).toFixed(0) + 'px;--r0:' + ((R() - .5) * 30).toFixed(0) + 'deg;--r1:' + ((R() - .5) * 30).toFixed(0) + 'deg;--t:' + (5 + R() * 4).toFixed(1) + 's;--b:' + (1.6 + R() * 1.2).toFixed(1) + 's;--d:-' + (R() * 6).toFixed(1) + 's">' + heart(c[0], c[1], c[0] === '#ffffff' ? 0 : 2, 'a' + i) + '</div>';
+    });
+    for (var j = 0; j < 9; j++) {
+      var c2 = cols[j % cols.length];
+      html += '<div class="sp-hr" style="left:' + (4 + R() * 90).toFixed(0) + '%;width:' + (14 + R() * 16).toFixed(0) + 'px;--t:' + (8 + R() * 7).toFixed(1) + 's;--d:-' + (R() * 12).toFixed(1) + 's">' + heart(c2[0], c2[1], 0, 'r' + j) + '</div>';
+    }
+    var BC = [['#ff4d8d','#ffd23f'],['#3a86ff','#8be9fd'],['#8338ec','#ff99c8'],['#06d6a0','#ffe66d'],['#ff7a00','#ffd23f'],['#e11d48','#fb7185'],['#00b4d8','#c77dff']];
+    for (var b = 0; b < 7; b++) {
+      var q = BC[b], g = 'bw' + b;
+      html += '<div class="sp-bf" style="--w:' + (30 + R() * 16).toFixed(0) + 'px;--y0:' + (8 + R() * 78).toFixed(0) + 'vh;--t:' + (15 + R() * 10).toFixed(0) + 's;--d:-' + (R() * 22).toFixed(0) + 's"><svg viewBox="0 0 100 80"><defs><linearGradient id="' + g + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + q[0] + '"/><stop offset="1" stop-color="' + q[1] + '"/></linearGradient></defs><g class="wg"><path d="M50 40C38 8 8 0 4 20 2 34 24 44 50 42Z" fill="url(#' + g + ')"/><path d="M50 42C30 46 10 56 20 72 32 80 46 60 50 42Z" fill="url(#' + g + ')" opacity=".92"/><path d="M50 40C62 8 92 0 96 20 98 34 76 44 50 42Z" fill="url(#' + g + ')"/><path d="M50 42C70 46 90 56 80 72 68 80 54 60 50 42Z" fill="url(#' + g + ')" opacity=".92"/><circle cx="22" cy="22" r="5" fill="#fff" opacity=".75"/><circle cx="78" cy="22" r="5" fill="#fff" opacity=".75"/><circle cx="26" cy="62" r="3" fill="#fff" opacity=".7"/><circle cx="74" cy="62" r="3" fill="#fff" opacity=".7"/></g><ellipse cx="50" cy="42" rx="2.6" ry="16" fill="#3b2a2a"/><path d="M49 28Q44 14 38 12M51 28Q56 14 62 12" stroke="#3b2a2a" stroke-width="1.4" fill="none"/></svg></div>';
+    }
+    box.innerHTML = html;
+  })();
   (function art(){
     var svg = $('spWillow'); if (!svg) return;
     var NS = 'http://www.w3.org/2000/svg', seed = 7;
@@ -3087,7 +3141,7 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   pg.innerHTML=pages[idx];
   function setFs(n){fs=Math.max(12,Math.min(40,n));pg.style.fontSize=fs+'px';g('a4Sz').textContent=fs;try{localStorage.setItem(FS,fs);}catch(e){}chk();}
   function fit(){var w=area.clientWidth-20,sc=Math.min(1,w/794);pg.style.transform='scale('+sc+')';wrap.style.width=(794*sc)+'px';wrap.style.height=(1123*sc)+'px';}
-  function chk(){g('a4Full').style.display=pg.scrollHeight>pg.clientHeight+2?'block':'none';}
+  function chk(){var o=pgOver();g('a4Full').style.display=o?'block':'none';if(o&&!reflowing&&pg.innerHTML!==stuckHtml)setTimeout(reflow,0);}
   pg.addEventListener('input',function(){grab();persist();chk();});
   g('a4Open').onclick=function(){g('settings').classList.add('hidden');ov.classList.remove('hidden');setFs(fs);fit();show(idx);};
   g('a4Prev').onclick=function(){show(idx-1);};g('a4Next').onclick=function(){show(idx+1);};
@@ -3250,6 +3304,163 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
     }catch(e){alert('ডাউনলোড হয়নি। নেট চালু আছে কিনা দেখে আবার চেষ্টা করুন।');}
     t.textContent=old;
   }
+  /* ===== স্বয়ংক্রিয় পাতা বদল + লাইন ওপর-নিচ ===== */
+  var meas=document.createElement('div');meas.className='pg';meas.setAttribute('aria-hidden','true');meas.style.cssText='position:absolute;left:-10000px;top:0;visibility:hidden;pointer-events:none;transform:none';ov.appendChild(meas);
+  var reflowing=false,stuckHtml=null;
+  function bottomOf(c){var r=document.createRange();r.selectNodeContents(c);var b=r.getBoundingClientRect();if(!b||(!b.height&&!b.width))return 0;var t=c.getBoundingClientRect(),sc=(c.offsetHeight?t.height/c.offsetHeight:1)||1;return (b.bottom-t.top)/sc;}
+  function limitOf(c){return c.clientHeight-(parseFloat(getComputedStyle(c).paddingBottom)||0);}
+  function overC(c){return bottomOf(c)>limitOf(c)+1;}
+  function pgOver(){return !ov.classList.contains('hidden')&&overC(pg);}
+  function mover(){return overC(meas);}
+  function mEmpty(){return meas.textContent.length===0&&!meas.querySelector('img,hr');}
+  function tokens(t){var a=t.split(/(\s+)/),o=[];a.forEach(function(w){if(w==='')return;if(w.length>24&&!/\s/.test(w)){var ch=Array.from(w);for(var k=0;k<ch.length;k+=16)o.push(ch.slice(k,k+16).join(''));}else o.push(w);});return o;}
+  function fitInto(cont,node){
+    if(node.nodeType===3){
+      var tk=tokens(node.nodeValue),empty=mEmpty(),t=document.createTextNode('');cont.appendChild(t);
+      var lo=0,hi=tk.length,best=0;
+      while(lo<=hi){var mid=(lo+hi)>>1;t.nodeValue=tk.slice(0,mid).join('');if(!mover()){best=mid;lo=mid+1;}else hi=mid-1;}
+      if(best===0&&empty&&tk.length)best=1;
+      t.nodeValue=tk.slice(0,best).join('');
+      if(best>=tk.length)return null;
+      if(best===0)cont.removeChild(t);
+      return document.createTextNode(tk.slice(best).join(''));
+    }
+    if(node.nodeType===1){
+      if(/^(BR|HR|IMG|SVG|CANVAS|INPUT)$/i.test(node.tagName)||!node.firstChild){
+        var emp=mEmpty();cont.appendChild(node);
+        if(mover()){cont.removeChild(node);if(emp){cont.appendChild(node);return null;}return node;}
+        return null;
+      }
+      var shell=node.cloneNode(false);cont.appendChild(shell);
+      var kids=Array.prototype.slice.call(node.childNodes);
+      for(var i=0;i<kids.length;i++){
+        var rem=fitInto(shell,kids[i]);
+        if(rem){
+          var rs=node.cloneNode(false);rs.appendChild(rem);for(var j=i+1;j<kids.length;j++)rs.appendChild(kids[j]);
+          if(!shell.firstChild)cont.removeChild(shell);
+          return rs;
+        }
+      }
+      return null;
+    }
+    cont.appendChild(node);return null;
+  }
+  function fitPage(i){
+    meas.style.cssText=pg.style.cssText;
+    meas.style.transform='none';meas.style.position='absolute';meas.style.left='-10000px';meas.style.top='0';meas.style.visibility='hidden';meas.style.pointerEvents='none';
+    meas.innerHTML=pages[i];
+    if(!mover())return '';
+    var ns=Array.prototype.slice.call(meas.childNodes),n=ns.length;
+    function put(p){while(meas.firstChild)meas.removeChild(meas.firstChild);for(var j=0;j<p;j++)meas.appendChild(ns[j]);}
+    var lo=0,hi=n-1,best=0;
+    while(lo<=hi){var mid=(lo+hi)>>1;put(mid);if(!mover()){best=mid;lo=mid+1;}else hi=mid-1;}
+    put(best);
+    var carry=document.createElement('div');
+    if(best<n){var rem=fitInto(meas,ns[best]);if(rem)carry.appendChild(rem);for(var k=best+1;k<n;k++)carry.appendChild(ns[k]);}
+    pages[i]=meas.innerHTML;
+    return carry.innerHTML;
+  }
+  function textLen(html){var d=document.createElement('div');d.innerHTML=html;return d.textContent.length;}
+  function caretOff(){var s=getSelection();if(!s.rangeCount||!pg.contains(s.anchorNode))return -1;var r=document.createRange();r.setStart(pg,0);try{r.setEnd(s.anchorNode,s.anchorOffset);}catch(e){return -1;}return r.toString().length;}
+  function setCaret(root,off){
+    var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),acc=0,nd,r=document.createRange(),done=false;
+    while((nd=w.nextNode())){var L=nd.nodeValue.length;if(acc+L>=off){r.setStart(nd,Math.max(0,off-acc));done=true;break;}acc+=L;}
+    if(!done){r.selectNodeContents(root);r.collapse(false);}else r.collapse(true);
+    var s=getSelection();s.removeAllRanges();s.addRange(r);
+  }
+  function reflow(){
+    if(reflowing)return;reflowing=true;
+    try{
+      var mk=null,s0=getSelection();
+      if(s0.rangeCount&&pg.contains(s0.anchorNode)){var r0=s0.getRangeAt(0).cloneRange();r0.collapse(false);mk=document.createElement('span');mk.id='a4caret';try{r0.insertNode(mk);}catch(e){mk=null;}}
+      grab();
+      var start=idx,i=idx,guard=0;
+      while(guard++<400){
+        var carry=fitPage(i);
+        if(!carry)break;
+        if(i>=pages.length-1)pages.push('');
+        pages[i+1]=carry+pages[i+1];i++;
+      }
+      var p=start;
+      if(mk){for(var q=start;q<pages.length;q++){if(pages[q].indexOf('id="a4caret"')>=0){p=q;break;}}}
+      var changedPage=p!==idx;
+      idx=p;pg.innerHTML=pages[idx];
+      stuckHtml=null;
+      show(idx);
+      if(mk){
+        var m=pg.querySelector('#a4caret');
+        if(m){var r=document.createRange();r.setStartBefore(m);r.collapse(true);m.parentNode.removeChild(m);pg.normalize();pg.focus();var s=getSelection();s.removeAllRanges();s.addRange(r);grab();persist();}
+      }
+      if(overC(pg))stuckHtml=pg.innerHTML;
+      if(changedPage){area.scrollTop=0;}
+      else{try{var s2=getSelection();if(s2.rangeCount){var rc=s2.getRangeAt(0).getBoundingClientRect(),ar=area.getBoundingClientRect();if(rc.height&&(rc.bottom>ar.bottom||rc.top<ar.top))area.scrollTop+=rc.bottom-ar.bottom+40;}}catch(e){}}
+    }finally{reflowing=false;}
+  }
+  pg.addEventListener('input',function(){if(!reflowing&&pgOver()&&pg.innerHTML!==stuckHtml)reflow();});
+  /* লাইন ওপরে/নিচে নেওয়া */
+  var BLK=/^(DIV|P|UL|OL|H1|H2|H3|HR|TABLE|BLOCKQUOTE)$/;
+  function normalize(){
+    var out=[],run=[];
+    function flush(){if(!run.length)return;var d=document.createElement('div');run.forEach(function(n){d.appendChild(n);});if(!d.textContent&&!d.querySelector('img'))d.innerHTML='<br>';out.push(d);run=[];}
+    Array.prototype.slice.call(pg.childNodes).forEach(function(n){
+      if(n.nodeType===1&&BLK.test(n.tagName)){flush();out.push(n);}
+      else if(n.nodeName==='BR'){run.push(n);flush();}
+      else run.push(n);
+    });
+    flush();
+    pg.textContent='';out.forEach(function(n){pg.appendChild(n);});
+  }
+  function unitOf(n){
+    var li=null,x=n;
+    while(x&&x!==pg){if(x.nodeName==='LI'&&!li)li=x;if(x.parentNode===pg)return li||x;x=x.parentNode;}
+    return null;
+  }
+  function selUnits(){
+    var s=getSelection(),r=null;
+    if(s.rangeCount&&pg.contains(s.anchorNode))r=s.getRangeAt(0);else if(saved&&pg.contains(saved.startContainer))r=saved;
+    if(!r)return null;
+    var sc=r.startContainer,so=r.startOffset,ec=r.endContainer,eo=r.endOffset;
+    normalize();
+    function fix(c,o){return pg.contains(c)?[c,o]:[pg,0];}
+    var a=fix(sc,so),b=fix(ec,eo);
+    function nodeAt(c,o,end){if(c===pg){var k=pg.childNodes;return k[end?Math.max(0,o-1):Math.min(o,k.length-1)];}return c;}
+    var u1=unitOf(nodeAt(a[0],a[1],false)),u2=unitOf(nodeAt(b[0],b[1],true));
+    if(!u1)return null;if(!u2)u2=u1;
+    if(u1!==u2&&b[0]!==pg&&u2.contains(b[0])){var tr=document.createRange();try{tr.setStart(u2,0);tr.setEnd(b[0],b[1]);if(tr.toString()===''&&u2.previousSibling)u2=u2.previousSibling;}catch(e){}}
+    if(u1.parentNode!==u2.parentNode){u1=u1.parentNode===pg?u1:unitOf(u1.parentNode)||u1;u2=u2.parentNode===pg?u2:unitOf(u2.parentNode)||u2;if(u1.parentNode!==u2.parentNode)u2=u1;}
+    if(u1.compareDocumentPosition(u2)&2){var t=u1;u1=u2;u2=t;}
+    var list=[],c=u1;while(c){list.push(c);if(c===u2)break;c=c.nextSibling;}
+    return list;
+  }
+  function selectUnits(list){
+    var r=document.createRange();r.setStartBefore(list[0]);r.setEndAfter(list[list.length-1]);
+    var s=getSelection();s.removeAllRanges();s.addRange(r);
+    try{list[0].scrollIntoView({block:'nearest'});}catch(e){}
+  }
+  function moveLines(dir){
+    pg.focus();var list=selUnits();
+    if(!list){alert('আগে যে লাইনটি সরাতে চান সেখানে ট্যাপ করুন।');return;}
+    var first=list[0],last=list[list.length-1],par=first.parentNode;
+    if(dir<0){
+      var pv=first.previousSibling;
+      if(!pv){selectUnits(list);if(window.toast)toast('এটা এই পাতার প্রথম লাইন');return;}
+      list.forEach(function(u){par.insertBefore(u,pv);});
+    }else{
+      var nx=last.nextSibling;
+      if(!nx){selectUnits(list);if(window.toast)toast('এটা এই পাতার শেষ লাইন');return;}
+      var ref=nx.nextSibling;list.forEach(function(u){par.insertBefore(u,ref);});
+    }
+    selectUnits(list);
+    pg.dispatchEvent(new Event('input'));
+    selectUnits(list);
+  }
+  function selLine(){
+    pg.focus();var list=selUnits();if(!list){alert('আগে যে লাইনটি সিলেক্ট করতে চান সেখানে ট্যাপ করুন।');return;}
+    selectUnits(list);
+  }
+  [['a4LUp',function(){moveLines(-1);}],['a4LDn',function(){moveLines(1);}],['a4LSel',selLine]].forEach(function(x){
+    var b=g(x[0]);['mousedown','pointerdown'].forEach(function(ev){b.addEventListener(ev,function(e){e.preventDefault();});});b.onclick=x[1];
+  });
   Array.prototype.forEach.call(menu.querySelectorAll('button'),function(b){b.onclick=function(){dl(b.getAttribute('data-f'));};});
 })();
 </script>
