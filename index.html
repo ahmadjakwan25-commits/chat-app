@@ -91,20 +91,6 @@ input,textarea{font:inherit;color:inherit}
 
 
 
-/* ---------- প্রফেশনাল ভয়েস স্টুডিও ---------- */
-#voiceStudio{position:fixed;inset:0;z-index:110;background:var(--bg);display:flex;flex-direction:column;overflow:auto;padding:calc(12px + env(safe-area-inset-top)) 14px calc(18px + env(safe-area-inset-bottom));}
-#voiceStudio .vsHead{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-#voiceStudio .vsHead h2{font-size:20px;flex:1}
-#voiceStudio .vsCard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
-#voiceStudio .vsSub{color:var(--muted);font-size:13px;line-height:1.5}
-#voiceStudio .vsActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-#voiceStudio .vsActions button{border:1px solid var(--line);border-radius:12px;padding:10px 12px;flex:1;min-width:105px}
-#voiceStudio .vsActions .primary{background:var(--accent);border-color:var(--accent);color:#fff}
-#voiceStudio button:disabled{opacity:.45;cursor:not-allowed}
-#voiceStudio audio{width:100%;margin-top:12px}
-#voiceStudio .vsStatus{margin-top:10px;font-size:13px;color:var(--accent);min-height:20px;overflow-wrap:anywhere}
-#voiceStudio input[type=file]{width:100%;margin-top:10px;font-size:13px}
-#voiceStudio .vsWarn{border-left:3px solid #d97706;padding:9px 11px;background:var(--bg);font-size:12px;line-height:1.55;border-radius:8px;margin-top:10px}
 /* ---------- সেটিংস ---------- */
 .sheetWrap{position:absolute;inset:0;z-index:40;background:rgba(0,0,0,.45);display:flex;align-items:flex-end}
 .sheet{width:100%;max-height:88%;overflow-y:auto;background:var(--panel);border-radius:18px 18px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom))}
@@ -433,7 +419,6 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 #spGo{color:#fff;background:linear-gradient(135deg,#10b981,#0f766e);box-shadow:0 8px 22px rgba(16,185,129,.4)}
 #spNew{color:#6d28d9;background:#fff;border:2px solid #a78bfa;box-shadow:0 8px 22px rgba(124,58,237,.18)}
 .sp-btns small{display:block;font-size:clamp(9px,2.7vw,11.5px);font-weight:500;opacity:.85}
-#spVoice{color:#fff;background:linear-gradient(135deg,#7c3aed,#2563eb);border:1px solid #8b5cf6;box-shadow:0 8px 22px rgba(99,102,241,.3)}
 @media (max-height:700px){#splash{padding-top:40px}.sp-ar{font-size:44px}.sp-ahlan{font-size:38px}.sp-card{margin-top:8px;padding:10px 14px}.sp-card .ar2{font-size:18px}.sp-card #spStatus{font-size:14px}.sp-willow{width:min(52vw,210px)}}
 @media (max-height:580px){.sp-card,.sp-hello{display:none}}
 
@@ -571,6 +556,18 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 .sp-card{background:linear-gradient(rgba(255,255,255,.92),rgba(255,255,255,.92)) padding-box,linear-gradient(135deg,#e11d48,#fb7185,#e11d48) border-box}
 #spGo{background:linear-gradient(135deg,#f43f5e,#be123c);box-shadow:0 8px 22px rgba(225,29,72,.38)}
 #spNew{color:#be123c;background:#fff;border:2px solid #fb7185;box-shadow:0 8px 22px rgba(225,29,72,.16)}
+
+/* ===== লেখার স্টাইল (v18) ===== */
+#styBar{display:flex;align-items:center;gap:8px;overflow-x:auto;padding:6px 10px;background:var(--panel);border-top:1px solid var(--line);scrollbar-width:none;animation:slideUp .18s ease-out}
+#styBar::-webkit-scrollbar{display:none}
+#styBar .lbl{flex:none;font-size:12px;color:var(--muted);line-height:1.2;text-align:center}
+#styBar .sy-auto{flex:none;font-size:12px;line-height:1.25;padding:6px 10px;border-radius:14px;border:1.5px dashed var(--accent);color:var(--accent);background:var(--bg)}
+#styBar .sy-auto.on{background:var(--accent);color:#fff;border-style:solid}
+#styBar .sy-c{flex:none;max-width:150px;max-height:56px;overflow:hidden;padding:6px 11px;text-align:left;line-height:1.3;font-size:14px;transition:transform .12s;word-break:break-word}
+#styBar .sy-c:active{transform:scale(.92)}
+.bubble.sty .meta{color:inherit!important;opacity:.78}
+.bubble.sty .tick{color:inherit}
+.bubble.sty .tick.read{color:#38bdf8}
 </style>
 </head>
 <body>
@@ -618,6 +615,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   <div id="replyBar" class="hidden"></div>
   <div id="emojiPanel" class="hidden"></div>
   <div id="sugBar" class="hidden"></div>
+  <div id="styBar" class="hidden"></div>
   <div id="bar" class="hidden">
     <button class="ib" id="btnEmoji" aria-label="ইমুজি">😊</button>
     <button class="ib" id="btnAttach" aria-label="ছবি বা ভিডিও">📎</button>
@@ -647,6 +645,8 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
       <div class="sw" id="acSw"></div>
       <h3>লেখার আকার</h3>
       <div class="line"><input type="range" id="setFont" min="14" max="22" step="1" style="flex:1"><span id="fontVal"></span></div>
+      <div class="line"><div>🎨 লেখার স্টাইল সাজেশন<small>লিখলেই নানা রং-ডিজাইনে লেখা দেখাবে, বেছে পাঠান</small></div><input type="checkbox" id="setSty"></div>
+      <div class="line"><div>🎲 প্রতি মেসেজে আলাদা স্টাইল<small>আমি যা পাঠাব, প্রতিটি আলাদা রং-ডিজাইনে যাবে; তার ফোনেও একই দেখাবে</small></div><input type="checkbox" id="setAutoSty"></div>
       <div class="line"><div>মেসেজের অ্যানিমেশন<small>নতুন মেসেজ আসার সময় নরম নড়াচড়া</small></div><input type="checkbox" id="setAnim"></div>
       <h3>ফন্ট (বাংলা লেখার ধরন)</h3>
       <select id="setFF" style="width:100%"></select>
@@ -697,32 +697,6 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     </div>
   </div>
 
-  <!-- প্রফেশনাল ভয়েস স্টুডিও: আলাদা মডিউল, পুরোনো চ্যাট ফিচার অপরিবর্তিত -->
-  <section id="voiceStudio" class="hidden" aria-label="প্রফেশনাল ভয়েস স্টুডিও">
-    <div class="vsHead"><button class="ib" id="vsClose" aria-label="বন্ধ করুন">←</button><h2>🎙️ প্রফেশনাল ভয়েস স্টুডিও</h2></div>
-    <div class="vsCard">
-      <h3>নিজের কণ্ঠ রেকর্ড করুন</h3>
-      <p class="vsSub">রেকর্ডিংয়ের সময় হালকা অডিও ক্লিনআপ, ভলিউম নিয়ন্ত্রণ ও কণ্ঠের টোন সমন্বয় করা হবে। মাইক্রোফোনের অনুমতি দিতে হবে।</p>
-      <div class="vsActions"><button class="primary" id="vsRecord">🔴 রেকর্ড শুরু</button><button id="vsStop" disabled>⏹ বন্ধ করুন</button></div>
-      <div id="vsTimer" class="vsStatus">রেকর্ডিংয়ের জন্য প্রস্তুত</div>
-    </div>
-    <div class="vsCard">
-      <h3>রেকর্ড করা অডিও</h3>
-      <p class="vsSub">পাঠানো বা ডাউনলোডের আগে এখানে শুনে নিন। চাইলে ফোন থেকে আগের অডিও ফাইলও বেছে নিতে পারবেন।</p>
-      <input id="vsFile" type="file" accept="audio/*">
-      <audio id="vsPlayer" controls class="hidden"></audio>
-      <div class="vsActions"><button id="vsDownload" disabled>⬇ ডাউনলোড</button><button id="vsSend" class="primary" disabled>➤ চ্যাটে পাঠান</button></div>
-      <div id="vsStatus" class="vsStatus" aria-live="polite"></div>
-    </div>
-    <div class="vsCard">
-      <h3>✨ AI ভয়েস উন্নতকরণ</h3>
-      <p class="vsSub">বিনামূল্যের ওপেন-সোর্স নয়েজ রিডাকশন দিয়ে বর্তমান রেকর্ডিং পরিষ্কার করার চেষ্টা করুন। অডিও আপনার ব্রাউজারেই প্রসেস হবে; কোনো AI API key বা পেইড সার্ভিস লাগবে না।</p>
-      <div class="vsActions"><button id="vsEnhance" class="primary" type="button">✨ ফ্রি নয়েজ রিডাকশন চালান</button><button id="vsRestore" type="button" disabled>↩ মূল অডিও ফেরত</button></div>
-      <div id="vsEnhanceStatus" class="vsStatus" aria-live="polite">প্রথমবার ওপেন-সোর্স প্রসেসিং লাইব্রেরি ইন্টারনেট থেকে লোড হবে। রেকর্ডিং আপলোড করা হবে না।</div>
-      <div class="vsWarn">নোট: এটি AI ভয়েস মডেল নয়; এটি স্থানীয় অডিও নয়েজ রিডাকশন। সব ধরনের শব্দ পুরোপুরি দূর নাও হতে পারে। পরিষ্কার করার সময় মূল অডিও ফেরত নেওয়ার অপশন থাকবে।</div>
-    </div>
-  </section>
-
   <!-- বাড়তি পাতা ও মেনু -->
   <div id="panel" class="hidden"><div class="ph"><button class="ib" id="panelBack" aria-label="পেছনে">←</button><div id="panelT"></div></div><div id="panelB"></div></div>
   <div id="sheet2" class="sheetWrap hidden"><div class="sheet" id="sheet2b"></div></div>
@@ -771,7 +745,6 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   <div class="sp-btns">
     <button id="spNew" type="button">📝 নতুন পাতা<small>লেখার পাতা</small></button>
     <button id="spGo" type="button">💬 চ্যাট খুলুন<small>আমাদের চ্যাট</small></button>
-    <button id="spVoice" type="button">🎙️ ভয়েস স্টুডিও<small>কণ্ঠ উন্নত করুন</small></button>
   </div>
 </div>
 <div id="fxLayer"></div>
@@ -1213,6 +1186,7 @@ function rowEl(m){
   else if (m.media_path || m.localUrl) b.appendChild(mediaEl(m));
   if (m.uploading) b.appendChild(el('div', 'txt', 'পাঠানো হচ্ছে…'));
   if (m.body) b.appendChild(el('div', 'txt' + (stk ? ' sticker' : ''), m.body));
+  if (!stk && !m.media_type && window.styApply) styApply(b, m);
   var rc = reactsEl(m); if (rc) b.appendChild(rc);
   var meta = el('div', 'meta');
   if (m.pinned) meta.appendChild(el('span', '', '📌'));
@@ -1271,7 +1245,7 @@ function sendText(){
   if (editing) { if (body) saveEdit(body); return; }
   if (!body) return;
   sendTyping(false);
-  queueMsg({ body: body });
+  queueMsg(window.styAutoPick ? styAutoPick(body) : { body: body });
   ta.value = ''; autoGrow(); $('emojiPanel').classList.add('hidden');
 }
 function queueMsg(f){
@@ -1323,7 +1297,7 @@ async function delMsg(m){
   onMsgDelete({ id: m.id });
 }
 function autoGrow(){ var t = $('msg'); t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight, 110) + 'px'; updateSendBtn(); }
-function updateSendBtn(){ var has = $('msg').value.trim().length > 0 || !!editing; $('send').classList.toggle('hidden', !has); $('btnMic').classList.toggle('hidden', has); if (window.sugUpdate) sugUpdate(); }
+function updateSendBtn(){ var has = $('msg').value.trim().length > 0 || !!editing; $('send').classList.toggle('hidden', !has); $('btnMic').classList.toggle('hidden', has); if (window.styUpdate) styUpdate(); if (window.sugUpdate) sugUpdate(); }
 
 /* ---------- ছবি ও ভিডিও ---------- */
 function compressImage(file, maxDim, q){
@@ -1633,6 +1607,87 @@ function sugUpdate(){
     });
     bar.classList.remove('hidden'); bar.scrollLeft = 0;
   }, 180);
+}
+
+
+/* ===================== লেখার স্টাইল ===================== */
+var STY_PAL = [
+  ['linear-gradient(135deg,#ff9a9e,#fad0c4)', '#5b1230', '#f9a8b8'],
+  ['linear-gradient(135deg,#4facfe,#00c6fb)', '#ffffff', '#2b8de0'],
+  ['linear-gradient(135deg,#d4fc79,#96e6a1)', '#14532d', '#7ccf8a'],
+  ['linear-gradient(135deg,#f6d365,#fda085)', '#5a2a0a', '#f0a15a'],
+  ['linear-gradient(135deg,#a18cd1,#fbc2eb)', '#3b0764', '#b394e0'],
+  ['linear-gradient(135deg,#0f2027,#2c5364)', '#ffe58a', '#3b6a80'],
+  ['linear-gradient(135deg,#fff7d6,#ffe08a)', '#7c4a00', '#d99a1a'],
+  ['linear-gradient(135deg,#e11d48,#9f1239)', '#ffffff', '#fb7185'],
+  ['linear-gradient(135deg,#059669,#064e3b)', '#ffffff', '#34d399'],
+  ['linear-gradient(135deg,#ff758c,#ff7eb3)', '#ffffff', '#ff4f8b'],
+  ['linear-gradient(135deg,#e0f2fe,#bae6fd)', '#0c4a6e', '#7dd3fc'],
+  ['linear-gradient(135deg,#6d28d9,#db2777)', '#ffffff', '#c084fc']
+];
+var STY_FF = ['Hind Siliguri', 'Galada', 'Baloo Da 2', 'Noto Serif Bengali', 'Tiro Bangla', 'Atma', 'Mina', 'Anek Bangla'];
+var STY_SH = [
+  { r: '18px', bd: 1, fw: 500 },
+  { r: '26px', bd: 0, fw: 700 },
+  { r: '8px', bd: 2, fw: 600 },
+  { r: '22px 22px 22px 4px', bd: 0, fw: 500 }
+];
+var STY_N = 36;
+function styOf(n){
+  n = +n; if (!(n >= 1 && n <= STY_N)) return null;
+  var k = n - 1, pal = STY_PAL[k % 12], sh = STY_SH[Math.floor(k / 12) % 4 === 0 ? (k % 4) : (k + Math.floor(k / 12)) % 4];
+  return { bg: pal[0], ink: pal[1], bd: pal[2], ff: STY_FF[(k * 5 + Math.floor(k / 12) * 3) % STY_FF.length], sh: sh, dark: pal[1] === '#ffffff' || pal[1] === '#ffe58a' };
+}
+function styId(m){ var t = m && m.meta; if (!t || typeof t !== 'string' || t.indexOf('sty:') !== 0) return 0; return +t.slice(4) || 0; }
+function styPaint(b, st, small){
+  b.style.setProperty('background', st.bg, 'important');
+  b.style.setProperty('color', st.ink, 'important');
+  b.style.setProperty('border-radius', small ? '16px' : st.sh.r, 'important');
+  b.style.setProperty('border', st.sh.bd ? st.sh.bd + 'px solid ' + st.bd : '0', 'important');
+  b.style.setProperty('box-shadow', st.sh.bd === 2 ? '3px 3px 0 ' + st.bd : '0 3px 10px rgba(0,0,0,.14)', 'important');
+  b.style.fontFamily = '"' + st.ff + '","Hind Siliguri",system-ui,sans-serif';
+  b.style.fontWeight = st.sh.fw;
+  if (st.dark) b.style.textShadow = '0 1px 3px rgba(0,0,0,.35)';
+}
+function styApply(b, m){
+  var st = styOf(styId(m)); if (!st) return;
+  b.classList.add('sty'); styPaint(b, st);
+  var q = b.querySelector('.txt'); if (q) { q.style.fontFamily = 'inherit'; q.style.fontWeight = 'inherit'; }
+}
+var styLast = 0;
+function styAutoPick(body){
+  if (!settings.autoSty || EMO_RE && EMO_RE.test(body) && Array.from(body.replace(/\s/g, '')).length <= 4) return { body: body };
+  var n; do { n = 1 + Math.floor(Math.random() * STY_N); } while (n === styLast && STY_N > 1);
+  styLast = n; return { body: body, meta: 'sty:' + n };
+}
+var styChips = null, styT = 0, styKey = '';
+function styUpdate(){
+  var bar = $('styBar'); if (!bar) return;
+  var t = ($('msg').value || '').trim();
+  if (!t || editing || t.length > 200 || settings.styleSug === false) { bar.classList.add('hidden'); styKey = ''; return; }
+  clearTimeout(styT);
+  styT = setTimeout(function(){
+    if (!styChips) {
+      styChips = [];
+      bar.textContent = '';
+      bar.appendChild(el('div', 'lbl', '🎨\nস্টাইল'));
+      var au = el('button', 'sy-auto', '🎲 প্রতিটি\nআলাদা'); au.type = 'button'; au.id = 'syAuto';
+      au.onclick = function(){ settings.autoSty = !settings.autoSty; lsSet('settings', settings); toast(settings.autoSty ? '🎲 এখন থেকে প্রতি মেসেজ আলাদা স্টাইলে' : 'স্বাভাবিক মেসেজ'); styUpdate(); };
+      bar.appendChild(au);
+      for (var i = 1; i <= STY_N; i++) (function(n){
+        var b = el('button', 'sy-c', ''); b.type = 'button'; styPaint(b, styOf(n), true);
+        b.onclick = function(){
+          var body = $('msg').value.trim(); if (!me || !body) return;
+          sendTyping(false); queueMsg({ body: body, meta: 'sty:' + n });
+          $('msg').value = ''; autoGrow(); $('emojiPanel').classList.add('hidden');
+        };
+        styChips.push(b); bar.appendChild(b);
+      })(i);
+    }
+    $('syAuto').classList.toggle('on', !!settings.autoSty);
+    if (t !== styKey) { styKey = t; var shown = t.length > 60 ? t.slice(0, 58) + '…' : t; styChips.forEach(function(b){ b.textContent = shown; }); bar.scrollLeft = 0; }
+    bar.classList.remove('hidden');
+  }, 160);
 }
 
 /* ===================== ব্যাকগ্রাউন্ড ===================== */
@@ -2330,7 +2385,6 @@ function openMore(){
     sheetItem(b, '🖼 ছবি ও ভিডিওর অ্যালবাম', openAlbum);
     sheetItem(b, '📝 শেয়ার নোট ও কাউন্টডাউন', openNotes);
     sheetItem(b, '🕌 সালাতের সময়', openPrayer);
-    sheetItem(b, '🎙️ প্রফেশনাল ভয়েস স্টুডিও', openVoiceStudio);
     sheetItem(b, '⚙️ সেটিংস', openSettings);
     sheetItem(b, 'বন্ধ করুন', null, 'alt');
   });
@@ -2665,7 +2719,7 @@ function colorSettings(){
   });
 }
 /* ---------- সংস্করণ ও স্বয়ংক্রিয় পরীক্ষা ---------- */
-var APP_VER = 'v17 · ১৮ অক্টোবর (হার্ট ও প্রজাপতির স্বাগত পাতা)';
+var APP_VER = 'v18 · ১৮ অক্টোবর (ভয়েস স্টুডিও বাদ, লেখার স্টাইল)';
 async function runChecks(){
   var res = [];
   function add(ok, label, detail){ res.push({ ok: ok, label: label, detail: detail || '' }); }
@@ -2738,6 +2792,7 @@ function openSettings(){
   Array.from($('themeSeg').children).forEach(function(b){ b.classList.toggle('on', b.dataset.v === (settings.theme || 'auto')); });
   $('setFont').value = settings.font || 16; $('fontVal').textContent = bn(settings.font || 16);
   $('setAnim').checked = settings.anim !== false;
+  $('setSty').checked = settings.styleSug !== false; $('setAutoSty').checked = !!settings.autoSty;
   $('setLock').checked = !!lockCfg;
   $('bioLine').classList.toggle('hidden', !(lockCfg && window.PublicKeyCredential));
   $('setBio').checked = !!(lockCfg && lockCfg.bio);
@@ -2751,6 +2806,8 @@ Array.from($('themeSeg').children).forEach(function(b){
   b.onclick = function(){ settings.theme = b.dataset.v; lsSet('settings', settings); applyTheme(); pushShared(); Array.from($('themeSeg').children).forEach(function(x){ x.classList.toggle('on', x === b); }); };
 });
 $('setFont').oninput = function(){ settings.font = +this.value; $('fontVal').textContent = bn(this.value); lsSet('settings', settings); applyTheme(); pushShared(); };
+$('setSty').onchange = function(){ settings.styleSug = this.checked; lsSet('settings', settings); if (window.styUpdate) styUpdate(); };
+$('setAutoSty').onchange = function(){ settings.autoSty = this.checked; lsSet('settings', settings); toast(this.checked ? '🎲 প্রতি মেসেজ আলাদা স্টাইলে যাবে' : 'স্বাভাবিক মেসেজ'); if (window.styUpdate) styUpdate(); };
 $('setAnim').onchange = function(){ settings.anim = this.checked; lsSet('settings', settings); applyTheme(); pushShared(); };
 $('setLock').onchange = function(){
   if (!(window.crypto && crypto.subtle)) { toast('এই ব্রাউজারে পিন লক চলবে না'); this.checked = !!lockCfg; return; }
@@ -3141,11 +3198,6 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   var closed = false, t;
   function close(){ if (closed) return; closed = true; clearTimeout(t); sp.classList.add('out'); setTimeout(function(){ if (closed) sp.classList.add('away'); }, 650); }
   $('spGo').onclick = close;
-  $('spVoice').onclick = function(){
-    if (closed) { openVoiceStudio(false); return; }
-    closed = true; clearTimeout(t); sp.classList.add('out');
-    setTimeout(function(){ sp.classList.add('away'); openVoiceStudio(true); }, 650);
-  };
   $('spNew').onclick = function(){ if (closed) return; sp.classList.add('away'); $('a4Open').click(); };
   function show(){ closed = false; sp.classList.remove('out'); sp.classList.remove('away'); }
   window.__spBack = show; window.__spShow = show; window.__spClose = close;
@@ -3163,146 +3215,6 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   try { var g = await sb.auth.getSession(); s = g.data && g.data.session; } catch(e){}
   if (s) await enter(s.user); else showAuth();
 })();
-/* ---------- প্রফেশনাল ভয়েস স্টুডিও ---------- */
-var vsState = { recorder: null, stream: null, ctx: null, chunks: [], blob: null, url: null, originalBlob: null, started: 0, timer: null, mime: 'audio/webm' };
-var vsReturnToSplash = false;
-function openVoiceStudio(fromSplash){
-  vsReturnToSplash = !!fromSplash;
-  try { if (typeof closeSheet === 'function') closeSheet(); } catch(e){}
-  $('settings').classList.add('hidden');
-  $('voiceStudio').classList.remove('hidden');
-  $('vsStatus').textContent = '';
-}
-function vsSetStatus(t){ $('vsStatus').textContent = t || ''; }
-function vsResetAudio(){
-  if (vsState.url) { try { URL.revokeObjectURL(vsState.url); } catch(e){} }
-  vsState.url = null; vsState.blob = null;
-  $('vsPlayer').pause(); $('vsPlayer').removeAttribute('src'); $('vsPlayer').load(); $('vsPlayer').classList.add('hidden');
-  $('vsDownload').disabled = true; $('vsSend').disabled = true;
-}
-function vsLoadBlob(blob, name, keepOriginal){
-  if (!blob || !blob.size) { vsSetStatus('অডিও তৈরি হয়নি; আবার চেষ্টা করুন।'); return; }
-  if (!keepOriginal) { vsState.originalBlob = null; $('vsRestore').disabled = true; }
-  vsResetAudio(); vsState.blob = blob; vsState.url = URL.createObjectURL(blob);
-  $('vsPlayer').src = vsState.url; $('vsPlayer').classList.remove('hidden');
-  $('vsDownload').disabled = false; $('vsSend').disabled = false;
-  vsSetStatus((name || 'অডিও প্রস্তুত') + ' · ' + (blob.size/1024).toFixed(0) + ' KB');
-}
-function vsExt(blob){
-  var t = (blob && blob.type || '').toLowerCase();
-  if (t.indexOf('mp4') >= 0 || t.indexOf('m4a') >= 0) return 'm4a';
-  if (t.indexOf('wav') >= 0) return 'wav';
-  if (t.indexOf('mpeg') >= 0 || t.indexOf('mp3') >= 0) return 'mp3';
-  if (t.indexOf('ogg') >= 0) return 'ogg';
-  return 'webm';
-}
-async function vsStart(){
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) { vsSetStatus('এই ব্রাউজারে রেকর্ডিং সমর্থিত নয়। Chrome-এ HTTPS লিংক খুলে চেষ্টা করুন।'); return; }
-  if (vsState.recorder) return;
-  try {
-    vsResetAudio(); vsState.chunks = [];
-    var stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true, noiseSuppression:true, autoGainControl:true, channelCount:1}});
-    vsState.stream = stream;
-    var Ctx = window.AudioContext || window.webkitAudioContext;
-    if (!Ctx) throw new Error('AudioContext নেই');
-    var ctx = new Ctx(); vsState.ctx = ctx;
-    var source = ctx.createMediaStreamSource(stream);
-    var high = ctx.createBiquadFilter(); high.type = 'highpass'; high.frequency.value = 85; high.Q.value = 0.7;
-    var presence = ctx.createBiquadFilter(); presence.type = 'peaking'; presence.frequency.value = 2800; presence.Q.value = 0.8; presence.gain.value = 1.5;
-    var comp = ctx.createDynamicsCompressor(); comp.threshold.value = -22; comp.knee.value = 18; comp.ratio.value = 3; comp.attack.value = 0.008; comp.release.value = 0.22;
-    var gain = ctx.createGain(); gain.gain.value = 1.0;
-    var dest = ctx.createMediaStreamDestination();
-    source.connect(high); high.connect(presence); presence.connect(comp); comp.connect(gain); gain.connect(dest);
-    var candidates = ['audio/webm;codecs=opus','audio/webm','audio/mp4'].filter(function(t){ try{return MediaRecorder.isTypeSupported(t)}catch(e){return false} });
-    var mime = candidates[0] || '';
-    var recorder = mime ? new MediaRecorder(dest.stream,{mimeType:mime,audioBitsPerSecond:96000}) : new MediaRecorder(dest.stream);
-    vsState.recorder = recorder; vsState.mime = recorder.mimeType || mime || 'audio/webm'; vsState.started = Date.now();
-    recorder.ondataavailable = function(e){ if(e.data && e.data.size) vsState.chunks.push(e.data); };
-    recorder.onerror = function(){ vsSetStatus('রেকর্ডিংয়ে সমস্যা হয়েছে; আবার চেষ্টা করুন।'); };
-    recorder.onstop = async function(){
-      var blob = new Blob(vsState.chunks,{type:(vsState.mime || 'audio/webm').split(';')[0]});
-      vsState.recorder = null;
-      if (vsState.timer) clearInterval(vsState.timer); vsState.timer = null;
-      if (vsState.stream) vsState.stream.getTracks().forEach(function(t){t.stop()}); vsState.stream = null;
-      if (vsState.ctx) { try{await vsState.ctx.close()}catch(e){} vsState.ctx = null; }
-      $('vsRecord').disabled = false; $('vsStop').disabled = true;
-      vsLoadBlob(blob,'ক্লিন-আপ করা রেকর্ডিং');
-      $('vsTimer').textContent = 'রেকর্ডিং সম্পন্ন';
-    };
-    await ctx.resume(); recorder.start(500);
-    $('vsRecord').disabled = true; $('vsStop').disabled = false;
-    $('vsTimer').textContent = 'রেকর্ড হচ্ছে: ০০:০০';
-    vsState.timer = setInterval(function(){
-      var sec = Math.floor((Date.now()-vsState.started)/1000), mm=String(Math.floor(sec/60)).padStart(2,'0'), ss=String(sec%60).padStart(2,'0');
-      $('vsTimer').textContent = 'রেকর্ড হচ্ছে: '+mm+':'+ss;
-      if(sec>=300) vsStop();
-    },250);
-    vsSetStatus('রেকর্ডিং চলছে—শেষ হলে বন্ধ করুন।');
-  } catch(e){
-    if (vsState.stream) vsState.stream.getTracks().forEach(function(t){t.stop()}); vsState.stream=null;
-    if (vsState.ctx) {try{await vsState.ctx.close()}catch(x){} vsState.ctx=null;}
-    vsState.recorder=null; $('vsRecord').disabled=false; $('vsStop').disabled=true;
-    vsSetStatus(e && e.name==='NotAllowedError' ? 'মাইক্রোফোনের অনুমতি দিন।' : 'রেকর্ডিং চালু হয়নি। HTTPS/মাইক্রোফোনের অনুমতি পরীক্ষা করুন।');
-  }
-}
-function vsStop(){ if(vsState.recorder && vsState.recorder.state!=='inactive'){ try{vsState.recorder.stop()}catch(e){} } }
-$('vsRecord').onclick = vsStart;
-$('vsStop').onclick = vsStop;
-$('vsClose').onclick = function(){ if(vsState.recorder) vsStop(); $('voiceStudio').classList.add('hidden'); if(vsReturnToSplash && window.__spShow) window.__spShow(); vsReturnToSplash=false; };
-$('vsFile').onchange = function(){
-  var f=this.files && this.files[0]; this.value=''; if(!f) return;
-  if(!/^audio\//i.test(f.type)){vsSetStatus('শুধু অডিও ফাইল বেছে নিন।');return;}
-  vsLoadBlob(f,f.name || 'বাছাই করা অডিও');
-};
-$('vsDownload').onclick = function(){
-  if(!vsState.blob) return;
-  var a=document.createElement('a'); a.href=vsState.url; a.download='voice-studio-'+Date.now()+'.'+vsExt(vsState.blob); document.body.appendChild(a); a.click(); a.remove();
-};
-function vsEncodeWav(audioBuffer){
-  var channels=audioBuffer.numberOfChannels, rate=audioBuffer.sampleRate, length=audioBuffer.length, bytes=length*channels*2, out=new ArrayBuffer(44+bytes), v=new DataView(out), pos=44;
-  function str(o,t){for(var i=0;i<t.length;i++)v.setUint8(o+i,t.charCodeAt(i));}
-  str(0,'RIFF');v.setUint32(4,36+bytes,true);str(8,'WAVE');str(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,channels,true);v.setUint32(24,rate,true);v.setUint32(28,rate*channels*2,true);v.setUint16(32,channels*2,true);v.setUint16(34,16,true);str(36,'data');v.setUint32(40,bytes,true);
-  var data=[];for(var c=0;c<channels;c++)data.push(audioBuffer.getChannelData(c));
-  for(var i=0;i<length;i++)for(var c=0;c<channels;c++){var x=Math.max(-1,Math.min(1,data[c][i]));v.setInt16(pos,x<0?x*32768:x*32767,true);pos+=2;}
-  return new Blob([out],{type:'audio/wav'});
-}
-$('vsEnhance').onclick = async function(){
-  var btn=$('vsEnhance'), status=$('vsEnhanceStatus'), input=vsState.blob;
-  if(!input){status.textContent='আগে রেকর্ড করুন অথবা একটি অডিও ফাইল বেছে নিন।';return;}
-  if(input.size>60*1024*1024){status.textContent='ফাইলটি ৬০ MB-এর বেশি। ছোট অডিও দিয়ে চেষ্টা করুন।';return;}
-  btn.disabled=true; $('vsRestore').disabled=true; status.textContent='লাইব্রেরি লোড ও অডিও পরিষ্কার করা হচ্ছে…';
-  var ctx=null;
-  try{
-    var mod=await import('https://esm.sh/@audio/denoise');
-    if(typeof mod.denoise!=='function') throw new Error('denoise function unavailable');
-    var Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)throw new Error('AudioContext unavailable');ctx=new Ctx();
-    var arr=await input.arrayBuffer(), decoded=await ctx.decodeAudioData(arr.slice(0));
-    if(decoded.length>decoded.sampleRate*600)throw new Error('Audio is longer than 10 minutes');
-    var out=ctx.createBuffer(decoded.numberOfChannels,decoded.length,decoded.sampleRate);var plans=[];
-    for(var c=0;c<decoded.numberOfChannels;c++){
-      status.textContent='অডিও পরিষ্কার হচ্ছে… ('+(c+1)+'/'+decoded.numberOfChannels+')';
-      var samples=new Float32Array(decoded.getChannelData(c));
-      var result=mod.denoise(samples,{fs:decoded.sampleRate,returnPlan:true});
-      var cleaned=result&&result.out?result.out:result;
-      if(!cleaned||cleaned.length!==decoded.length)throw new Error('Unexpected denoise output');
-      out.copyToChannel(new Float32Array(cleaned),c); if(result&&result.plan)plans.push(result.plan);
-    }
-    var cleanedBlob=vsEncodeWav(out);vsState.originalBlob=input;vsLoadBlob(cleanedBlob,'ফ্রি নয়েজ রিডাকশন সম্পন্ন · WAV',true);$('vsRestore').disabled=false;
-    status.textContent='সম্পন্ন! পরিষ্কার অডিও WAV ফরম্যাটে তৈরি হয়েছে। প্রিভিউ শুনুন; ভালো না লাগলে “মূল অডিও ফেরত” চাপুন।'+(plans.length?' পদ্ধতি: '+plans.join(', '):'');
-  }catch(e){status.textContent='প্রসেস করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করুন, অথবা অন্য/ছোট অডিও দিয়ে চেষ্টা করুন।';console.error('Free denoise error',e);}
-  finally{if(ctx){try{await ctx.close()}catch(e){}}btn.disabled=false;}
-};
-$('vsRestore').onclick=function(){if(vsState.originalBlob){var b=vsState.originalBlob;vsLoadBlob(b,'মূল অডিও পুনরুদ্ধার',true);$('vsRestore').disabled=true;$('vsEnhanceStatus').textContent='মূল অডিও ফিরিয়ে আনা হয়েছে।';}};
-$('vsSend').onclick = async function(){
-  if(!vsState.blob) return;
-  if(!me){vsSetStatus('আগে অ্যাকাউন্টে লগইন করুন।');return;}
-  if(!navigator.onLine){vsSetStatus('চ্যাটে পাঠাতে ইন্টারনেট সংযোগ লাগবে।');return;}
-  var b=vsState.blob; $('vsSend').disabled=true; vsSetStatus('চ্যাটে পাঠানো হচ্ছে…');
-  try { await uploadSend({blob:b,ext:vsExt(b),ctype:(b.type||'audio/webm').split(';')[0],media_type:'audio',meta:String(Math.max(1,Math.round(($('vsPlayer').duration||1))))}); vsSetStatus('চ্যাটে পাঠানোর অনুরোধ সম্পন্ন হয়েছে।'); }
-  catch(e){vsSetStatus('পাঠানো যায়নি। নেটওয়ার্ক/স্টোরেজের অনুমতি পরীক্ষা করুন।');}
-  finally {$('vsSend').disabled=false;}
-};
-
 </script>
 
 <script>
