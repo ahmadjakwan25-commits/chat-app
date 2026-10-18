@@ -91,6 +91,20 @@ input,textarea{font:inherit;color:inherit}
 
 
 
+/* ---------- প্রফেশনাল ভয়েস স্টুডিও ---------- */
+#voiceStudio{position:fixed;inset:0;z-index:110;background:var(--bg);display:flex;flex-direction:column;overflow:auto;padding:calc(12px + env(safe-area-inset-top)) 14px calc(18px + env(safe-area-inset-bottom));}
+#voiceStudio .vsHead{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+#voiceStudio .vsHead h2{font-size:20px;flex:1}
+#voiceStudio .vsCard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+#voiceStudio .vsSub{color:var(--muted);font-size:13px;line-height:1.5}
+#voiceStudio .vsActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+#voiceStudio .vsActions button{border:1px solid var(--line);border-radius:12px;padding:10px 12px;flex:1;min-width:105px}
+#voiceStudio .vsActions .primary{background:var(--accent);border-color:var(--accent);color:#fff}
+#voiceStudio button:disabled{opacity:.45;cursor:not-allowed}
+#voiceStudio audio{width:100%;margin-top:12px}
+#voiceStudio .vsStatus{margin-top:10px;font-size:13px;color:var(--accent);min-height:20px;overflow-wrap:anywhere}
+#voiceStudio input[type=file]{width:100%;margin-top:10px;font-size:13px}
+#voiceStudio .vsWarn{border-left:3px solid #d97706;padding:9px 11px;background:var(--bg);font-size:12px;line-height:1.55;border-radius:8px;margin-top:10px}
 /* ---------- সেটিংস ---------- */
 .sheetWrap{position:absolute;inset:0;z-index:40;background:rgba(0,0,0,.45);display:flex;align-items:flex-end}
 .sheet{width:100%;max-height:88%;overflow-y:auto;background:var(--panel);border-radius:18px 18px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom))}
@@ -414,11 +428,12 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 .sp-card #spStatus{font-size:15.5px;line-height:1.65;color:#2a3d39}
 .sp-card small{display:block;margin-top:6px;color:#b45309;font-size:12.5px;font-weight:600}
 .sp-btns{position:absolute!important;left:0;right:0;bottom:0;z-index:3!important;display:flex;gap:12px;justify-content:center;padding:34px 16px calc(20px + env(safe-area-inset-bottom));background:linear-gradient(to top,#fbf7ee 55%,rgba(251,247,238,0));animation:spUp .8s 1.55s both}
-.sp-btns button{flex:1;max-width:178px;padding:13px 8px;border-radius:30px;font-weight:700;font-size:16.5px;line-height:1.25;transition:transform .12s}
+.sp-btns button{flex:1;min-width:0;max-width:178px;padding:12px 5px;border-radius:24px;font-weight:700;font-size:clamp(11px,3.5vw,15px);line-height:1.25;transition:transform .12s}
 .sp-btns button:active{transform:scale(.95)}
 #spGo{color:#fff;background:linear-gradient(135deg,#10b981,#0f766e);box-shadow:0 8px 22px rgba(16,185,129,.4)}
 #spNew{color:#6d28d9;background:#fff;border:2px solid #a78bfa;box-shadow:0 8px 22px rgba(124,58,237,.18)}
-.sp-btns small{display:block;font-size:11.5px;font-weight:500;opacity:.85}
+.sp-btns small{display:block;font-size:clamp(9px,2.7vw,11.5px);font-weight:500;opacity:.85}
+#spVoice{color:#fff;background:linear-gradient(135deg,#7c3aed,#2563eb);border:1px solid #8b5cf6;box-shadow:0 8px 22px rgba(99,102,241,.3)}
 @media (max-height:700px){#splash{padding-top:40px}.sp-ar{font-size:44px}.sp-ahlan{font-size:38px}.sp-card{margin-top:8px;padding:10px 14px}.sp-card .ar2{font-size:18px}.sp-card #spStatus{font-size:14px}.sp-willow{width:min(52vw,210px)}}
 @media (max-height:580px){.sp-card,.sp-hello{display:none}}
 
@@ -682,6 +697,30 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     </div>
   </div>
 
+  <!-- প্রফেশনাল ভয়েস স্টুডিও: আলাদা মডিউল, পুরোনো চ্যাট ফিচার অপরিবর্তিত -->
+  <section id="voiceStudio" class="hidden" aria-label="প্রফেশনাল ভয়েস স্টুডিও">
+    <div class="vsHead"><button class="ib" id="vsClose" aria-label="বন্ধ করুন">←</button><h2>🎙️ প্রফেশনাল ভয়েস স্টুডিও</h2></div>
+    <div class="vsCard">
+      <h3>নিজের কণ্ঠ রেকর্ড করুন</h3>
+      <p class="vsSub">রেকর্ডিংয়ের সময় হালকা অডিও ক্লিনআপ, ভলিউম নিয়ন্ত্রণ ও কণ্ঠের টোন সমন্বয় করা হবে। মাইক্রোফোনের অনুমতি দিতে হবে।</p>
+      <div class="vsActions"><button class="primary" id="vsRecord">🔴 রেকর্ড শুরু</button><button id="vsStop" disabled>⏹ বন্ধ করুন</button></div>
+      <div id="vsTimer" class="vsStatus">রেকর্ডিংয়ের জন্য প্রস্তুত</div>
+    </div>
+    <div class="vsCard">
+      <h3>রেকর্ড করা অডিও</h3>
+      <p class="vsSub">পাঠানো বা ডাউনলোডের আগে এখানে শুনে নিন। চাইলে ফোন থেকে আগের অডিও ফাইলও বেছে নিতে পারবেন।</p>
+      <input id="vsFile" type="file" accept="audio/*">
+      <audio id="vsPlayer" controls class="hidden"></audio>
+      <div class="vsActions"><button id="vsDownload" disabled>⬇ ডাউনলোড</button><button id="vsSend" class="primary" disabled>➤ চ্যাটে পাঠান</button></div>
+      <div id="vsStatus" class="vsStatus" aria-live="polite"></div>
+    </div>
+    <div class="vsCard">
+      <h3>✨ AI ভয়েস উন্নতকরণ</h3>
+      <p class="vsSub">বর্তমান সংস্করণে ব্রাউজার-ভিত্তিক অডিও ক্লিনআপ চালু আছে। প্রকৃত AI noise removal/voice enhancement চালু করতে নিরাপদ সার্ভার API ও অনুমোদিত AI সার্ভিস যুক্ত করতে হবে।</p>
+      <div class="vsWarn">গুরুত্বপূর্ণ: এই HTML ফাইলে কোনো AI API key বসাবেন না। সেটি সার্ভারে নিরাপদে রাখতে হবে। এখনকার রেকর্ডিং ফিল্টার AI নয় এবং সব ধরনের পেছনের শব্দ দূর করার নিশ্চয়তা দেয় না।</div>
+    </div>
+  </section>
+
   <!-- বাড়তি পাতা ও মেনু -->
   <div id="panel" class="hidden"><div class="ph"><button class="ib" id="panelBack" aria-label="পেছনে">←</button><div id="panelT"></div></div><div id="panelB"></div></div>
   <div id="sheet2" class="sheetWrap hidden"><div class="sheet" id="sheet2b"></div></div>
@@ -730,6 +769,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   <div class="sp-btns">
     <button id="spNew" type="button">📝 নতুন পাতা<small>লেখার পাতা</small></button>
     <button id="spGo" type="button">💬 চ্যাট খুলুন<small>আমাদের চ্যাট</small></button>
+    <button id="spVoice" type="button">🎙️ ভয়েস স্টুডিও<small>কণ্ঠ উন্নত করুন</small></button>
   </div>
 </div>
 <div id="fxLayer"></div>
@@ -2288,6 +2328,7 @@ function openMore(){
     sheetItem(b, '🖼 ছবি ও ভিডিওর অ্যালবাম', openAlbum);
     sheetItem(b, '📝 শেয়ার নোট ও কাউন্টডাউন', openNotes);
     sheetItem(b, '🕌 সালাতের সময়', openPrayer);
+    sheetItem(b, '🎙️ প্রফেশনাল ভয়েস স্টুডিও', openVoiceStudio);
     sheetItem(b, '⚙️ সেটিংস', openSettings);
     sheetItem(b, 'বন্ধ করুন', null, 'alt');
   });
@@ -3098,6 +3139,11 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   var closed = false, t;
   function close(){ if (closed) return; closed = true; clearTimeout(t); sp.classList.add('out'); setTimeout(function(){ if (closed) sp.classList.add('away'); }, 650); }
   $('spGo').onclick = close;
+  $('spVoice').onclick = function(){
+    if (closed) { openVoiceStudio(false); return; }
+    closed = true; clearTimeout(t); sp.classList.add('out');
+    setTimeout(function(){ sp.classList.add('away'); openVoiceStudio(true); }, 650);
+  };
   $('spNew').onclick = function(){ if (closed) return; sp.classList.add('away'); $('a4Open').click(); };
   function show(){ closed = false; sp.classList.remove('out'); sp.classList.remove('away'); }
   window.__spBack = show; window.__spShow = show; window.__spClose = close;
@@ -3115,6 +3161,110 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   try { var g = await sb.auth.getSession(); s = g.data && g.data.session; } catch(e){}
   if (s) await enter(s.user); else showAuth();
 })();
+/* ---------- প্রফেশনাল ভয়েস স্টুডিও ---------- */
+var vsState = { recorder: null, stream: null, ctx: null, chunks: [], blob: null, url: null, started: 0, timer: null, mime: 'audio/webm' };
+var vsReturnToSplash = false;
+function openVoiceStudio(fromSplash){
+  vsReturnToSplash = !!fromSplash;
+  try { if (typeof closeSheet === 'function') closeSheet(); } catch(e){}
+  $('settings').classList.add('hidden');
+  $('voiceStudio').classList.remove('hidden');
+  $('vsStatus').textContent = '';
+}
+function vsSetStatus(t){ $('vsStatus').textContent = t || ''; }
+function vsResetAudio(){
+  if (vsState.url) { try { URL.revokeObjectURL(vsState.url); } catch(e){} }
+  vsState.url = null; vsState.blob = null;
+  $('vsPlayer').pause(); $('vsPlayer').removeAttribute('src'); $('vsPlayer').load(); $('vsPlayer').classList.add('hidden');
+  $('vsDownload').disabled = true; $('vsSend').disabled = true;
+}
+function vsLoadBlob(blob, name){
+  if (!blob || !blob.size) { vsSetStatus('অডিও তৈরি হয়নি; আবার চেষ্টা করুন।'); return; }
+  vsResetAudio(); vsState.blob = blob; vsState.url = URL.createObjectURL(blob);
+  $('vsPlayer').src = vsState.url; $('vsPlayer').classList.remove('hidden');
+  $('vsDownload').disabled = false; $('vsSend').disabled = false;
+  vsSetStatus((name || 'অডিও প্রস্তুত') + ' · ' + (blob.size/1024).toFixed(0) + ' KB');
+}
+function vsExt(blob){
+  var t = (blob && blob.type || '').toLowerCase();
+  if (t.indexOf('mp4') >= 0 || t.indexOf('m4a') >= 0) return 'm4a';
+  if (t.indexOf('wav') >= 0) return 'wav';
+  if (t.indexOf('mpeg') >= 0 || t.indexOf('mp3') >= 0) return 'mp3';
+  if (t.indexOf('ogg') >= 0) return 'ogg';
+  return 'webm';
+}
+async function vsStart(){
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) { vsSetStatus('এই ব্রাউজারে রেকর্ডিং সমর্থিত নয়। Chrome-এ HTTPS লিংক খুলে চেষ্টা করুন।'); return; }
+  if (vsState.recorder) return;
+  try {
+    vsResetAudio(); vsState.chunks = [];
+    var stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true, noiseSuppression:true, autoGainControl:true, channelCount:1}});
+    vsState.stream = stream;
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) throw new Error('AudioContext নেই');
+    var ctx = new Ctx(); vsState.ctx = ctx;
+    var source = ctx.createMediaStreamSource(stream);
+    var high = ctx.createBiquadFilter(); high.type = 'highpass'; high.frequency.value = 85; high.Q.value = 0.7;
+    var presence = ctx.createBiquadFilter(); presence.type = 'peaking'; presence.frequency.value = 2800; presence.Q.value = 0.8; presence.gain.value = 1.5;
+    var comp = ctx.createDynamicsCompressor(); comp.threshold.value = -22; comp.knee.value = 18; comp.ratio.value = 3; comp.attack.value = 0.008; comp.release.value = 0.22;
+    var gain = ctx.createGain(); gain.gain.value = 1.0;
+    var dest = ctx.createMediaStreamDestination();
+    source.connect(high); high.connect(presence); presence.connect(comp); comp.connect(gain); gain.connect(dest);
+    var candidates = ['audio/webm;codecs=opus','audio/webm','audio/mp4'].filter(function(t){ try{return MediaRecorder.isTypeSupported(t)}catch(e){return false} });
+    var mime = candidates[0] || '';
+    var recorder = mime ? new MediaRecorder(dest.stream,{mimeType:mime,audioBitsPerSecond:96000}) : new MediaRecorder(dest.stream);
+    vsState.recorder = recorder; vsState.mime = recorder.mimeType || mime || 'audio/webm'; vsState.started = Date.now();
+    recorder.ondataavailable = function(e){ if(e.data && e.data.size) vsState.chunks.push(e.data); };
+    recorder.onerror = function(){ vsSetStatus('রেকর্ডিংয়ে সমস্যা হয়েছে; আবার চেষ্টা করুন।'); };
+    recorder.onstop = async function(){
+      var blob = new Blob(vsState.chunks,{type:(vsState.mime || 'audio/webm').split(';')[0]});
+      vsState.recorder = null;
+      if (vsState.timer) clearInterval(vsState.timer); vsState.timer = null;
+      if (vsState.stream) vsState.stream.getTracks().forEach(function(t){t.stop()}); vsState.stream = null;
+      if (vsState.ctx) { try{await vsState.ctx.close()}catch(e){} vsState.ctx = null; }
+      $('vsRecord').disabled = false; $('vsStop').disabled = true;
+      vsLoadBlob(blob,'ক্লিন-আপ করা রেকর্ডিং');
+      $('vsTimer').textContent = 'রেকর্ডিং সম্পন্ন';
+    };
+    await ctx.resume(); recorder.start(500);
+    $('vsRecord').disabled = true; $('vsStop').disabled = false;
+    $('vsTimer').textContent = 'রেকর্ড হচ্ছে: ০০:০০';
+    vsState.timer = setInterval(function(){
+      var sec = Math.floor((Date.now()-vsState.started)/1000), mm=String(Math.floor(sec/60)).padStart(2,'0'), ss=String(sec%60).padStart(2,'0');
+      $('vsTimer').textContent = 'রেকর্ড হচ্ছে: '+mm+':'+ss;
+      if(sec>=300) vsStop();
+    },250);
+    vsSetStatus('রেকর্ডিং চলছে—শেষ হলে বন্ধ করুন।');
+  } catch(e){
+    if (vsState.stream) vsState.stream.getTracks().forEach(function(t){t.stop()}); vsState.stream=null;
+    if (vsState.ctx) {try{await vsState.ctx.close()}catch(x){} vsState.ctx=null;}
+    vsState.recorder=null; $('vsRecord').disabled=false; $('vsStop').disabled=true;
+    vsSetStatus(e && e.name==='NotAllowedError' ? 'মাইক্রোফোনের অনুমতি দিন।' : 'রেকর্ডিং চালু হয়নি। HTTPS/মাইক্রোফোনের অনুমতি পরীক্ষা করুন।');
+  }
+}
+function vsStop(){ if(vsState.recorder && vsState.recorder.state!=='inactive'){ try{vsState.recorder.stop()}catch(e){} } }
+$('vsRecord').onclick = vsStart;
+$('vsStop').onclick = vsStop;
+$('vsClose').onclick = function(){ if(vsState.recorder) vsStop(); $('voiceStudio').classList.add('hidden'); if(vsReturnToSplash && window.__spShow) window.__spShow(); vsReturnToSplash=false; };
+$('vsFile').onchange = function(){
+  var f=this.files && this.files[0]; this.value=''; if(!f) return;
+  if(!/^audio\//i.test(f.type)){vsSetStatus('শুধু অডিও ফাইল বেছে নিন।');return;}
+  vsLoadBlob(f,f.name || 'বাছাই করা অডিও');
+};
+$('vsDownload').onclick = function(){
+  if(!vsState.blob) return;
+  var a=document.createElement('a'); a.href=vsState.url; a.download='voice-studio-'+Date.now()+'.'+vsExt(vsState.blob); document.body.appendChild(a); a.click(); a.remove();
+};
+$('vsSend').onclick = async function(){
+  if(!vsState.blob) return;
+  if(!me){vsSetStatus('আগে অ্যাকাউন্টে লগইন করুন।');return;}
+  if(!navigator.onLine){vsSetStatus('চ্যাটে পাঠাতে ইন্টারনেট সংযোগ লাগবে।');return;}
+  var b=vsState.blob; $('vsSend').disabled=true; vsSetStatus('চ্যাটে পাঠানো হচ্ছে…');
+  try { await uploadSend({blob:b,ext:vsExt(b),ctype:(b.type||'audio/webm').split(';')[0],media_type:'audio',meta:String(Math.max(1,Math.round(($('vsPlayer').duration||1))))}); vsSetStatus('চ্যাটে পাঠানোর অনুরোধ সম্পন্ন হয়েছে।'); }
+  catch(e){vsSetStatus('পাঠানো যায়নি। নেটওয়ার্ক/স্টোরেজের অনুমতি পরীক্ষা করুন।');}
+  finally {$('vsSend').disabled=false;}
+};
+
 </script>
 
 <script>
