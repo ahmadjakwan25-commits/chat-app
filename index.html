@@ -610,6 +610,23 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 #spThemes .spTile{position:relative;height:104px;border-radius:14px;border:2.5px solid transparent;background-size:cover;background-position:center;color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:flex-end;justify-content:center;padding:0 3px 5px;line-height:1.2;text-shadow:0 1px 3px rgba(0,0,0,.7);box-shadow:0 2px 8px rgba(0,0,0,.18);overflow:hidden}
 #spThemes .spTile.on{border-color:#c026d3;box-shadow:0 0 0 2px #fff,0 0 0 4.5px #c026d3}
 #spThemes .spTile.on::after{content:"✓";position:absolute;top:4px;right:6px;background:#c026d3;border-radius:50%;width:20px;height:20px;font-size:13px;display:flex;align-items:center;justify-content:center}
+
+/* ===== A4: সেভ, স্পেস, ডাউনলোড (v22) ===== */
+#a4 #a4Sv{background:#16a34a;color:#fff}
+#a4 #a4Sst{padding:2px 12px 4px;font-size:12px;color:#15803d;background:var(--panel);border-bottom:1px solid var(--line)}
+#a4 .dl{min-width:250px}
+#a4 .dl button{height:auto;min-height:44px;padding:8px 12px;line-height:1.3}
+#a4 .dl button small{display:block;font-size:11.5px;font-weight:400;color:var(--muted)}
+#a4 #a4Sp.on{background:var(--accent);color:var(--on-accent)}
+#a4 .tb3{display:flex;flex-wrap:wrap;gap:8px 12px;padding:8px 10px;background:color-mix(in srgb,var(--accent) 9%,var(--panel));border-bottom:1px solid var(--line)}
+#a4 .tb3.hidden{display:none}
+#a4 .tb3 .g{display:flex;align-items:center;gap:5px}
+#a4 .tb3 .g span{font-size:12.5px;color:var(--muted)}
+#a4 .tb3 .g b{min-width:34px;text-align:center;font-size:14px}
+#a4 .tb3 button{min-width:36px;height:34px;padding:0 9px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:14px}
+#a4 .tb3 button.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+#a4 .dlist .io{display:flex;gap:8px;margin:8px 0 0}
+#a4 .dlist .io button{flex:1;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:13.5px}
 </style>
 </head>
 <body>
@@ -817,9 +834,10 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 <div id="a4" class="hidden">
   <div class="tb" style="position:relative">
     <button id="a4Back" aria-label="ফিরে যান">←</button><button id="a4Home" aria-label="স্বাগত পাতা">🏠</button><div class="ttl">📝 A4 লেখার পাতা</div>
+    <button id="a4Sv" aria-label="সেভ করুন">💾 সেভ</button>
     <button id="a4Fold" aria-label="টুলবার লুকান/দেখান">🛠</button>
     <button id="a4Dl">⬇ ডাউনলোড</button>
-    <div class="dl" id="a4Menu"><button data-f="pdf">📄 PDF</button><button data-f="jpg">🖼 JPG</button><button data-f="png">🖼 PNG</button></div>
+    <div class="dl" id="a4Menu"><button data-f="pdf">📄 PDF — সেরা মান<small>লেখা একদম স্পষ্ট · ছোট ফাইল<br>(প্রিন্ট স্ক্রিনে “PDF হিসেবে সেভ” বেছে নিন)</small></button><button data-f="pdfi">📄 PDF — ছবি থেকে<small>৩০০ ডিপিআই, সরাসরি ডাউনলোড</small></button><button data-f="jpg">🖼 JPG — সর্বোচ্চ মান<small>২৪৮১×৩৫০৯ পিক্সেল</small></button><button data-f="png">🖼 PNG — সর্বোচ্চ মান<small>ক্ষতিহীন, ২৪৮১×৩৫০৯ পিক্সেল</small></button></div>
   </div>
   <div class="tb2">
     <button data-c="undo" aria-label="আনডু">↶</button><button data-c="redo" aria-label="রিডু">↷</button><button data-c="bold"><b>B</b></button><button data-c="italic"><i>I</i></button><button data-c="underline"><u>U</u></button>
@@ -828,9 +846,17 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <button id="a4Min">A−</button><span class="sz" id="a4Sz">20</span><button id="a4Pls">A+</button>
     <button id="a4Tc" aria-label="লেখার রং" style="border-bottom:4px solid #c0392b"><b>A</b></button><button id="a4Hl" aria-label="হাইলাইট" style="border-bottom:4px solid #facc15">🖍</button>
     <button id="a4Img" aria-label="ছবি যোগ করুন">🖼</button><input type="file" id="a4ImgF" accept="image/*" class="hidden">
-    <button id="a4Clr" aria-label="এই পৃষ্ঠার লেখা মুছুন">🧹</button>
+    <button id="a4Clr" aria-label="এই পৃষ্ঠার লেখা মুছুন">🧹</button><button id="a4Sp" aria-label="স্পেস টুলবার">↕ স্পেস</button>
+  </div>
+  <div class="tb3 hidden" id="a4Tb3">
+    <div class="g"><span>↕ লাইনের ফাঁক</span><button data-sp="lh-">−</button><b id="a4SpL">১.৭</b><button data-sp="lh+">＋</button></div>
+    <div class="g"><span>নিচে ফাঁক</span><button data-sp="mb-">−</button><b id="a4SpB">০</b><button data-sp="mb+">＋</button></div>
+    <div class="g"><span>ওপরে ফাঁক</span><button data-sp="mt-">−</button><b id="a4SpT">০</b><button data-sp="mt+">＋</button></div>
+    <div class="g"><button data-sp="ind">⇥ প্রথম লাইন ঢুকান</button><button data-sp="rst">↺ ফাঁক রিসেট</button></div>
+    <div class="g"><span>কোথায়</span><button id="a4SpS" class="on">▭ নির্বাচিত লাইন</button></div>
   </div>
   <div class="dcr"><button id="a4Dn">📂 <span id="a4Dname"></span> ▾</button></div>
+  <div id="a4Sst"></div>
   <div class="dlist hidden" id="a4Dl2"></div>
   <div class="imr hidden" id="a4Imr"><span>ছবি:</span><button id="a4Is">− ছোট</button><button id="a4Il">＋ বড়</button><button id="a4Id">🗑 মুছুন</button></div>
   <div class="pal hidden" id="a4Pal"></div>
@@ -2866,7 +2892,7 @@ function colorSettings(){
   });
 }
 /* ---------- সংস্করণ ও স্বয়ংক্রিয় পরীক্ষা ---------- */
-var APP_VER = 'v21 · ১৯ অক্টোবর (হালকা ছবি)';
+var APP_VER = 'v22 · ১৯ অক্টোবর (লেখা সেভ, স্পেস টুলবার, সেরা মানের ডাউনলোড)';
 async function runChecks(){
   var res = [];
   function add(ok, label, detail){ res.push({ ok: ok, label: label, detail: detail || '' }); }
@@ -3524,14 +3550,17 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   function listDocs(){
     var h='';
     docs.slice().sort(function(a,b){return b.t-a.t;}).forEach(function(d){
-      h+='<div class="r"><button class="nm'+(d===doc?' on':'')+'" data-o="'+d.id+'">'+(d===doc?'✔ ':'')+esc(d.name)+'<small>'+d.pages.length+' পৃষ্ঠা · '+fmt(d.t)+'</small></button><button class="ic" data-r="'+d.id+'" aria-label="নাম বদলান">✏️</button><button class="ic" data-x="'+d.id+'" aria-label="মুছুন">🗑</button></div>';
+      h+='<div class="r"><button class="nm'+(d===doc?' on':'')+'" data-o="'+d.id+'">'+(d===doc?'✔ ':'')+esc(d.name)+'<small>'+d.pages.length+' পৃষ্ঠা · '+fmt(d.t)+'</small></button><button class="ic" data-r="'+d.id+'" aria-label="নাম বদলান">✏️</button><button class="ic" data-d="'+d.id+'" aria-label="নকল করুন">⧉</button><button class="ic" data-x="'+d.id+'" aria-label="মুছুন">🗑</button></div>';
     });
+    h+='<div class="io"><button id="a4Ex">📤 এই লেখা ফাইলে সেভ</button><button id="a4Im">📥 ফাইল থেকে খুলুন</button></div>';
     h+='<button class="add" id="a4New">＋ নতুন ডকুমেন্ট</button>';
     h+='<div style="display:flex;gap:8px;margin-top:8px"><button class="add" id="a4Bk" style="margin:0;background:var(--bg);color:var(--text);border:1px solid var(--line)">⬇ ব্যাকআপ নামান</button><button class="add" id="a4Rs" style="margin:0;background:var(--bg);color:var(--text);border:1px solid var(--line)">⬆ ফিরিয়ে আনুন</button></div>';
     dlp.innerHTML=h;
     Array.prototype.forEach.call(dlp.querySelectorAll('[data-o]'),function(b){b.onclick=function(){openDoc(b.getAttribute('data-o'));};});
     Array.prototype.forEach.call(dlp.querySelectorAll('[data-r]'),function(b){b.onclick=function(){var d=find(b.getAttribute('data-r')),n=prompt('নতুন নাম দিন',d.name);if(n&&n.trim()){d.name=n.trim().slice(0,40);persist();dname();listDocs();}};});
     Array.prototype.forEach.call(dlp.querySelectorAll('[data-x]'),function(b){b.onclick=function(){delDoc(b.getAttribute('data-x'));};});
+    Array.prototype.forEach.call(dlp.querySelectorAll('[data-d]'),function(b){b.onclick=function(){var d=find(b.getAttribute('data-d'));grab();persist();var nd={id:'d'+Date.now(),name:(d.name+' (নকল)').slice(0,40),pages:d.pages.slice(),idx:0,t:Date.now()};docs.push(nd);persist();listDocs();toast('নকল তৈরি হয়েছে');};});
+    g('a4Ex').onclick=exportDoc;g('a4Im').onclick=function(){bkF.click();};
     g('a4Bk').onclick=backup;g('a4Rs').onclick=function(){bkF.click();};
     g('a4New').onclick=function(){var n=prompt('ডকুমেন্টের নাম দিন','নতুন লেখা');if(n===null)return;grab();persist();var d={id:'d'+Date.now(),name:(n.trim()||'নতুন লেখা').slice(0,40),pages:[''],idx:0,t:Date.now()};docs.push(d);openDoc(d.id);};
   }
@@ -3595,7 +3624,9 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
     var f=bkF.files&&bkF.files[0];bkF.value='';if(!f)return;
     var r=new FileReader();r.onload=function(){
       try{
-        var j=JSON.parse(r.result);if(!j||j.app!=='a4'||!j.docs||!j.docs.length)throw 0;
+        var j=JSON.parse(r.result);
+        if(j&&j.app==='a4doc'&&j.pages&&j.pages.length){var nd={id:'d'+Date.now(),name:String(j.name||'ফাইল থেকে').slice(0,40),pages:j.pages,idx:0,t:Date.now()};docs.push(nd);openDoc(nd.id);persist();listDocs();toast('✔ ফাইল খোলা হয়েছে: '+nd.name);return;}
+        if(!j||j.app!=='a4'||!j.docs||!j.docs.length)throw 0;
         if(!confirm(j.docs.length+'টি ডকুমেন্ট ফিরিয়ে আনবেন? আপনার বর্তমান ডকুমেন্টগুলো যেমন আছে তেমনই থাকবে।'))return;
         j.docs.forEach(function(d,i){docs.push({id:'d'+Date.now()+'_'+i,name:String(d.name||'ফিরিয়ে আনা').slice(0,40),pages:(d.pages&&d.pages.length)?d.pages:[''],idx:0,t:d.t||Date.now()});});
         persist();listDocs();alert('ফিরিয়ে আনা হয়েছে।');
@@ -3620,27 +3651,6 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
     if(!window.jspdf)await load('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
   }
   function save(blob,name){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},2000);}
-  async function dl(f){
-    menu.style.display='none';
-    var t=g('a4Dl'),old=t.textContent;t.textContent='⏳ তৈরি হচ্ছে…';
-    try{
-      await libs();
-      if(document.fonts&&document.fonts.ready)await document.fonts.ready;
-      grab();var tr=pg.style.transform,cur=idx,cvs=[];pg.style.transform='none';
-      try{for(var i=0;i<pages.length;i++){pg.innerHTML=pages[i];await new Promise(function(r){setTimeout(r,60);});cvs.push(await html2canvas(pg,{scale:2,backgroundColor:'#ffffff',useCORS:true,width:794,height:1123,windowWidth:794}));}}
-      finally{pg.style.transform=tr;pg.innerHTML=pages[cur];}
-      var nm=(doc.name||'a4-lekha').replace(/[\\\/:*?"<>|]/g,'_');
-      if(f==='pdf'){
-        var P=window.jspdf.jsPDF,d=new P({unit:'mm',format:'a4',orientation:'portrait'});
-        cvs.forEach(function(c,k){if(k)d.addPage('a4','portrait');d.addImage(c.toDataURL('image/jpeg',0.95),'JPEG',0,0,210,297);});
-        save(d.output('blob'),nm+'.pdf');
-      }else{
-        var mime=f==='jpg'?'image/jpeg':'image/png';
-        cvs.forEach(function(c,k){setTimeout(function(){c.toBlob(function(b){save(b,nm+(cvs.length>1?'-'+(k+1):'')+'.'+f);},mime,0.95);},k*600);});
-      }
-    }catch(e){alert('ডাউনলোড হয়নি। নেট চালু আছে কিনা দেখে আবার চেষ্টা করুন।');}
-    t.textContent=old;
-  }
   /* ===== স্বয়ংক্রিয় পাতা বদল + লাইন ওপর-নিচ ===== */
   var meas=document.createElement('div');meas.className='pg';meas.setAttribute('aria-hidden','true');meas.style.cssText='position:absolute;left:-10000px;top:0;visibility:hidden;pointer-events:none;transform:none';ov.appendChild(meas);
   var reflowing=false,stuckHtml=null;
@@ -3798,6 +3808,111 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   [['a4LUp',function(){moveLines(-1);}],['a4LDn',function(){moveLines(1);}],['a4LSel',selLine]].forEach(function(x){
     var b=g(x[0]);['mousedown','pointerdown'].forEach(function(ev){b.addEventListener(ev,function(e){e.preventDefault();});});b.onclick=x[1];
   });
+
+  /* ===== সেভ (v22) ===== */
+  var sst=g('a4Sst'),_persist=persist;
+  function nowT(){try{return new Date().toLocaleTimeString('bn-BD',{hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+  persist=function(){_persist();if(sst)sst.textContent='✔ সেভ হয়েছে · '+nowT()+' · '+bn(doc.pages.length)+' পৃষ্ঠা';};
+  function safeName(){return (doc.name||'a4-lekha').replace(/[\\\/:*?"<>|]/g,'_');}
+  function exportDoc(){
+    grab();persist();
+    var o={app:'a4doc',v:1,name:doc.name,pages:doc.pages,t:Date.now()};
+    save(new Blob([JSON.stringify(o)],{type:'application/json'}),safeName()+'.a4lekha.json');
+    toast('📤 ফাইলে সেভ হয়েছে — ডাউনলোড ফোল্ডারে। পরে “📥 ফাইল থেকে খুলুন” দিয়ে আবার সংশোধন করতে পারবেন।',5200);
+  }
+  g('a4Sv').onclick=function(){
+    grab();persist();
+    var ok=false;try{var a=JSON.parse(localStorage.getItem(KD)||'[]');ok=a.some(function(d){return d.id===doc.id&&d.pages.join('|')===pages.join('|');});}catch(e){}
+    if(ok)toast('💾 সেভ হয়েছে — “'+doc.name+'” · '+bn(pages.length)+' পৃষ্ঠা');
+    else toast('⚠️ ফোনে জায়গা কম — “📂 → 📤 ফাইলে সেভ” করে রাখুন',5200);
+  };
+  g('a4Sv').addEventListener('mousedown',function(e){e.preventDefault();});
+  stampInit();
+  function stampInit(){if(sst)sst.textContent='সব লেখা নিজে থেকেই সেভ হয়। আলাদা ফাইল রাখতে: 📂 তালিকা → 📤';}
+
+  /* ===== স্পেস টুলবার (v22) ===== */
+  var tb3=g('a4Tb3'),spScope='sel',spBtn=g('a4Sp');
+  spBtn.addEventListener('mousedown',function(e){e.preventDefault();});
+  spBtn.onclick=function(){var h=tb3.classList.toggle('hidden');spBtn.classList.toggle('on',!h);if(!h)spShow();};
+  Array.prototype.forEach.call(tb3.querySelectorAll('button'),function(b){b.addEventListener('mousedown',function(e){e.preventDefault();});});
+  function bnf(x){return String(x).replace(/\d/g,function(d){return '০১২৩৪৫৬৭৮৯'[d];});}
+  function spUnits(){if(spScope==='all'){normalize();return Array.prototype.slice.call(pg.children);}return selUnits();}
+  function lhOf(u){var cs=getComputedStyle(u),fs2=parseFloat(cs.fontSize)||20,lh=parseFloat(cs.lineHeight);return lh?Math.round(lh/fs2*10)/10:1.7;}
+  function spShow(){
+    var u=null;try{if(spScope==='all')u=pg.firstElementChild;else{var se=getSelection();if(se.rangeCount&&pg.contains(se.anchorNode)){var nd=se.anchorNode;if(nd===pg)nd=pg.childNodes[Math.min(se.anchorOffset,pg.childNodes.length-1)];u=nd&&unitOf(nd);}}}catch(e){}
+    if(!u||u.nodeType!==1){g('a4SpL').textContent=bnf('1.7');g('a4SpB').textContent='০';g('a4SpT').textContent='০';return;}
+    var cs=getComputedStyle(u);
+    g('a4SpL').textContent=bnf(lhOf(u));g('a4SpB').textContent=bnf(Math.round(parseFloat(cs.marginBottom)||0));g('a4SpT').textContent=bnf(Math.round(parseFloat(cs.marginTop)||0));
+  }
+  document.addEventListener('selectionchange',function(){if(!tb3.classList.contains('hidden')&&!ov.classList.contains('hidden'))spShow();});
+  g('a4SpS').onclick=function(){spScope=spScope==='sel'?'all':'sel';this.classList.toggle('on',spScope==='sel');this.textContent=spScope==='sel'?'▭ নির্বাচিত লাইন':'📄 পুরো পাতা';spShow();};
+  function spDo(act){
+    var l=spUnits();
+    if(!l||!l.length){alert('আগে যে লাইনের ফাঁক বদলাতে চান সেখানে ট্যাপ করুন — অথবা “কোথায়” বাটনে চেপে “পুরো পাতা” বেছে নিন।');return;}
+    if(document.activeElement!==pg)pg.focus({preventScroll:true});
+    var u0=l[0],base={lh:lhOf(u0),mb:Math.round(parseFloat(getComputedStyle(u0).marginBottom)||0),mt:Math.round(parseFloat(getComputedStyle(u0).marginTop)||0)};
+    var tind=u0.style.textIndent&&u0.style.textIndent!=='0px'&&u0.style.textIndent!=='0';
+    l.forEach(function(u){
+      if(u.nodeType!==1)return;
+      if(act==='lh-'||act==='lh+')u.style.lineHeight=String(Math.max(1,Math.min(3.4,Math.round((base.lh+(act==='lh+'?.1:-.1))*10)/10)));
+      else if(act==='mb-'||act==='mb+')u.style.marginBottom=Math.max(0,Math.min(120,base.mb+(act==='mb+'?6:-6)))+'px';
+      else if(act==='mt-'||act==='mt+')u.style.marginTop=Math.max(0,Math.min(120,base.mt+(act==='mt+'?6:-6)))+'px';
+      else if(act==='ind')u.style.textIndent=tind?'':'2em';
+      else if(act==='rst'){u.style.lineHeight='';u.style.marginTop='';u.style.marginBottom='';u.style.textIndent='';if(!u.getAttribute('style'))u.removeAttribute('style');}
+    });
+    pg.dispatchEvent(new Event('input'));
+    if(spScope==='sel'&&l[0].parentNode)selectUnits(l);
+    spShow();
+  }
+  Array.prototype.forEach.call(tb3.querySelectorAll('[data-sp]'),function(b){b.onclick=function(){spDo(b.getAttribute('data-sp'));};});
+
+  /* ===== সর্বোচ্চ মানের ডাউনলোড (v22) ===== */
+  function printHtml(){
+    var css='';Array.prototype.forEach.call(document.head.querySelectorAll('link[rel=stylesheet],style'),function(n){css+=n.outerHTML;});
+    var st=pg.style,pgst='background-color:'+(st.backgroundColor||'#fff')+';background-image:'+(st.backgroundImage||'none')+';background-size:100% 100%;background-repeat:no-repeat;padding:'+(st.padding||'76px');
+    var body=pages.map(function(h){return '<div class="pg" style="'+pgst.replace(/"/g,"'")+'">'+h+'</div>';}).join('');
+    return '<!doctype html><html lang="bn"><head><meta charset="utf-8"><title>'+esc(doc.name)+'</title>'+css+'<style>@page{size:A4;margin:0}html,body{margin:0!important;padding:0!important;background:#fff!important;overflow:visible!important;height:auto!important;position:static!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}#a4{position:static!important;display:block!important;overflow:visible!important;height:auto!important;background:#fff!important;inset:auto!important}#a4 .pg{position:relative!important;left:auto!important;top:auto!important;transform:none!important;box-shadow:none!important;margin:0!important;width:794px!important;height:1122px!important;overflow:hidden!important;break-after:page;page-break-after:always;display:block}#a4 .pg:last-child{break-after:auto;page-break-after:auto}</style></head><body><div id="a4">'+body+'</div></body></html>';
+  }
+  window.__a4PrintHtml=function(){grab();return printHtml();};
+  function printPdf(){
+    grab();persist();
+    var f=document.createElement('iframe');f.setAttribute('aria-hidden','true');f.style.cssText='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none';
+    document.body.appendChild(f);
+    var w=f.contentWindow,d=w.document;d.open();d.write(printHtml());d.close();
+    toast('প্রিন্ট স্ক্রিন খুলছে — সেখানে “PDF হিসেবে সেভ করুন” বেছে নিন',5200);
+    function go(){try{w.focus();w.print();}catch(e){alert('এই ফোনে প্রিন্ট খোলেনি। “PDF — ছবি থেকে” বাটন ব্যবহার করুন।');}setTimeout(function(){try{f.remove();}catch(e){}},180000);}
+    setTimeout(function(){(d.fonts&&d.fonts.ready?d.fonts.ready:Promise.resolve()).then(function(){setTimeout(go,400);},go);},900);
+  }
+  async function dl(f){
+    menu.style.display='none';
+    if(f==='pdf'){printPdf();return;}
+    var t=g('a4Dl'),old=t.textContent;t.textContent='⏳ সর্বোচ্চ মানে তৈরি হচ্ছে…';
+    try{
+      await libs();
+      if(document.fonts&&document.fonts.ready)await document.fonts.ready;
+      grab();var tr=pg.style.transform,cur=idx,cvs=[];pg.style.transform='none';
+      var sc=(navigator.deviceMemory&&navigator.deviceMemory<=2)?2.5:3.125;
+      try{
+        for(var i=0;i<pages.length;i++){
+          pg.innerHTML=pages[i];await new Promise(function(r){setTimeout(r,90);});
+          var c;try{c=await html2canvas(pg,{scale:sc,backgroundColor:'#ffffff',useCORS:true,width:794,height:1123,windowWidth:794,logging:false,imageTimeout:0});}
+          catch(e1){c=await html2canvas(pg,{scale:2,backgroundColor:'#ffffff',useCORS:true,width:794,height:1123,windowWidth:794,logging:false});}
+          cvs.push(c);
+        }
+      }finally{pg.style.transform=tr;pg.innerHTML=pages[cur];}
+      var nm=safeName();
+      if(f==='pdfi'){
+        var P=window.jspdf.jsPDF,d=new P({unit:'mm',format:'a4',orientation:'portrait',compress:true});
+        cvs.forEach(function(c,k){if(k)d.addPage('a4','portrait');d.addImage(c.toDataURL('image/jpeg',0.98),'JPEG',0,0,210,297);});
+        save(d.output('blob'),nm+'.pdf');
+      }else{
+        var mime=f==='jpg'?'image/jpeg':'image/png';
+        cvs.forEach(function(c,k){setTimeout(function(){c.toBlob(function(b){save(b,nm+(cvs.length>1?'-'+(k+1):'')+'.'+f);},mime,1);},k*900);});
+      }
+      toast('✔ ডাউনলোড শুরু হয়েছে — ডাউনলোড ফোল্ডারে দেখুন');
+    }catch(e){alert('ডাউনলোড হয়নি। নেট চালু আছে কিনা দেখে আবার চেষ্টা করুন।');}
+    t.textContent=old;
+  }
   Array.prototype.forEach.call(menu.querySelectorAll('button'),function(b){b.onclick=function(){dl(b.getAttribute('data-f'));};});
 })();
 </script>
