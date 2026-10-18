@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0f766e">
 <meta name="mobile-web-app-capable" content="yes">
-<title>আমাদের চ্যাট</title>
+<title>J+S</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -637,7 +637,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <div class="card">
       <div class="logo">☪</div>
       <div class="bism">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
-      <h1>আমাদের চ্যাট</h1>
+      <h1>J+S</h1>
       <p class="sub">শুধু দুজনের জন্য মেসেজ ও কল</p>
       <div id="nameBox" class="hidden">
         <label for="aName">আপনার নাম</label>
@@ -812,7 +812,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   <div class="sp-card"><div class="ar2" id="spAr2"></div><div id="spStatus"></div><small id="spRef"></small></div>
   <div class="sp-btns">
     <button id="spNew" type="button">📝 নতুন পাতা<small>লেখার পাতা</small></button>
-    <button id="spGo" type="button">💬 চ্যাট খুলুন<small>আমাদের চ্যাট</small></button>
+    <button id="spGo" type="button">💬 চ্যাট খুলুন<small>J+S</small></button>
   </div>
 </div>
 <div id="fxLayer"></div>
@@ -2800,7 +2800,7 @@ async function backupChat(){
     return '[' + when + '] ' + nameOf(m.sender) + ': ' + what;
   });
   var d = new Date();
-  saveBlobAs(new Blob(['﻿' + 'আমাদের চ্যাট — ব্যাকআপ (ছবি ও ভিডিও এতে নেই)\n\n' + lines.join('\n')], { type: 'text/plain;charset=utf-8' }), 'chat-backup-' + d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2) + '.txt');
+  saveBlobAs(new Blob(['﻿' + 'J+S — ব্যাকআপ (ছবি ও ভিডিও এতে নেই)\n\n' + lines.join('\n')], { type: 'text/plain;charset=utf-8' }), 'chat-backup-' + d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2) + '.txt');
   toast('ব্যাকআপ ডাউনলোড হয়েছে (' + bn(all.length) + 'টি মেসেজ)');
 }
 
@@ -2853,7 +2853,7 @@ function b64(buf){ return btoa(String.fromCharCode.apply(null, new Uint8Array(bu
 function unb64(t){ var s = atob(t), a = new Uint8Array(s.length); for (var i = 0; i < s.length; i++) a[i] = s.charCodeAt(i); return a; }
 async function bioRegister(){
   var cred = await navigator.credentials.create({ publicKey: {
-    challenge: crypto.getRandomValues(new Uint8Array(32)), rp: { name: 'আমাদের চ্যাট' },
+    challenge: crypto.getRandomValues(new Uint8Array(32)), rp: { name: 'J+S' },
     user: { id: crypto.getRandomValues(new Uint8Array(16)), name: 'chat', displayName: 'chat' },
     pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
     authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required' }, timeout: 60000 } });
