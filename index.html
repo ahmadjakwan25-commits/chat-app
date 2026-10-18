@@ -716,8 +716,10 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     </div>
     <div class="vsCard">
       <h3>✨ AI ভয়েস উন্নতকরণ</h3>
-      <p class="vsSub">বর্তমান সংস্করণে ব্রাউজার-ভিত্তিক অডিও ক্লিনআপ চালু আছে। প্রকৃত AI noise removal/voice enhancement চালু করতে নিরাপদ সার্ভার API ও অনুমোদিত AI সার্ভিস যুক্ত করতে হবে।</p>
-      <div class="vsWarn">গুরুত্বপূর্ণ: এই HTML ফাইলে কোনো AI API key বসাবেন না। সেটি সার্ভারে নিরাপদে রাখতে হবে। এখনকার রেকর্ডিং ফিল্টার AI নয় এবং সব ধরনের পেছনের শব্দ দূর করার নিশ্চয়তা দেয় না।</div>
+      <p class="vsSub">বিনামূল্যের ওপেন-সোর্স নয়েজ রিডাকশন দিয়ে বর্তমান রেকর্ডিং পরিষ্কার করার চেষ্টা করুন। অডিও আপনার ব্রাউজারেই প্রসেস হবে; কোনো AI API key বা পেইড সার্ভিস লাগবে না।</p>
+      <div class="vsActions"><button id="vsEnhance" class="primary" type="button">✨ ফ্রি নয়েজ রিডাকশন চালান</button><button id="vsRestore" type="button" disabled>↩ মূল অডিও ফেরত</button></div>
+      <div id="vsEnhanceStatus" class="vsStatus" aria-live="polite">প্রথমবার ওপেন-সোর্স প্রসেসিং লাইব্রেরি ইন্টারনেট থেকে লোড হবে। রেকর্ডিং আপলোড করা হবে না।</div>
+      <div class="vsWarn">নোট: এটি AI ভয়েস মডেল নয়; এটি স্থানীয় অডিও নয়েজ রিডাকশন। সব ধরনের শব্দ পুরোপুরি দূর নাও হতে পারে। পরিষ্কার করার সময় মূল অডিও ফেরত নেওয়ার অপশন থাকবে।</div>
     </div>
   </section>
 
@@ -3162,7 +3164,7 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   if (s) await enter(s.user); else showAuth();
 })();
 /* ---------- প্রফেশনাল ভয়েস স্টুডিও ---------- */
-var vsState = { recorder: null, stream: null, ctx: null, chunks: [], blob: null, url: null, started: 0, timer: null, mime: 'audio/webm' };
+var vsState = { recorder: null, stream: null, ctx: null, chunks: [], blob: null, url: null, originalBlob: null, started: 0, timer: null, mime: 'audio/webm' };
 var vsReturnToSplash = false;
 function openVoiceStudio(fromSplash){
   vsReturnToSplash = !!fromSplash;
@@ -3178,8 +3180,9 @@ function vsResetAudio(){
   $('vsPlayer').pause(); $('vsPlayer').removeAttribute('src'); $('vsPlayer').load(); $('vsPlayer').classList.add('hidden');
   $('vsDownload').disabled = true; $('vsSend').disabled = true;
 }
-function vsLoadBlob(blob, name){
+function vsLoadBlob(blob, name, keepOriginal){
   if (!blob || !blob.size) { vsSetStatus('অডিও তৈরি হয়নি; আবার চেষ্টা করুন।'); return; }
+  if (!keepOriginal) { vsState.originalBlob = null; $('vsRestore').disabled = true; }
   vsResetAudio(); vsState.blob = blob; vsState.url = URL.createObjectURL(blob);
   $('vsPlayer').src = vsState.url; $('vsPlayer').classList.remove('hidden');
   $('vsDownload').disabled = false; $('vsSend').disabled = false;
@@ -3255,6 +3258,41 @@ $('vsDownload').onclick = function(){
   if(!vsState.blob) return;
   var a=document.createElement('a'); a.href=vsState.url; a.download='voice-studio-'+Date.now()+'.'+vsExt(vsState.blob); document.body.appendChild(a); a.click(); a.remove();
 };
+function vsEncodeWav(audioBuffer){
+  var channels=audioBuffer.numberOfChannels, rate=audioBuffer.sampleRate, length=audioBuffer.length, bytes=length*channels*2, out=new ArrayBuffer(44+bytes), v=new DataView(out), pos=44;
+  function str(o,t){for(var i=0;i<t.length;i++)v.setUint8(o+i,t.charCodeAt(i));}
+  str(0,'RIFF');v.setUint32(4,36+bytes,true);str(8,'WAVE');str(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,channels,true);v.setUint32(24,rate,true);v.setUint32(28,rate*channels*2,true);v.setUint16(32,channels*2,true);v.setUint16(34,16,true);str(36,'data');v.setUint32(40,bytes,true);
+  var data=[];for(var c=0;c<channels;c++)data.push(audioBuffer.getChannelData(c));
+  for(var i=0;i<length;i++)for(var c=0;c<channels;c++){var x=Math.max(-1,Math.min(1,data[c][i]));v.setInt16(pos,x<0?x*32768:x*32767,true);pos+=2;}
+  return new Blob([out],{type:'audio/wav'});
+}
+$('vsEnhance').onclick = async function(){
+  var btn=$('vsEnhance'), status=$('vsEnhanceStatus'), input=vsState.blob;
+  if(!input){status.textContent='আগে রেকর্ড করুন অথবা একটি অডিও ফাইল বেছে নিন।';return;}
+  if(input.size>60*1024*1024){status.textContent='ফাইলটি ৬০ MB-এর বেশি। ছোট অডিও দিয়ে চেষ্টা করুন।';return;}
+  btn.disabled=true; $('vsRestore').disabled=true; status.textContent='লাইব্রেরি লোড ও অডিও পরিষ্কার করা হচ্ছে…';
+  var ctx=null;
+  try{
+    var mod=await import('https://esm.sh/@audio/denoise');
+    if(typeof mod.denoise!=='function') throw new Error('denoise function unavailable');
+    var Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)throw new Error('AudioContext unavailable');ctx=new Ctx();
+    var arr=await input.arrayBuffer(), decoded=await ctx.decodeAudioData(arr.slice(0));
+    if(decoded.length>decoded.sampleRate*600)throw new Error('Audio is longer than 10 minutes');
+    var out=ctx.createBuffer(decoded.numberOfChannels,decoded.length,decoded.sampleRate);var plans=[];
+    for(var c=0;c<decoded.numberOfChannels;c++){
+      status.textContent='অডিও পরিষ্কার হচ্ছে… ('+(c+1)+'/'+decoded.numberOfChannels+')';
+      var samples=new Float32Array(decoded.getChannelData(c));
+      var result=mod.denoise(samples,{fs:decoded.sampleRate,returnPlan:true});
+      var cleaned=result&&result.out?result.out:result;
+      if(!cleaned||cleaned.length!==decoded.length)throw new Error('Unexpected denoise output');
+      out.copyToChannel(new Float32Array(cleaned),c); if(result&&result.plan)plans.push(result.plan);
+    }
+    var cleanedBlob=vsEncodeWav(out);vsState.originalBlob=input;vsLoadBlob(cleanedBlob,'ফ্রি নয়েজ রিডাকশন সম্পন্ন · WAV',true);$('vsRestore').disabled=false;
+    status.textContent='সম্পন্ন! পরিষ্কার অডিও WAV ফরম্যাটে তৈরি হয়েছে। প্রিভিউ শুনুন; ভালো না লাগলে “মূল অডিও ফেরত” চাপুন।'+(plans.length?' পদ্ধতি: '+plans.join(', '):'');
+  }catch(e){status.textContent='প্রসেস করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করুন, অথবা অন্য/ছোট অডিও দিয়ে চেষ্টা করুন।';console.error('Free denoise error',e);}
+  finally{if(ctx){try{await ctx.close()}catch(e){}}btn.disabled=false;}
+};
+$('vsRestore').onclick=function(){if(vsState.originalBlob){var b=vsState.originalBlob;vsLoadBlob(b,'মূল অডিও পুনরুদ্ধার',true);$('vsRestore').disabled=true;$('vsEnhanceStatus').textContent='মূল অডিও ফিরিয়ে আনা হয়েছে।';}};
 $('vsSend').onclick = async function(){
   if(!vsState.blob) return;
   if(!me){vsSetStatus('আগে অ্যাকাউন্টে লগইন করুন।');return;}
