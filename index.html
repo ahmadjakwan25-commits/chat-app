@@ -631,20 +631,61 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 /* ===== খেলা: লুডু (v23) ===== */
 #spGame{flex:0 0 100%!important;max-width:366px!important;padding:9px 8px!important;color:#fff;background:linear-gradient(135deg,#7c3aed,#db2777);box-shadow:0 6px 18px rgba(124,58,237,.35)}
 #splash .sp-btns{flex-wrap:wrap;gap:9px 12px;padding-top:24px}
-#splash{padding-bottom:calc(150px + env(safe-area-inset-bottom))!important}
-@media (max-height:700px){#splash{padding-bottom:calc(138px + env(safe-area-inset-bottom))!important}}
-/* ===== স্বাগত পাতা: হুমাইরা ও সাদিয়ার লাইভ কাউন্টার ===== */
-.sp-cnt{display:flex;gap:8px;margin-top:10px;width:100%;max-width:352px;animation:spUp .9s 1.4s both}
-.sp-c{flex:1;min-width:0;padding:7px 6px 6px;border-radius:16px;border:1.5px solid transparent;background:linear-gradient(rgba(255,255,255,.86),rgba(255,255,255,.86)) padding-box,linear-gradient(135deg,#f472b6,#a78bfa,#10b981) border-box;box-shadow:0 6px 18px rgba(124,58,237,.12)}
-.sp-c .t{font-size:12px;font-weight:700;color:#7c3aed;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sp-c .g{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
-.sp-c .g div{background:rgba(124,58,237,.07);border-radius:9px;padding:2px 0 3px}
-.sp-c .g b{display:block;font-size:16px;line-height:1.25;color:#1f3a36;font-variant-numeric:tabular-nums}
-.sp-c .g small{display:block;font-size:10px;color:#b45309;font-weight:600;line-height:1.2}
-#splash[data-th=night] .sp-c{background:linear-gradient(rgba(15,23,42,.8),rgba(15,23,42,.8)) padding-box,linear-gradient(135deg,#fde68a,#a5f3fc) border-box}
-#splash[data-th=night] .sp-c .t{color:#fde68a}
-#splash[data-th=night] .sp-c .g div{background:rgba(255,255,255,.08)}
-#splash[data-th=night] .sp-c .g b{color:#e2e8f0}
+#splash{padding-bottom:calc(262px + env(safe-area-inset-bottom))!important}
+@media (max-height:700px){#splash{padding-bottom:calc(250px + env(safe-area-inset-bottom))!important}}
+/* ===== স্বাগত পাতা: হুমাইরা ও সাদিয়া বাটন + আলাদা পাতা ===== */
+#spMiftah{flex:0 0 100%!important;max-width:366px!important;padding:9px 8px!important;color:#fff;border:0;background:linear-gradient(135deg,#059669,#0f766e);box-shadow:0 6px 18px rgba(5,150,105,.35)}
+#spMiftah small{display:block;font-size:10.5px;font-weight:600;opacity:.92;margin-top:1px}
+#splash .sp-btns .sp-row{flex:0 0 100%;display:flex;gap:12px;justify-content:center;max-width:366px}
+.sp-row button{color:#fff;border:0}
+.sp-row button small{display:block;font-size:10.5px;font-weight:600;opacity:.92;margin-top:1px}
+#spHumBtn{background:linear-gradient(135deg,#f472b6,#e11d48);box-shadow:0 8px 20px rgba(225,29,72,.32)}
+#spSadBtn{background:linear-gradient(135deg,#a855f7,#6d28d9);box-shadow:0 8px 20px rgba(109,40,217,.32)}
+@keyframes cpFloat{0%{transform:translate(0,105vh) rotate(0);opacity:0}10%{opacity:.9}100%{transform:translate(var(--dx),-12vh) rotate(var(--r));opacity:0}}
+@keyframes cpPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes cpIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes cpGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.0)}50%{box-shadow:0 0 22px 2px var(--gl)}}
+.cp{position:fixed;inset:0;z-index:520;display:none;flex-direction:column;align-items:center;overflow-y:auto;overflow-x:hidden;padding:calc(64px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom));text-align:center}
+.cp.on{display:flex;animation:cpIn .5s both}
+.cp-fx{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.cp-fx i{position:absolute;bottom:0;left:var(--x);font-style:normal;font-size:var(--s);animation:cpFloat var(--t) linear var(--d) infinite;opacity:0}
+.cp>*:not(.cp-fx){position:relative;z-index:1}
+.cp-back{position:fixed!important;top:calc(12px + env(safe-area-inset-top));left:12px;width:44px;height:44px;border-radius:50%;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:5!important;border:0}
+.cp .ar{font-family:"Aref Ruqaa","Amiri","Noto Naskh Arabic",serif;font-size:30px;line-height:1.7;font-weight:700}
+.cp .nm{font-family:"Galada","Hind Siliguri",cursive;font-size:44px;line-height:1.25;margin-top:2px;animation:cpPulse 4s ease-in-out infinite}
+.cp .sub{font-size:14.5px;margin-top:4px;font-weight:600}
+.cp .orn{margin:10px 0 14px;font-size:18px;letter-spacing:3px}
+.cp .tiles{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;width:100%;max-width:360px}
+.cp .tile{flex:0 0 calc(33.33% - 7px);border-radius:20px;padding:14px 4px 10px;animation:cpGlow 3s ease-in-out infinite}
+.cp .tile b{display:block;font-size:34px;line-height:1.15;font-variant-numeric:tabular-nums}
+.cp .tile small{display:block;margin-top:3px;font-size:13px;font-weight:700}
+.cp .info{margin-top:16px;width:100%;max-width:360px;border-radius:20px;padding:12px 14px;font-size:14px;line-height:1.7;font-weight:600}
+.cp .info div+div{margin-top:2px}
+.cp .dua{margin-top:14px;font-size:13.5px;line-height:1.7;max-width:340px;font-weight:600}
+/* হুমাইরা পাতা */
+#humPage{background:radial-gradient(circle at 15% 8%,#ffe0ec 0,transparent 48%),radial-gradient(circle at 90% 22%,#fde3ff 0,transparent 46%),radial-gradient(circle at 10% 90%,#fff0d6 0,transparent 50%),linear-gradient(180deg,#fff5f8,#ffe9f1);color:#7a1d45;--gl:rgba(244,114,182,.55)}
+#humPage .ar{color:#be185d}
+#humPage .nm{background:linear-gradient(90deg,#e11d48,#c026d3,#f59e0b,#e11d48);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:cpPulse 4s ease-in-out infinite,spShine 6s linear infinite}
+#humPage .sub{color:#9d174d}
+#humPage .orn{color:#e11d48}
+#humPage .tile{background:linear-gradient(160deg,#fff,#ffe4ee);border:2px solid #f9a8d4;box-shadow:0 8px 18px rgba(225,29,72,.14)}
+#humPage .tile b{color:#be123c}
+#humPage .tile small{color:#a21caf}
+#humPage .info{background:rgba(255,255,255,.8);border:2px solid #fbcfe8;color:#831843}
+#humPage .dua{color:#9d174d}
+#humPage .cp-back{background:#fff;color:#be185d;box-shadow:0 4px 12px rgba(190,24,93,.25)}
+/* সাদিয়া পাতা */
+#sadPage{background:radial-gradient(circle at 80% 6%,#6d28d9 0,transparent 50%),radial-gradient(circle at 8% 40%,#9d174d 0,transparent 50%),radial-gradient(circle at 92% 92%,#b45309 0,transparent 46%),linear-gradient(180deg,#2e1065,#4c1d95 55%,#3b0764);color:#fdf4ff;--gl:rgba(253,230,138,.5)}
+#sadPage .ar{color:#fde68a}
+#sadPage .nm{background:linear-gradient(90deg,#fde68a,#fff,#fbcfe8,#fde68a);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-size:40px;animation:cpPulse 4s ease-in-out infinite,spShine 6s linear infinite}
+#sadPage .sub{color:#fbcfe8}
+#sadPage .orn{color:#fde68a}
+#sadPage .tile{background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.06));border:2px solid rgba(253,230,138,.7);backdrop-filter:blur(4px)}
+#sadPage .tile b{color:#fef3c7}
+#sadPage .tile small{color:#fbcfe8}
+#sadPage .info{background:rgba(255,255,255,.1);border:2px solid rgba(253,230,138,.45);color:#fdf4ff}
+#sadPage .dua{color:#fde68a}
+#sadPage .cp-back{background:rgba(255,255,255,.18);color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.3)}
 @media (max-height:820px){
   #splash{padding-top:34px!important}
   #splash .sp-orn{display:none}
@@ -656,14 +697,12 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   .sp-card .ar2{font-size:17px;line-height:1.6}
   .sp-card #spStatus{font-size:13px;line-height:1.5}
   .sp-card small{margin-top:3px;font-size:11.5px}
-  .sp-cnt{margin-top:8px}
 }
 @media (max-height:690px){
   .sp-moon,.sp-hello{display:none}
   .sp-ar{font-size:34px}
   .sp-ahlan{font-size:28px}
   .sp-card .ar2{display:none}
-  .sp-c .g b{font-size:14.5px}
 }
 #game{position:fixed;inset:0;z-index:300;background:linear-gradient(180deg,#fef3c7,#fde7f3 55%,#e0e7ff);color:#1f2937;display:flex;flex-direction:column;overflow:auto}
 #game .gh{display:flex;align-items:center;gap:8px;padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;flex:none}
@@ -889,15 +928,38 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   <div class="sp-names"><span class="gr">যাকওয়ান</span> <i class="hrt">♥️</i> <span class="gr">সাদিয়া</span></div>
   <div class="sp-hello" id="spHello"></div>
   <div class="sp-card"><div class="ar2" id="spAr2"></div><div id="spStatus"></div><small id="spRef"></small></div>
-  <div class="sp-cnt">
-    <div class="sp-c" id="spHum"><div class="t">🌸 হুমাইরা জান্নাত</div><div class="g"></div></div>
-    <div class="sp-c" id="spSad"><div class="t">💞 সাদিয়া ♥️ যাকওয়ান</div><div class="g"></div></div>
-  </div>
   <div class="sp-btns">
+    <button id="spMiftah" type="button">🕌 আল-মিফতাহ<small>এখানে চাপ দিন</small></button>
+    <div class="sp-row">
+      <button id="spHumBtn" type="button">🌸 হুমাইরা জান্নাত<small>জন্ম থেকে এখন পর্যন্ত</small></button>
+      <button id="spSadBtn" type="button">💞 সাদিয়া<small>বিবাহের পর থেকে</small></button>
+    </div>
     <button id="spNew" type="button">📝 নতুন পাতা<small>লেখার পাতা</small></button>
     <button id="spGo" type="button">💬 চ্যাট খুলুন<small>আমাদের চ্যাট</small></button>
     <button id="spGame" type="button">🎮 খেলা <small>লুডু ও আরও</small></button>
   </div>
+</div>
+<div class="cp" id="humPage">
+  <div class="cp-fx" data-fx="🌸,💗,✨,🦋,🌷,⭐"></div>
+  <button class="cp-back" type="button" aria-label="ফিরে যান">←</button>
+  <div class="ar">مَا شَاءَ ٱللَّٰه</div>
+  <div class="nm">হুমাইরা জান্নাত</div>
+  <div class="sub">আল্লাহর দেওয়া এক অনন্য উপহার 🌸</div>
+  <div class="orn">🌷 ✦ 🌸 ✦ 🌼</div>
+  <div class="tiles" id="humT"></div>
+  <div class="info"><div>🎂 জন্ম: ৪ সেপ্টেম্বর ২০২৬ ইং, রাত ৮:২০</div><div id="humTotal"></div></div>
+  <div class="dua">আল্লাহ তাকে নেক হায়াত, সুস্বাস্থ্য ও ঈমানের আলোয় বড় করুন। আমিন 🤲</div>
+</div>
+<div class="cp" id="sadPage">
+  <div class="cp-fx" data-fx="💞,✨,🌙,⭐,💖,🕊️"></div>
+  <button class="cp-back" type="button" aria-label="ফিরে যান">←</button>
+  <div class="ar">بَارَكَ ٱللَّهُ لَكُمَا</div>
+  <div class="nm">সাদিয়া ♥️ যাকওয়ান</div>
+  <div class="sub">দুজনের একসাথে পথচলা 💞</div>
+  <div class="orn">✦ 🌙 ✦ 💍 ✦ 🌙 ✦</div>
+  <div class="tiles" id="sadT"></div>
+  <div class="info"><div>💍 বিবাহ: ১৮ জুলাই ২০২৫ ইং, রাত ১২:৩০</div><div id="sadTotal"></div></div>
+  <div class="dua">বারাকাল্লাহু লাকুমা ওয়া বারাকা আলাইকুমা ওয়া জামা‘আ বাইনাকুমা ফী খাইর। আমিন 🤲</div>
 </div>
 <div id="game" class="hidden">
   <div class="gh"><button id="gBack" aria-label="পেছনে">←</button><div class="gt" id="gTitle">🎮 খেলা</div><button id="gHome" aria-label="স্বাগত পাতা">🏠</button></div>
@@ -3386,7 +3448,7 @@ document.addEventListener('visibilitychange', function(){
 });
 window.addEventListener('focus', function(){ if (me) markSeen(); });
 
-/* ---------- হুমাইরা ও সাদিয়ার লাইভ কাউন্টার ---------- */
+/* ---------- হুমাইরা ও সাদিয়ার পাতা (লাইভ কাউন্টার) ---------- */
 (function spCounters(){
   var HUM = new Date(2026, 8, 4, 20, 20, 0);   /* ৪ সেপ্টেম্বর ২০২৬, রাত ৮:২০ */
   var WED = new Date(2025, 6, 18, 0, 30, 0);   /* ১৮ জুলাই ২০২৫, রাত ১২:৩০ */
@@ -3403,21 +3465,49 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
     if (mo < 0) { mo += 12; y--; }
     return { y: y, mo: mo, d: d, h: h, mi: mi, s: s };
   }
-  function build(id, labels){
-    var g = document.querySelector('#' + id + ' .g'); if (!g) return null;
-    g.innerHTML = labels.map(function(l){ return '<div><b>০</b><small>' + l + '</small></div>'; }).join('');
-    return g.querySelectorAll('b');
+  function tiles(id, labels){
+    var box = document.getElementById(id); if (!box) return [];
+    box.innerHTML = labels.map(function(l){ return '<div class="tile"><b>০</b><small>' + l + '</small></div>'; }).join('');
+    return box.querySelectorAll('b');
   }
-  var humB = build('spHum', ['মাস', 'দিন', 'ঘণ্টা', 'মিনিট', 'সেকেন্ড']);
-  var sadB = build('spSad', ['বছর', 'মাস', 'দিন', 'ঘণ্টা', 'মিনিট', 'সেকেন্ড']);
+  var humB = tiles('humT', ['মাস', 'দিন', 'ঘণ্টা', 'মিনিট', 'সেকেন্ড']);
+  var sadB = tiles('sadT', ['বছর', 'মাস', 'দিন', 'ঘণ্টা', 'মিনিট', 'সেকেন্ড']);
+  var humP = document.getElementById('humPage'), sadP = document.getElementById('sadPage');
   function tick(){
-    var sp = document.getElementById('splash');
-    if (document.hidden || (sp && sp.classList.contains('away'))) return;
-    var now = new Date(), x;
-    if (humB) { x = diff(HUM, now); var v = [x.y * 12 + x.mo, x.d, x.h, x.mi, x.s]; for (var i = 0; i < v.length; i++) humB[i].textContent = bn(v[i]); }
-    if (sadB) { x = diff(WED, now); var w = [x.y, x.mo, x.d, x.h, x.mi, x.s]; for (var j = 0; j < w.length; j++) sadB[j].textContent = bn(w[j]); }
+    if (document.hidden) return;
+    var now = new Date(), x, i;
+    if (humP && humP.classList.contains('on')) {
+      x = diff(HUM, now);
+      var v = [x.y * 12 + x.mo, x.d, x.h, x.mi, x.s];
+      for (i = 0; i < v.length; i++) humB[i].textContent = bn(v[i]);
+      var hd = Math.floor(Math.max(0, now - HUM) / 864e5);
+      document.getElementById('humTotal').textContent = '🌼 মোট ' + bn(hd) + ' দিন পূর্ণ হয়েছে';
+    }
+    if (sadP && sadP.classList.contains('on')) {
+      x = diff(WED, now);
+      var w = [x.y, x.mo, x.d, x.h, x.mi, x.s];
+      for (i = 0; i < w.length; i++) sadB[i].textContent = bn(w[i]);
+      var sd = Math.floor(Math.max(0, now - WED) / 864e5);
+      document.getElementById('sadTotal').textContent = '💞 মোট ' + bn(sd) + ' দিন একসাথে';
+    }
   }
-  tick(); setInterval(tick, 1000);
+  function fx(page){
+    var box = page.querySelector('.cp-fx'); if (!box || box.childNodes.length) return;
+    var em = box.getAttribute('data-fx').split(','), h = '';
+    for (var k = 0; k < 16; k++) {
+      h += '<i style="--x:' + (Math.random() * 94).toFixed(0) + '%;--s:' + (16 + Math.random() * 18).toFixed(0) + 'px;--t:' + (9 + Math.random() * 9).toFixed(1) + 's;--d:-' + (Math.random() * 16).toFixed(1) + 's;--dx:' + ((Math.random() - .5) * 90).toFixed(0) + 'px;--r:' + ((Math.random() - .5) * 120).toFixed(0) + 'deg">' + em[k % em.length] + '</i>';
+    }
+    box.innerHTML = h;
+  }
+  function open(p){ if (!p) return; fx(p); p.classList.add('on'); p.scrollTop = 0; tick(); }
+  function close(p){ if (p) p.classList.remove('on'); }
+  var bm = document.getElementById('spMiftah');
+  if (bm) bm.onclick = function(){ var u = 'https://ahmadjakwan25-commits.github.io/hishab/'; try { if (!window.open(u, '_blank')) location.href = u; } catch (e) { location.href = u; } };
+  var b1 = document.getElementById('spHumBtn'), b2 = document.getElementById('spSadBtn');
+  if (b1) b1.onclick = function(){ open(humP); };
+  if (b2) b2.onclick = function(){ open(sadP); };
+  [humP, sadP].forEach(function(p){ if (!p) return; var bk = p.querySelector('.cp-back'); if (bk) bk.onclick = function(){ close(p); }; });
+  setInterval(tick, 1000);
   document.addEventListener('visibilitychange', tick);
 })();
 
