@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0f766e">
 <meta name="mobile-web-app-capable" content="yes">
-<title>J+S</title>
+<title>আমাদের চ্যাট</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -627,6 +627,53 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 #a4 .tb3 button.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
 #a4 .dlist .io{display:flex;gap:8px;margin:8px 0 0}
 #a4 .dlist .io button{flex:1;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:13.5px}
+
+/* ===== খেলা: লুডু (v23) ===== */
+#spGame{flex:0 0 100%!important;max-width:366px!important;padding:9px 8px!important;color:#fff;background:linear-gradient(135deg,#7c3aed,#db2777);box-shadow:0 6px 18px rgba(124,58,237,.35)}
+#splash .sp-btns{flex-wrap:wrap;gap:9px 12px;padding-top:24px}
+#splash{padding-bottom:calc(150px + env(safe-area-inset-bottom))!important}
+@media (max-height:700px){#splash{padding-bottom:calc(138px + env(safe-area-inset-bottom))!important}}
+#game{position:fixed;inset:0;z-index:300;background:linear-gradient(180deg,#fef3c7,#fde7f3 55%,#e0e7ff);color:#1f2937;display:flex;flex-direction:column;overflow:auto}
+#game .gh{display:flex;align-items:center;gap:8px;padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;flex:none}
+#game .gh button{width:40px;height:38px;border-radius:10px;background:rgba(255,255,255,.2);color:#fff;font-size:18px;font-weight:700}
+#game .gt{flex:1;text-align:center;font-weight:700;font-size:18px}
+#gMenu{padding:14px 14px 30px;display:grid;gap:12px}
+#gMenu .gc{background:#fff;border-radius:20px;padding:14px;box-shadow:0 6px 20px rgba(124,58,237,.16);border:2px solid #e9d5ff}
+#gMenu .gc h3{font-size:19px;margin-bottom:2px}
+#gMenu .gc p{font-size:13px;color:#6b7280;margin-bottom:10px;line-height:1.5}
+#gMenu .gc .r{display:flex;gap:8px;flex-wrap:wrap}
+#gMenu .gc button{flex:1;min-width:130px;padding:11px 8px;border-radius:14px;font-weight:700;font-size:14.5px;color:#fff;background:linear-gradient(135deg,#7c3aed,#db2777)}
+#gMenu .gc button.alt{background:linear-gradient(135deg,#0ea5e9,#6366f1)}
+#gMenu .gc.soon{opacity:.6;border-style:dashed}
+#gMenu .gres{margin-bottom:10px}
+#gLudo{display:flex;flex-direction:column;align-items:center;padding:8px 10px 22px;gap:8px}
+#gLudo .gst{font-weight:700;font-size:16px;min-height:24px;text-align:center}
+#gLudo .gpl{display:flex;align-items:center;gap:8px;width:min(100%,430px)}
+#gLudo .pp{flex:1;padding:6px 8px;border-radius:12px;text-align:center;font-weight:700;font-size:14px;color:#fff;border:3px solid transparent;transition:transform .2s,box-shadow .2s;opacity:.72}
+#gLudo .pp.on{opacity:1;transform:scale(1.05);box-shadow:0 0 0 3px #fff,0 6px 16px rgba(0,0,0,.3)}
+#gLudo .vs{font-size:12px;color:#6b7280}
+#gLudo .gbw{width:min(100%,430px);background:#fff;border-radius:16px;padding:6px;box-shadow:0 8px 26px rgba(0,0,0,.2)}
+#gBoard{display:block;width:100%;height:auto;touch-action:manipulation}
+#gBoard .pw{transition:transform .16s ease-out;cursor:default}
+#gBoard .pw.mv{cursor:pointer;animation:gPulse .7s ease-in-out infinite alternate}
+@keyframes gPulse{from{filter:drop-shadow(0 0 0 #fff)}to{filter:drop-shadow(0 0 3px #111)}}
+#gLudo .gdw{display:flex;align-items:center;gap:14px}
+#gDice{width:74px;height:74px;border-radius:16px;background:#fff;border:3px solid #7c3aed;box-shadow:0 6px 16px rgba(124,58,237,.35);display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:9px;gap:2px}
+#gDice i{display:block;border-radius:50%;background:transparent;margin:auto;width:13px;height:13px}
+#gDice i.o{background:#1f2937}
+#gDice.my{animation:gPulse2 .8s ease-in-out infinite alternate;border-color:#db2777}
+#gDice.rl{animation:gShake .12s linear infinite}
+@keyframes gPulse2{from{transform:scale(1)}to{transform:scale(1.1)}}
+@keyframes gShake{0%{transform:rotate(-12deg)}50%{transform:rotate(12deg) scale(1.05)}100%{transform:rotate(-12deg)}}
+#gLudo .gdh{font-size:13px;color:#6b7280;max-width:190px;line-height:1.4}
+#gLudo .gsc{font-size:13.5px;font-weight:700;color:#7c3aed}
+#gLudo .gbt{display:flex;gap:8px;width:min(100%,430px)}
+#gLudo .gbt button{flex:1;padding:10px 6px;border-radius:12px;background:#fff;border:2px solid #c4b5fd;color:#6d28d9;font-weight:700;font-size:13.5px}
+#gInv{position:fixed;left:12px;right:12px;top:calc(12px + env(safe-area-inset-top));z-index:700;background:#fff;color:#111;border-radius:18px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);border:2px solid #a78bfa;text-align:center;animation:slideUp .25s}
+#gInv #gInvT{font-weight:700;margin-bottom:10px}
+#gInv .b{display:flex;gap:8px}
+#gInv .b button{flex:1;padding:10px;border-radius:12px;font-weight:700;background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff}
+#gInv .b button+button{background:#f3f4f6;color:#374151}
 </style>
 </head>
 <body>
@@ -637,7 +684,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <div class="card">
       <div class="logo">☪</div>
       <div class="bism">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
-      <h1>J+S</h1>
+      <h1>আমাদের চ্যাট</h1>
       <p class="sub">শুধু দুজনের জন্য মেসেজ ও কল</p>
       <div id="nameBox" class="hidden">
         <label for="aName">আপনার নাম</label>
@@ -812,9 +859,23 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   <div class="sp-card"><div class="ar2" id="spAr2"></div><div id="spStatus"></div><small id="spRef"></small></div>
   <div class="sp-btns">
     <button id="spNew" type="button">📝 নতুন পাতা<small>লেখার পাতা</small></button>
-    <button id="spGo" type="button">💬 চ্যাট খুলুন<small>J+S</small></button>
+    <button id="spGo" type="button">💬 চ্যাট খুলুন<small>আমাদের চ্যাট</small></button>
+    <button id="spGame" type="button">🎮 খেলা <small>লুডু ও আরও</small></button>
   </div>
 </div>
+<div id="game" class="hidden">
+  <div class="gh"><button id="gBack" aria-label="পেছনে">←</button><div class="gt" id="gTitle">🎮 খেলা</div><button id="gHome" aria-label="স্বাগত পাতা">🏠</button></div>
+  <div id="gMenu"></div>
+  <div id="gLudo" class="hidden">
+    <div class="gst" id="gSt"></div>
+    <div class="gpl"><div class="pp" id="gP0"></div><div class="vs">বনাম</div><div class="pp" id="gP1"></div></div>
+    <div class="gbw"><svg id="gBoard" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="gdw"><button id="gDice" aria-label="পাশা চালুন"></button><div class="gdh" id="gDh"></div></div>
+    <div class="gsc" id="gSc"></div>
+    <div class="gbt"><button id="gNew">🔄 আবার নতুন করে</button><button id="gMn">☰ খেলার তালিকা</button></div>
+  </div>
+</div>
+<div id="gInv" class="hidden"><div id="gInvT"></div><div class="b"><button id="gInvY">🎲 খেলুন</button><button id="gInvN">পরে</button></div></div>
 <div id="fxLayer"></div>
 <div id="fxBanner"></div>
 <div id="toast" class="hidden"></div>
@@ -1535,6 +1596,7 @@ function startFun(){
     funReady = false;
     funCh = sb.channel('fun-room', { config: { broadcast: { self: false } } })
       .on('broadcast', { event: 'fx' }, function(m){ onFx(m && m.payload); })
+      .on('broadcast', { event: 'game' }, function(m){ if (window.gameOn) gameOn(m && m.payload); })
       .subscribe(function(st){ funReady = (st === 'SUBSCRIBED'); });
   } catch(e){}
 }
@@ -2554,6 +2616,7 @@ function sendLocation(){
 function openMore(){
   openSheet(function(b){
     sheetItem(b, '🏠 স্বাগত পাতা', function(){ if (window.__spShow) window.__spShow(); });
+    sheetItem(b, '🎮 খেলা (লুডু)', function(){ if (window.openGame) openGame('chat'); });
     sheetItem(b, '🔍 মেসেজ খুঁজুন', openSearch);
     sheetItem(b, '🖼 ছবি ও ভিডিওর অ্যালবাম', openAlbum);
     sheetItem(b, '📝 শেয়ার নোট ও কাউন্টডাউন', openNotes);
@@ -2800,7 +2863,7 @@ async function backupChat(){
     return '[' + when + '] ' + nameOf(m.sender) + ': ' + what;
   });
   var d = new Date();
-  saveBlobAs(new Blob(['﻿' + 'J+S — ব্যাকআপ (ছবি ও ভিডিও এতে নেই)\n\n' + lines.join('\n')], { type: 'text/plain;charset=utf-8' }), 'chat-backup-' + d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2) + '.txt');
+  saveBlobAs(new Blob(['﻿' + 'আমাদের চ্যাট — ব্যাকআপ (ছবি ও ভিডিও এতে নেই)\n\n' + lines.join('\n')], { type: 'text/plain;charset=utf-8' }), 'chat-backup-' + d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2) + '.txt');
   toast('ব্যাকআপ ডাউনলোড হয়েছে (' + bn(all.length) + 'টি মেসেজ)');
 }
 
@@ -2853,7 +2916,7 @@ function b64(buf){ return btoa(String.fromCharCode.apply(null, new Uint8Array(bu
 function unb64(t){ var s = atob(t), a = new Uint8Array(s.length); for (var i = 0; i < s.length; i++) a[i] = s.charCodeAt(i); return a; }
 async function bioRegister(){
   var cred = await navigator.credentials.create({ publicKey: {
-    challenge: crypto.getRandomValues(new Uint8Array(32)), rp: { name: 'J+S' },
+    challenge: crypto.getRandomValues(new Uint8Array(32)), rp: { name: 'আমাদের চ্যাট' },
     user: { id: crypto.getRandomValues(new Uint8Array(16)), name: 'chat', displayName: 'chat' },
     pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
     authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required' }, timeout: 60000 } });
@@ -2892,7 +2955,7 @@ function colorSettings(){
   });
 }
 /* ---------- সংস্করণ ও স্বয়ংক্রিয় পরীক্ষা ---------- */
-var APP_VER = 'v22 · ১৯ অক্টোবর (লেখা সেভ, স্পেস টুলবার, সেরা মানের ডাউনলোড)';
+var APP_VER = 'v23 · ১৯ অক্টোবর (খেলা: লুডু)';
 async function runChecks(){
   var res = [];
   function add(ok, label, detail){ res.push({ ok: ok, label: label, detail: detail || '' }); }
@@ -3464,6 +3527,260 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   $('spSee').onclick = function(){ if (window.closeSettings) closeSettings(); else $('settings').classList.add('hidden'); if (window.__spShow) __spShow(); };
   spApplyTheme();
   window.__spBack = show; window.__spShow = show; window.__spClose = close;
+})();
+
+
+/* ===================== খেলা: লুডু ===================== */
+(function ludo(){
+  var G = $('game'); if (!G) return;
+  var RING = [[6,1],[6,2],[6,3],[6,4],[6,5],[5,6],[4,6],[3,6],[2,6],[1,6],[0,6],[0,7],[0,8],[1,8],[2,8],[3,8],[4,8],[5,8],[6,9],[6,10],[6,11],[6,12],[6,13],[6,14],[7,14],[8,14],[8,13],[8,12],[8,11],[8,10],[8,9],[9,8],[10,8],[11,8],[12,8],[13,8],[14,8],[14,7],[14,6],[13,6],[12,6],[11,6],[10,6],[9,6],[8,5],[8,4],[8,3],[8,2],[8,1],[8,0],[7,0],[6,0]];
+  var START = [0, 26], SAFE = [0, 13, 26, 39, 8, 21, 34, 47];
+  var HOMEC = [[[7,1],[7,2],[7,3],[7,4],[7,5]], [[7,13],[7,12],[7,11],[7,10],[7,9]]];
+  var COL = ['#e11d48', '#f59e0b'], COLD = ['#9f1239', '#b45309'], BASEQ = [[0, 0], [90, 90]];
+  var NAMES_DEF = ['যাকওয়ান', 'সাদিয়া'];
+  var S = null, mySeat = 0, mode = 'bot', busy = false, botT = 0, waitT = 0, pending = null, from = 'splash', rolling = false;
+  function nm(){ return (myProf && myProf.name) || 'আমি'; }
+  function pnm(){ return (peer && peer.name) || 'সাথী'; }
+  function newState(names){ return { gid: 'g' + Date.now() + Math.floor(Math.random() * 1e4), names: names, turn: 0, dice: null, sixes: 0, pawns: [[-1,-1,-1,-1],[-1,-1,-1,-1]], winner: -1, seq: 0, last: null }; }
+  function save(){ try { localStorage.setItem('ludo_v1', JSON.stringify({ S: S, mySeat: mySeat, mode: mode })); } catch(e){} }
+  function load(){ try { var o = JSON.parse(localStorage.getItem('ludo_v1') || 'null'); return o && o.S ? o : null; } catch(e){ return null; } }
+  function wins(){ try { return JSON.parse(localStorage.getItem('ludo_w') || '{"me":0,"pe":0}'); } catch(e){ return { me: 0, pe: 0 }; } }
+  function addWin(me2){ var w = wins(); if (me2) w.me++; else w.pe++; try { localStorage.setItem('ludo_w', JSON.stringify(w)); } catch(e){} }
+  /* ---------- নিয়ম ---------- */
+  function legal(T){
+    var r = [], v = T.dice; if (!v) return r;
+    for (var i = 0; i < 4; i++) { var p = T.pawns[T.turn][i]; if (p < 0 ? v === 6 : p + v <= 56) r.push(i); }
+    return r;
+  }
+  function act(T, a){
+    var ev = []; T.seq++;
+    if (a.t === 'roll') {
+      T.dice = a.v; T.last = { s: T.turn, v: a.v }; if (a.v === 6) T.sixes++;
+      ev.push({ t: 'roll', s: T.turn, v: a.v });
+      if (a.v === 6 && T.sixes >= 3) { ev.push({ t: 'three' }); T.dice = null; T.sixes = 0; T.turn = 1 - T.turn; ev.push({ t: 'turn' }); return ev; }
+      if (!legal(T).length) { ev.push({ t: 'nomove' }); T.dice = null; T.sixes = 0; T.turn = 1 - T.turn; ev.push({ t: 'turn' }); }
+    } else if (a.t === 'move') {
+      var s = T.turn, i = a.i, v = T.dice, fr = T.pawns[s][i], to = fr < 0 ? 0 : fr + v, cap = [];
+      T.pawns[s][i] = to;
+      if (to <= 50) {
+        var cell = (START[s] + to) % 52;
+        if (SAFE.indexOf(cell) < 0) { var o = 1 - s; for (var j = 0; j < 4; j++) { var q = T.pawns[o][j]; if (q >= 0 && q <= 50 && (START[o] + q) % 52 === cell) { T.pawns[o][j] = -1; cap.push({ s: o, i: j }); } } }
+      }
+      ev.push({ t: 'move', s: s, i: i, from: fr, to: to, cap: cap });
+      if (T.pawns[s].every(function(p){ return p === 56; })) { T.winner = s; T.dice = null; ev.push({ t: 'win', s: s }); return ev; }
+      var extra = v === 6 || cap.length > 0 || to === 56;
+      T.dice = null;
+      if (!extra) { T.turn = 1 - s; T.sixes = 0; ev.push({ t: 'turn' }); } else { if (v !== 6) T.sixes = 0; ev.push({ t: 'extra' }); }
+    }
+    return ev;
+  }
+  window.__ludo = { act: act, legal: legal, newState: newState, RING: RING };
+  /* ---------- আঁকা ---------- */
+  var NS = 'http://www.w3.org/2000/svg', svg = $('gBoard'), pawnEls = [[], []];
+  function mk(n, a, par){ var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); if (par) par.appendChild(e); return e; }
+  function cxy(r, c){ return [c * 10 + 5, r * 10 + 5]; }
+  function posOf(seat, i, p){
+    if (p < 0) { var q = BASEQ[seat], k = [[18,18],[42,18],[18,42],[42,42]][i]; return [q[0] + k[0], q[1] + k[1]]; }
+    if (p <= 50) { var rc = RING[(START[seat] + p) % 52]; return cxy(rc[0], rc[1]); }
+    if (p <= 55) { var h = HOMEC[seat][p - 51]; return cxy(h[0], h[1]); }
+    return [seat ? 83 : 67, 71 + i * 2.6];
+  }
+  function build(){
+    svg.textContent = '';
+    var qc = ['#fecdd3', '#bbf7d0', '#fde68a', '#bfdbfe'], qs = [[0, 0], [90, 0], [90, 90], [0, 90]], qd = ['#e11d48', '#16a34a', '#f59e0b', '#2563eb'];
+    for (var q = 0; q < 4; q++) {
+      mk('rect', { x: qs[q][0], y: qs[q][1], width: 60, height: 60, fill: qd[q], opacity: (q === 0 || q === 2) ? 1 : .45 }, svg);
+      mk('rect', { x: qs[q][0] + 8, y: qs[q][1] + 8, width: 44, height: 44, rx: 8, fill: qc[q] }, svg);
+      [[18,18],[42,18],[18,42],[42,42]].forEach(function(k){ mk('circle', { cx: qs[q][0] + k[0], cy: qs[q][1] + k[1], r: 6.4, fill: '#fff', opacity: .75, stroke: qd[q], 'stroke-width': .8 }, svg); });
+    }
+    RING.forEach(function(rc, idx){
+      var f = '#fff', own = START.indexOf(idx), col = idx === 0 ? qd[0] : idx === 13 ? qd[1] : idx === 26 ? qd[2] : idx === 39 ? qd[3] : null;
+      mk('rect', { x: rc[1] * 10, y: rc[0] * 10, width: 10, height: 10, fill: col || f, stroke: '#cbd5e1', 'stroke-width': .5 }, svg);
+      if ([8, 21, 34, 47].indexOf(idx) >= 0) { var t = mk('text', { x: rc[1] * 10 + 5, y: rc[0] * 10 + 7.6, 'text-anchor': 'middle', 'font-size': 7, fill: '#94a3b8' }, svg); t.textContent = '★'; }
+    });
+    HOMEC.forEach(function(col, sIdx){ col.forEach(function(rc){ mk('rect', { x: rc[1] * 10, y: rc[0] * 10, width: 10, height: 10, fill: COL[sIdx], opacity: .85, stroke: '#cbd5e1', 'stroke-width': .5 }, svg); }); });
+    [[[60,60],[75,75],[60,90]], [[60,60],[75,75],[90,60]], [[90,60],[75,75],[90,90]], [[60,90],[75,75],[90,90]]].forEach(function(tr, k){
+      mk('polygon', { points: tr.map(function(p){ return p.join(','); }).join(' '), fill: [qd[0], qd[1], qd[2], qd[3]][[0,1,2,3][k]] }, svg);
+    });
+    var gp = mk('g', { id: 'gpg' }, svg);
+    for (var s = 0; s < 2; s++) for (var i = 0; i < 4; i++) (function(s, i){
+      var g = mk('g', { class: 'pw' }, gp);
+      mk('circle', { cx: 0, cy: 1.2, r: 4.6, fill: 'rgba(0,0,0,.28)' }, g);
+      mk('circle', { cx: 0, cy: 0, r: 4.4, fill: COL[s], stroke: '#fff', 'stroke-width': 1.3 }, g);
+      mk('circle', { cx: -1.4, cy: -1.6, r: 1.3, fill: '#fff', opacity: .55 }, g);
+      g.addEventListener('click', function(){ onPawn(s, i); });
+      pawnEls[s][i] = g;
+    })(s, i);
+  }
+  function place(el2, xy, k, n){
+    var off = n > 1 ? [[-2.2,-2],[2.2,-2],[-2.2,2.2],[2.2,2.2]][k % 4] : [0, 0], sc = n > 1 ? .78 : 1;
+    el2.setAttribute('transform', 'translate(' + (xy[0] + off[0]).toFixed(1) + ' ' + (xy[1] + off[1]).toFixed(1) + ') scale(' + sc + ')');
+  }
+  function renderPawns(skip){
+    var groups = {};
+    for (var s = 0; s < 2; s++) for (var i = 0; i < 4; i++) { var p = S.pawns[s][i], key = p < 0 ? 'b' + s + i : p <= 50 ? 'r' + ((START[s] + p) % 52) : p <= 55 ? 'h' + s + p : 'f' + s + i; (groups[key] = groups[key] || []).push([s, i]); }
+    var mv = (S.winner < 0 && S.dice && !busy && isMine()) ? legal(S) : [];
+    Object.keys(groups).forEach(function(k){ groups[k].forEach(function(si, n){ var s2 = si[0], i2 = si[1]; if (skip && skip[s2 + '_' + i2]) return; place(pawnEls[s2][i2], posOf(s2, i2, S.pawns[s2][i2]), n, groups[k].length); }); });
+    for (s = 0; s < 2; s++) for (i = 0; i < 4; i++) pawnEls[s][i].classList.toggle('mv', s === S.turn && mv.indexOf(i) >= 0);
+    // সামনে আনুন
+    var gp = $('gpg'); if (S.winner < 0) for (i = 0; i < 4; i++) gp.appendChild(pawnEls[S.turn][i]);
+  }
+  var PIPS = { 1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8] };
+  function showDie(v){ var d = $('gDice'); d.textContent = ''; for (var k = 0; k < 9; k++) { var i2 = document.createElement('i'); if (v && PIPS[v].indexOf(k) >= 0) i2.className = 'o'; d.appendChild(i2); } }
+  function isMine(){ return mode === 'bot' ? S.turn === 0 : S.turn === mySeat; }
+  function names(){ return S.names; }
+  function status(){
+    var t = '', w = wins();
+    if (S.winner >= 0) t = '🏆 ' + names()[S.winner] + ' জিতেছেন! মাশাআল্লাহ';
+    else if (rolling) t = '🎲 পাশা ঘুরছে…';
+    else if (isMine()) t = S.dice ? '👆 একটা গুটি বেছে নিন' : '🎲 আপনার চাল — পাশায় চাপুন';
+    else t = '⏳ ' + names()[S.turn] + '-এর চাল…';
+    $('gSt').textContent = t;
+    var p0 = $('gP0'), p1 = $('gP1'); p0.textContent = '🔴 ' + names()[0]; p1.textContent = '🟡 ' + names()[1];
+    p0.style.background = COL[0]; p1.style.background = COL[1];
+    p0.classList.toggle('on', S.turn === 0 && S.winner < 0); p1.classList.toggle('on', S.turn === 1 && S.winner < 0);
+    var d = $('gDice'); d.classList.toggle('my', isMine() && !S.dice && S.winner < 0 && !busy && !rolling);
+    var h = $('gDh'); h.textContent = S.last ? names()[S.last.s] + ' ফেললেন: ' + bn(S.last.v) : 'প্রথমে ৬ পড়লে গুটি বের হবে';
+    $('gSc').textContent = mode === 'online' ? ('স্কোর: ' + (mySeat === 0 ? names()[0] : names()[1]) + ' ' + bn(w.me) + ' — ' + bn(w.pe) + ' ' + (mySeat === 0 ? names()[1] : names()[0])) : 'কম্পিউটারের সাথে অনুশীলন';
+  }
+  function bn2(n){ return String(n).replace(/\d/g, function(d){ return '০১২৩৪৫৬৭৮৯'[d]; }); }
+  /* ---------- শব্দ ---------- */
+  var ac = null;
+  function snd(f, d, ty, g){ try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); var o = ac.createOscillator(), gn = ac.createGain(); o.type = ty || 'sine'; o.frequency.value = f; gn.gain.value = g || .07; o.connect(gn); gn.connect(ac.destination); var t = ac.currentTime; gn.gain.exponentialRampToValueAtTime(.0001, t + d); o.start(t); o.stop(t + d); } catch(e){} }
+  /* ---------- অ্যানিমেশন ---------- */
+  function play(evs, done){
+    var i = 0;
+    (function next(){
+      if (i >= evs.length) { busy = false; renderPawns(); status(); save(); if (done) done(); autoplay(); return; }
+      var e = evs[i++];
+      if (e.t === 'roll') { rolling = true; busy = true; status(); var d = $('gDice'); d.classList.add('rl'); var k = 0, iv = setInterval(function(){ showDie(1 + Math.floor(Math.random() * 6)); snd(300 + Math.random() * 200, .05, 'square', .03); if (++k > 6) { clearInterval(iv); d.classList.remove('rl'); showDie(e.v); rolling = false; snd(e.v === 6 ? 880 : 520, .18, 'triangle'); setTimeout(next, 260); } }, 85); }
+      else if (e.t === 'move') {
+        busy = true; var skip = {}; skip[e.s + '_' + e.i] = 1; renderPawns(skip);
+        var steps = []; if (e.from < 0) steps = [0]; else for (var p = e.from + 1; p <= e.to; p++) steps.push(p);
+        var j = 0; (function stp(){
+          if (j >= steps.length) { e.cap.forEach(function(c){ snd(180, .35, 'sawtooth', .08); }); if (e.to === 56) snd(988, .4, 'triangle'); setTimeout(next, e.cap.length ? 380 : 120); return; }
+          place(pawnEls[e.s][e.i], posOf(e.s, e.i, steps[j++]), 0, 1); snd(420 + j * 12, .07, 'triangle', .05); setTimeout(stp, 150);
+        })();
+      }
+      else if (e.t === 'win') { snd(660, .2, 'triangle'); setTimeout(function(){ snd(880, .3, 'triangle'); }, 220); try { spawnHearts('mix', 40, 900); } catch(x){} var meWon = mode === 'bot' ? e.s === 0 : e.s === mySeat; if (mode === 'online') addWin(meWon); next(); }
+      else if (e.t === 'three') { toast('তিনবার ৬ — চাল বাতিল'); next(); }
+      else if (e.t === 'nomove') { setTimeout(function(){ toast('কোনো গুটি চলার মতো নেই'); }, 0); setTimeout(next, 650); }
+      else next();
+    })();
+  }
+  function apply(a, remote){
+    var evs = act(S, a); save();
+    if (!remote && mode === 'online') send({ t: 'act', gid: S.gid, seq: S.seq, a: a });
+    play(evs);
+  }
+  /* ---------- ইনপুট ---------- */
+  $('gDice').onclick = function(){
+    if (!S || busy || S.winner >= 0 || S.dice || !isMine()) return;
+    apply({ t: 'roll', v: 1 + Math.floor(Math.random() * 6) });
+  };
+  function onPawn(s, i){
+    if (!S || busy || S.winner >= 0 || !S.dice || !isMine() || s !== S.turn) return;
+    if (legal(S).indexOf(i) < 0) return;
+    apply({ t: 'move', i: i });
+  }
+  function autoplay(){
+    clearTimeout(botT);
+    if (!S || S.winner >= 0 || busy) return;
+    var L = legal(S);
+    if (isMine() && S.dice && L.length === 1) { botT = setTimeout(function(){ if (!busy && S.dice && isMine()) apply({ t: 'move', i: L[0] }); }, 650); return; }
+    if (mode === 'bot' && S.turn === 1) {
+      botT = setTimeout(function(){
+        if (busy || !S || S.turn !== 1 || S.winner >= 0) return;
+        if (!S.dice) { apply({ t: 'roll', v: 1 + Math.floor(Math.random() * 6) }); return; }
+        var best = L[0], bs = -1e9;
+        L.forEach(function(i){
+          var p = S.pawns[1][i], v = S.dice, to = p < 0 ? 0 : p + v, sc = to;
+          if (to === 56) sc += 100; if (p < 0) sc += 40;
+          if (to <= 50) { var cell = (START[1] + to) % 52; if (SAFE.indexOf(cell) < 0) { for (var j = 0; j < 4; j++) { var q = S.pawns[0][j]; if (q >= 0 && q <= 50 && (START[0] + q) % 52 === cell) sc += 80; } } else sc += 12; }
+          if (sc > bs) { bs = sc; best = i; }
+        });
+        apply({ t: 'move', i: best });
+      }, S.dice ? 700 : 900);
+    }
+  }
+  /* ---------- নেটওয়ার্ক ---------- */
+  function send(o){ try { if (funCh && funReady) funCh.send({ type: 'broadcast', event: 'game', payload: o }); else toast('সংযোগ নেই — একটু পরে চেষ্টা করুন'); } catch(e){} }
+  window.gameOn = function(m){
+    if (!m) return;
+    if (m.t === 'invite') {
+      pending = m; $('gInvT').textContent = '🎲 ' + pnm() + ' আপনাকে লুডু খেলতে ডাকছেন!'; $('gInv').classList.remove('hidden');
+      try { snd(660, .15, 'triangle', .08); setTimeout(function(){ snd(880, .2, 'triangle', .08); }, 160); } catch(e){}
+      clearTimeout(waitT); waitT = setTimeout(function(){ $('gInv').classList.add('hidden'); pending = null; }, 45000);
+    } else if (m.t === 'accept') {
+      if (S && mode === 'online' && S.gid === m.gid && waiting) { waiting = false; S.names = [S.names[0], m.name || pnm()]; save(); toast('✔ ' + (m.name || pnm()) + ' এসেছেন — খেলা শুরু!'); showLudo(); }
+    } else if (m.t === 'act') {
+      if (!S || mode !== 'online' || S.gid !== m.gid) return;
+      if (m.seq === S.seq + 1 && S.turn !== mySeat) {
+        if (busy) { setTimeout(function(){ gameOn(m); }, 250); return; }
+        apply(m.a, true);
+      } else if (m.seq > S.seq + 1) send({ t: 'need', gid: S.gid });
+    } else if (m.t === 'need') {
+      if (S && S.gid === m.gid && mode === 'online') send({ t: 'state', gid: S.gid, S: S });
+    } else if (m.t === 'state') {
+      if (S && S.gid === m.gid && m.S && m.S.seq >= S.seq && !busy) { S = m.S; save(); renderPawns(); status(); showDie(S.last ? S.last.v : 0); autoplay(); }
+    } else if (m.t === 'rematch') {
+      if (S && S.gid === m.gid) { var nn = newState(S.names); nn.gid = m.ngid; S = nn; save(); showDie(0); renderPawns(); status(); toast('নতুন খেলা শুরু'); }
+    } else if (m.t === 'cancel') { if (pending && pending.gid === m.gid) { $('gInv').classList.add('hidden'); pending = null; } }
+  };
+  var waiting = false;
+  $('gInvY').onclick = function(){
+    if (!pending) return; var m = pending; pending = null; $('gInv').classList.add('hidden');
+    S = newState([m.name || pnm(), nm()]); S.gid = m.gid; mySeat = 1; mode = 'online'; save();
+    openGame('invite'); showLudo(); send({ t: 'accept', gid: S.gid, name: nm() });
+  };
+  $('gInvN').onclick = function(){ $('gInv').classList.add('hidden'); pending = null; };
+  /* ---------- পাতা ---------- */
+  function showMenu(){
+    clearTimeout(botT); $('gLudo').classList.add('hidden'); $('gMenu').classList.remove('hidden'); $('gTitle').textContent = '🎮 খেলা';
+    var m = $('gMenu'); m.textContent = '';
+    var old = load(), c = el('div', 'gc'); c.appendChild(el('h3', '', '🎲 লুডু'));
+    c.appendChild(el('p', '', 'দুজনে মিলে আসল লুডুর মতো — ৬ পড়লে গুটি বের হয়, গুটি কাটা যায়, আগে চারটা গুটি বাড়ি পৌঁছালে জয়।'));
+    var r = el('div', 'r');
+    if (old && old.S && old.S.winner < 0) { var b0 = el('button', '', '▶ চলমান খেলা চালিয়ে যান'); b0.onclick = function(){ S = old.S; mySeat = old.mySeat; mode = old.mode; if (mode === 'online') { send({ t: 'need', gid: S.gid }); } showLudo(); }; r.appendChild(b0); }
+    var b1 = el('button', '', '👫 ' + pnm() + '-এর সাথে খেলুন'); b1.onclick = startOnline; r.appendChild(b1);
+    var b2 = el('button', 'alt', '🤖 কম্পিউটারের সাথে'); b2.onclick = startBot; r.appendChild(b2);
+    c.appendChild(r); m.appendChild(c);
+    [['🔤 শব্দ ধাঁধা', 'শীঘ্রই আসছে'], ['❓ আমাকে কতটা জানো', 'শীঘ্রই আসছে'], ['✖⭕ টিক-ট্যাক-টো', 'শীঘ্রই আসছে']].forEach(function(x){ var d = el('div', 'gc soon'); d.appendChild(el('h3', '', x[0])); d.appendChild(el('p', '', x[1])); m.appendChild(d); });
+  }
+  function startBot(){ S = newState([nm(), 'কম্পিউটার']); mySeat = 0; mode = 'bot'; save(); showLudo(); }
+  function startOnline(){
+    if (!peerOnline) toast('সাথী এখন অনলাইনে নেই বলে মনে হচ্ছে — তবুও ডাকা হলো', 4000);
+    S = newState([nm(), pnm()]); mySeat = 0; mode = 'online'; waiting = true; save();
+    send({ t: 'invite', gid: S.gid, name: nm() });
+    $('gMenu').textContent = ''; var c = el('div', 'gc'); c.appendChild(el('h3', '', '⏳ ' + pnm() + '-এর জন্য অপেক্ষা…'));
+    c.appendChild(el('p', '', 'ওনার ফোনে আমন্ত্রণ গেছে। “খেলুন” চাপলেই খেলা শুরু হবে। অ্যাপ খোলা থাকতে হবে।'));
+    var b = el('button', '', 'বাতিল'); b.onclick = function(){ waiting = false; send({ t: 'cancel', gid: S.gid }); showMenu(); }; c.appendChild(b); $('gMenu').appendChild(c);
+  }
+  function showLudo(){
+    clearTimeout(botT); busy = false; rolling = false;
+    $('gMenu').classList.add('hidden'); $('gLudo').classList.remove('hidden'); $('gTitle').textContent = '🎲 লুডু';
+    if (!pawnEls[0][0] || !pawnEls[0][0].parentNode) build();
+    showDie(S.last ? S.last.v : 0); renderPawns(); status(); autoplay();
+  }
+  $('gNew').onclick = function(){
+    if (!S) return; if (S.winner < 0 && !confirm('চলমান খেলা বাদ দিয়ে নতুন করে শুরু করবেন?')) return;
+    var nn = newState(S.names); if (mode === 'online') { send({ t: 'rematch', gid: S.gid, ngid: nn.gid }); } S = nn; save(); showDie(0); renderPawns(); status(); autoplay();
+  };
+  $('gMn').onclick = function(){ clearTimeout(botT); showMenu(); };
+  window.openGame = function(f){
+    from = f || 'splash';
+    var sp = $('splash'); if (sp && f !== 'invite') sp.classList.add('away'); else if (sp) sp.classList.add('away');
+    G.classList.remove('hidden');
+    if (S && mode === 'online' && !$('gLudo').classList.contains('hidden')) return;
+    showMenu();
+  };
+  function closeGame(){ clearTimeout(botT); G.classList.add('hidden'); }
+  $('gBack').onclick = function(){
+    if (!$('gLudo').classList.contains('hidden')) { showMenu(); return; }
+    waiting = false; closeGame(); if (from === 'chat') return; if (window.__spShow) __spShow();
+  };
+  $('gHome').onclick = function(){ closeGame(); if (window.__spShow) __spShow(); };
+  var sg = $('spGame'); if (sg) sg.onclick = function(){ openGame('splash'); };
 })();
 
 /* ===================== শুরু ===================== */
