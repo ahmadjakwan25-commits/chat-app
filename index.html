@@ -633,6 +633,38 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 #splash .sp-btns{flex-wrap:wrap;gap:9px 12px;padding-top:24px}
 #splash{padding-bottom:calc(150px + env(safe-area-inset-bottom))!important}
 @media (max-height:700px){#splash{padding-bottom:calc(138px + env(safe-area-inset-bottom))!important}}
+/* ===== স্বাগত পাতা: হুমাইরা ও সাদিয়ার লাইভ কাউন্টার ===== */
+.sp-cnt{display:flex;gap:8px;margin-top:10px;width:100%;max-width:352px;animation:spUp .9s 1.4s both}
+.sp-c{flex:1;min-width:0;padding:7px 6px 6px;border-radius:16px;border:1.5px solid transparent;background:linear-gradient(rgba(255,255,255,.86),rgba(255,255,255,.86)) padding-box,linear-gradient(135deg,#f472b6,#a78bfa,#10b981) border-box;box-shadow:0 6px 18px rgba(124,58,237,.12)}
+.sp-c .t{font-size:12px;font-weight:700;color:#7c3aed;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-c .g{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.sp-c .g div{background:rgba(124,58,237,.07);border-radius:9px;padding:2px 0 3px}
+.sp-c .g b{display:block;font-size:16px;line-height:1.25;color:#1f3a36;font-variant-numeric:tabular-nums}
+.sp-c .g small{display:block;font-size:10px;color:#b45309;font-weight:600;line-height:1.2}
+#splash[data-th=night] .sp-c{background:linear-gradient(rgba(15,23,42,.8),rgba(15,23,42,.8)) padding-box,linear-gradient(135deg,#fde68a,#a5f3fc) border-box}
+#splash[data-th=night] .sp-c .t{color:#fde68a}
+#splash[data-th=night] .sp-c .g div{background:rgba(255,255,255,.08)}
+#splash[data-th=night] .sp-c .g b{color:#e2e8f0}
+@media (max-height:820px){
+  #splash{padding-top:34px!important}
+  #splash .sp-orn{display:none}
+  .sp-bism{font-size:20px;line-height:1.6}
+  .sp-ar{font-size:42px;line-height:1.3}
+  .sp-ahlan{font-size:34px;margin-top:-4px}
+  .sp-names{font-size:28px}
+  .sp-card{margin-top:8px;padding:9px 14px 7px}
+  .sp-card .ar2{font-size:17px;line-height:1.6}
+  .sp-card #spStatus{font-size:13px;line-height:1.5}
+  .sp-card small{margin-top:3px;font-size:11.5px}
+  .sp-cnt{margin-top:8px}
+}
+@media (max-height:690px){
+  .sp-moon,.sp-hello{display:none}
+  .sp-ar{font-size:34px}
+  .sp-ahlan{font-size:28px}
+  .sp-card .ar2{display:none}
+  .sp-c .g b{font-size:14.5px}
+}
 #game{position:fixed;inset:0;z-index:300;background:linear-gradient(180deg,#fef3c7,#fde7f3 55%,#e0e7ff);color:#1f2937;display:flex;flex-direction:column;overflow:auto}
 #game .gh{display:flex;align-items:center;gap:8px;padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;flex:none}
 #game .gh button{width:40px;height:38px;border-radius:10px;background:rgba(255,255,255,.2);color:#fff;font-size:18px;font-weight:700}
@@ -857,6 +889,10 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   <div class="sp-names"><span class="gr">যাকওয়ান</span> <i class="hrt">♥️</i> <span class="gr">সাদিয়া</span></div>
   <div class="sp-hello" id="spHello"></div>
   <div class="sp-card"><div class="ar2" id="spAr2"></div><div id="spStatus"></div><small id="spRef"></small></div>
+  <div class="sp-cnt">
+    <div class="sp-c" id="spHum"><div class="t">🌸 হুমাইরা জান্নাত</div><div class="g"></div></div>
+    <div class="sp-c" id="spSad"><div class="t">💞 সাদিয়া ♥️ যাকওয়ান</div><div class="g"></div></div>
+  </div>
   <div class="sp-btns">
     <button id="spNew" type="button">📝 নতুন পাতা<small>লেখার পাতা</small></button>
     <button id="spGo" type="button">💬 চ্যাট খুলুন<small>আমাদের চ্যাট</small></button>
@@ -3349,6 +3385,41 @@ document.addEventListener('visibilitychange', function(){
   typingNow = false;
 });
 window.addEventListener('focus', function(){ if (me) markSeen(); });
+
+/* ---------- হুমাইরা ও সাদিয়ার লাইভ কাউন্টার ---------- */
+(function spCounters(){
+  var HUM = new Date(2026, 8, 4, 20, 20, 0);   /* ৪ সেপ্টেম্বর ২০২৬, রাত ৮:২০ */
+  var WED = new Date(2025, 6, 18, 0, 30, 0);   /* ১৮ জুলাই ২০২৫, রাত ১২:৩০ */
+  var BD = '০১২৩৪৫৬৭৮৯';
+  function bn(n){ return String(n).replace(/\d/g, function(d){ return BD.charAt(d); }); }
+  function diff(a, b){
+    if (b < a) b = a;
+    var y = b.getFullYear() - a.getFullYear(), mo = b.getMonth() - a.getMonth(), d = b.getDate() - a.getDate(),
+        h = b.getHours() - a.getHours(), mi = b.getMinutes() - a.getMinutes(), s = b.getSeconds() - a.getSeconds();
+    if (s < 0) { s += 60; mi--; }
+    if (mi < 0) { mi += 60; h--; }
+    if (h < 0) { h += 24; d--; }
+    if (d < 0) { d += new Date(b.getFullYear(), b.getMonth(), 0).getDate(); mo--; }
+    if (mo < 0) { mo += 12; y--; }
+    return { y: y, mo: mo, d: d, h: h, mi: mi, s: s };
+  }
+  function build(id, labels){
+    var g = document.querySelector('#' + id + ' .g'); if (!g) return null;
+    g.innerHTML = labels.map(function(l){ return '<div><b>০</b><small>' + l + '</small></div>'; }).join('');
+    return g.querySelectorAll('b');
+  }
+  var humB = build('spHum', ['মাস', 'দিন', 'ঘণ্টা', 'মিনিট', 'সেকেন্ড']);
+  var sadB = build('spSad', ['বছর', 'মাস', 'দিন', 'ঘণ্টা', 'মিনিট', 'সেকেন্ড']);
+  function tick(){
+    var sp = document.getElementById('splash');
+    if (document.hidden || (sp && sp.classList.contains('away'))) return;
+    var now = new Date(), x;
+    if (humB) { x = diff(HUM, now); var v = [x.y * 12 + x.mo, x.d, x.h, x.mi, x.s]; for (var i = 0; i < v.length; i++) humB[i].textContent = bn(v[i]); }
+    if (sadB) { x = diff(WED, now); var w = [x.y, x.mo, x.d, x.h, x.mi, x.s]; for (var j = 0; j < w.length; j++) sadB[j].textContent = bn(w[j]); }
+  }
+  tick(); setInterval(tick, 1000);
+  document.addEventListener('visibilitychange', tick);
+})();
 
 /* ---------- স্বাগত পাতা ---------- */
 (function splash(){
