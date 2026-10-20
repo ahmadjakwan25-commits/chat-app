@@ -749,7 +749,15 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 @keyframes gRing{from{transform:scale(.9)}to{transform:scale(1.12)}}
 #gVoice{position:sticky;bottom:0;z-index:5;margin-top:auto;display:flex;align-items:center;gap:8px;justify-content:center;padding:9px 12px calc(9px + env(safe-area-inset-bottom));background:rgba(255,255,255,.94);border-top:2px solid #ddd6fe;box-shadow:0 -6px 18px rgba(76,29,149,.12)}
 #gVoice button{border:0;border-radius:22px;padding:10px 16px;font-weight:700;font-size:14px;color:#fff;background:linear-gradient(135deg,#7c3aed,#db2777)}
-#gVoice button.rd{width:46px;height:46px;padding:0;border-radius:50%;font-size:20px;background:#ede9fe;color:#4c1d95;border:2px solid #c4b5fd}
+#gVoice{gap:6px}
+#gVoice button.rd{width:40px;height:40px;padding:0;border-radius:50%;font-size:18px;background:#ede9fe;color:#4c1d95;border:2px solid #c4b5fd}
+#gVoice button.vd{padding:10px 12px}
+#gVid{position:fixed;right:8px;top:calc(64px + env(safe-area-inset-top));z-index:60;width:104px;height:138px;border-radius:14px;touch-action:none;box-shadow:0 6px 18px rgba(0,0,0,.4);background:#111;border:2px solid #fff;overflow:hidden}
+#gVid.big{width:190px;height:253px}
+#gVid video{position:absolute;object-fit:cover;background:#222}
+#gvRemote{inset:0;width:100%;height:100%}
+#gvLocal{right:4px;bottom:4px;width:38%;height:34%;border-radius:8px;border:1.5px solid #fff;transform:scaleX(-1)}
+#gVid .gvn{position:absolute;left:5px;top:4px;font-size:10px;color:#fff;text-shadow:0 1px 3px #000;z-index:2}
 #gVoice button.rd.off{background:#fee2e2;border-color:#f87171}
 #gVoice button.end{background:#e11d48;color:#fff;border:0}
 #gVoice #gvT{font-weight:700;font-size:14px;color:#4c1d95;min-width:78px;text-align:center}
@@ -760,6 +768,37 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 #gLudo .gsc{font-size:13.5px;font-weight:700;color:#7c3aed}
 #gLudo .gbt{display:flex;gap:8px;width:min(100%,430px)}
 #gLudo .gbt button{flex:1;padding:10px 6px;border-radius:12px;background:#fff;border:2px solid #c4b5fd;color:#6d28d9;font-weight:700;font-size:13.5px}
+#gxInv{position:fixed;left:12px;right:12px;top:calc(12px + env(safe-area-inset-top));z-index:700;background:#fff;color:#111;border-radius:18px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);border:2px solid #a78bfa;text-align:center;animation:slideUp .25s}
+#gxInv #gxInvT{font-weight:700;margin-bottom:10px}
+#gxInv .b{display:flex;gap:8px}
+#gxInv .b button{flex:1;padding:10px;border-radius:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,#7c3aed,#db2777)}
+#gxInv .b button:last-child{background:#fff;color:#6d28d9;border:2px solid #c4b5fd}
+#gX{display:flex;flex-direction:column;align-items:center;padding:10px 12px 22px;gap:12px}
+#gX.hidden{display:none}
+#gX .gxs{font-weight:700;font-size:16px;text-align:center;line-height:1.5}
+#gX .gxs.sm{font-size:13px;color:#6b7280;font-weight:600}
+#gX .gxw{background:#fff;border-radius:20px;padding:16px;text-align:center;border:2px solid #e9d5ff;width:min(100%,430px)}
+#gX .gxw p{font-size:13px;color:#6b7280;margin:6px 0 12px}
+#gX .gxbt,#gX .gxb button{flex:1;padding:11px 8px;border-radius:14px;font-weight:700;font-size:14px;background:#fff;border:2px solid #c4b5fd;color:#6d28d9}
+#gX .gxb{display:flex;gap:8px;width:min(100%,430px)}
+#gX .gxp{display:flex;align-items:center;gap:8px;width:min(100%,430px)}
+#gX .gxp .pp{flex:1;padding:7px 8px;border-radius:12px;text-align:center;font-weight:700;font-size:13.5px;color:#fff;opacity:.75;transition:transform .2s}
+#gX .gxp .pp.on{opacity:1;transform:scale(1.04);box-shadow:0 0 0 3px #fff,0 6px 14px rgba(0,0,0,.25)}
+#gX .gxp .vs{font-size:12px;color:#6b7280;white-space:nowrap}
+#gX .ttt{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:min(100%,340px);background:#c4b5fd;padding:8px;border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+#gX .ttt button{aspect-ratio:1;border-radius:14px;background:#fff;font-size:54px;font-weight:800;line-height:1;display:flex;align-items:center;justify-content:center}
+#gX .ttt button.x{color:#e11d48}
+#gX .ttt button.o{color:#2563eb}
+#gX .ttt button.win{background:#fef08a;animation:gPulse2 .5s ease-in-out infinite alternate}
+#gX .kq{background:#fff;border-radius:18px;padding:16px;font-size:18px;font-weight:700;text-align:center;border:2px solid #e9d5ff;width:min(100%,430px);box-shadow:0 6px 18px rgba(124,58,237,.15)}
+#gX .ko{display:grid;gap:8px;width:min(100%,430px)}
+#gX .ko button{padding:13px 10px;border-radius:14px;background:#fff;border:2px solid #c4b5fd;font-size:16px;font-weight:600;color:#1f2937;text-align:center}
+#gX .ko button:disabled{opacity:.85}
+#gX .ko button.sel,#gX .ko button.gs{border-color:#db2777;background:#fdf2f8}
+#gX .ko button.ans{border-color:#16a34a;background:#dcfce7}
+#gX .kc{display:grid;gap:8px;width:min(100%,430px)}
+#gX .kc input{padding:11px;border-radius:12px;border:2px solid #c4b5fd;font-size:15px;background:#fff;color:#111}
+#gX .kr{font-size:20px;font-weight:800;text-align:center;line-height:1.8;color:#6d28d9}
 #gInv{position:fixed;left:12px;right:12px;top:calc(12px + env(safe-area-inset-top));z-index:700;background:#fff;color:#111;border-radius:18px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);border:2px solid #a78bfa;text-align:center;animation:slideUp .25s}
 #gInv #gInvT{font-weight:700;margin-bottom:10px}
 #gInv .b{display:flex;gap:8px}
@@ -1076,8 +1115,11 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <div class="gsc" id="gSc"></div>
     <div class="gbt"><button id="gNew">🔄 আবার নতুন করে</button><button id="gMn">☰ খেলার তালিকা</button></div>
   </div>
-  <div id="gVoice"><button id="gvCall">🎙 কথা বলুন</button><span class="gvh" id="gvH">খেলতে খেলতে ভয়েসে কথা — অল্প ডেটা লাগে</span><span id="gvT" class="hidden"></span><button id="gvMic" class="rd hidden">🎤</button><button id="gvSpk" class="rd hidden">🔊</button><button id="gvEnd" class="rd end hidden">📵</button></div>
+  <div id="gVid" class="hidden"><video id="gvRemote" autoplay playsinline muted></video><video id="gvLocal" autoplay playsinline muted></video><span class="gvn" id="gvN"></span></div>
+  <div id="gX" class="hidden"></div>
+  <div id="gVoice"><button id="gvCall">🎙 ভয়েস</button><button id="gvVid" class="vd">📹 ভিডিও</button><span class="gvh" id="gvH">খেলতে খেলতে ভয়েসে কথা — অল্প ডেটা লাগে</span><span id="gvT" class="hidden"></span><button id="gvMic" class="rd hidden">🎤</button><button id="gvSpk" class="rd hidden">🔊</button><button id="gvCam" class="rd hidden">📷</button><button id="gvFlip" class="rd hidden">🔄</button><button id="gvEnd" class="rd end hidden">📵</button></div>
 </div>
+<div id="gxInv" class="hidden"><div id="gxInvT"></div><div class="b"><button id="gxInvY">🎲 খেলুন</button><button id="gxInvN">পরে</button></div></div>
 <div id="gInv" class="hidden"><div id="gInvT"></div><div class="b"><button id="gInvY">🎲 খেলুন</button><button id="gInvN">পরে</button></div></div>
 <div id="fxLayer"></div>
 <div id="fxBanner"></div>
@@ -1106,7 +1148,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <button id="rsPrev">◀</button><span id="rsNum">পাতা ১/১</span><button id="rsNext">▶</button>
     <button id="rsAddP">＋ নতুন পাতা</button><button id="rsDelP">🗑 পাতা</button><i class="sep"></i>
     <button id="rsAddC">＋ কিতাব</button><button id="rsDelC">🗑 কিতাব</button><i class="sep"></i>
-    <button id="rsAddR">＋ ছাত্র</button><button id="rsDelR">🗑 ছাত্র</button><i class="sep"></i>
+    <button id="rsAddR">＋ ছাত্র</button><button id="rsDelR">🗑 ছাত্র</button><i class="sep"></i><button id="rsSA" aria-label="গড় ছোট থেকে বড়">গড় ↑ ছোট→বড়</button><button id="rsSD" aria-label="গড় বড় থেকে ছোট">গড় ↓ বড়→ছোট</button><i class="sep"></i>
     <button id="rsFm" aria-label="লেখা ছোট">A−</button><span id="rsFs">১৫</span><button id="rsFp" aria-label="লেখা বড়">A＋</button><i class="sep"></i><button id="rsZo">🔍−</button><button id="rsZf">ফিট</button><button id="rsZi">🔍＋</button>
   </div>
   <div class="hint" id="rsHint">কিতাব মুছতে কিতাবের নামের ঘরে, ছাত্র মুছতে ক্রম নম্বরে একবার ট্যাপ করে বাছুন।</div>
@@ -4107,7 +4149,7 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   $('gInvN').onclick = function(){ $('gInv').classList.add('hidden'); pending = null; };
   /* ---------- পাতা ---------- */
   function showMenu(){
-    clearTimeout(botT); $('gLudo').classList.add('hidden'); $('gMenu').classList.remove('hidden'); $('gTitle').textContent = '🎮 খেলা';
+    clearTimeout(botT); if (window.__gxHide) __gxHide(); $('gLudo').classList.add('hidden'); $('gMenu').classList.remove('hidden'); $('gTitle').textContent = '🎮 খেলা';
     var m = $('gMenu'); m.textContent = '';
     var old = load(), c = el('div', 'gc'); c.appendChild(el('h3', '', '🎲 লুডু'));
     c.appendChild(el('p', '', 'দুজনে মিলে আসল লুডুর মতো — ৬ পড়লে গুটি বের হয়, গুটি কাটা যায়, আগে চারটা গুটি বাড়ি পৌঁছালে জয়।'));
@@ -4116,7 +4158,8 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
     var b1 = el('button', '', '👫 ' + pnm() + '-এর সাথে খেলুন'); b1.onclick = startOnline; r.appendChild(b1);
     var b2 = el('button', 'alt', '🤖 কম্পিউটারের সাথে'); b2.onclick = startBot; r.appendChild(b2);
     c.appendChild(r); m.appendChild(c);
-    [['🔤 শব্দ ধাঁধা', 'শীঘ্রই আসছে'], ['❓ আমাকে কতটা জানো', 'শীঘ্রই আসছে'], ['✖⭕ টিক-ট্যাক-টো', 'শীঘ্রই আসছে']].forEach(function(x){ var d = el('div', 'gc soon'); d.appendChild(el('h3', '', x[0])); d.appendChild(el('p', '', x[1])); m.appendChild(d); });
+    if (window.__gxCards) __gxCards(m);
+    [['🔤 শব্দ ধাঁধা', 'শীঘ্রই আসছে']].forEach(function(x){ var d = el('div', 'gc soon'); d.appendChild(el('h3', '', x[0])); d.appendChild(el('p', '', x[1])); m.appendChild(d); });
   }
   function startBot(){ S = newState([nm(), 'কম্পিউটার']); mySeat = 0; mode = 'bot'; save(); showLudo(); }
   function startOnline(){
@@ -4156,7 +4199,7 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   };
   function closeGame(){ clearTimeout(botT); G.classList.add('hidden'); }
   $('gBack').onclick = function(){
-    if (!$('gLudo').classList.contains('hidden')) { showMenu(); return; }
+    if (!$('gLudo').classList.contains('hidden') || !$('gX').classList.contains('hidden')) { showMenu(); return; }
     waiting = false; closeGame(); if (from === 'chat') return; if (window.__spShow) __spShow();
   };
   $('gHome').onclick = function(){ closeGame(); if (window.__spShow) __spShow(); };
@@ -4165,9 +4208,19 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   function gvUpd(){
     if (G.classList.contains('hidden')) return;
     var c = call, on = !!c;
-    $('gvCall').classList.toggle('hidden', on); $('gvH').classList.toggle('hidden', on);
+    $('gvCall').classList.toggle('hidden', on); $('gvVid').classList.toggle('hidden', on); $('gvH').classList.toggle('hidden', on);
     ['gvT', 'gvMic', 'gvSpk', 'gvEnd'].forEach(function(id){ $(id).classList.toggle('hidden', !on); });
-    if (!on) { gvId = null; return; }
+    ['gvCam', 'gvFlip'].forEach(function(id){ $(id).classList.toggle('hidden', !(on && c.video)); });
+    var gv = $('gVid'); gv.classList.toggle('hidden', !(on && c.video));
+    if (on && c.video) {
+      var rs = $('remoteV').srcObject, lv = $('gvLocal');
+      if ($('gvRemote').srcObject !== rs) { $('gvRemote').srcObject = rs; if (rs) $('gvRemote').play().catch(function(){}); }
+      if (c.local && lv.srcObject !== c.local) { lv.srcObject = c.local; lv.play().catch(function(){}); }
+      $('gvN').textContent = peer ? peer.name : '';
+      var vt = c.local && c.local.getVideoTracks()[0]; lv.style.visibility = (vt && vt.enabled) ? '' : 'hidden';
+      $('gvCam').textContent = (vt && vt.enabled) ? '📷' : '🚫'; $('gvCam').classList.toggle('off', !(vt && vt.enabled));
+    }
+    if (!on) { gvId = null; $('gvRemote').srcObject = null; $('gvLocal').srcObject = null; return; }
     if (gvId !== c.id) { gvId = c.id; try { $('remoteV').muted = false; } catch(e){} }
     $('gvT').textContent = c.state === 'connected' ? '🟢 ' + fmtDur((Date.now() - c.startedAt) / 1000) : c.role === 'caller' ? '📞 ডাকা হচ্ছে…' : '⏳ সংযোগ…';
     var t = c.local && c.local.getAudioTracks()[0], mOff = !!(t && !t.enabled), sOff = !!$('remoteV').muted;
@@ -4176,6 +4229,15 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   }
   setInterval(gvUpd, 700);
   $('gvCall').onclick = function(){ startCall(false, true); setTimeout(gvUpd, 50); };
+  $('gvVid').onclick = function(){ startCall(true, true); setTimeout(gvUpd, 50); };
+  $('gvCam').onclick = function(){ $('cVideo').click(); setTimeout(gvUpd, 50); };
+  $('gvFlip').onclick = function(){ $('cFlip').click(); };
+  (function(){
+    var v = $('gVid'), sx = 0, sy = 0, ox = 0, oy = 0, mv = false, dn = false;
+    v.addEventListener('pointerdown', function(e){ dn = true; mv = false; sx = e.clientX; sy = e.clientY; var r = v.getBoundingClientRect(); ox = r.left; oy = r.top; try { v.setPointerCapture(e.pointerId); } catch(x){} });
+    v.addEventListener('pointermove', function(e){ if (!dn) return; var dx = e.clientX - sx, dy = e.clientY - sy; if (Math.abs(dx) + Math.abs(dy) > 6) mv = true; if (!mv) return; v.style.right = 'auto'; v.style.left = Math.max(0, Math.min(innerWidth - v.offsetWidth, ox + dx)) + 'px'; v.style.top = Math.max(0, Math.min(innerHeight - v.offsetHeight, oy + dy)) + 'px'; });
+    v.addEventListener('pointerup', function(){ if (dn && !mv) v.classList.toggle('big'); dn = false; });
+  })();
   $('gvEnd').onclick = function(){ endCall(true, ''); gvUpd(); };
   $('gvMic').onclick = function(){ if (!call || !call.local) return; var t = call.local.getAudioTracks()[0]; if (t) { t.enabled = !t.enabled; $('cMute').classList.toggle('on', !t.enabled); } gvUpd(); };
   $('gvSpk').onclick = function(){ var r = $('remoteV'); r.muted = !r.muted; if (!r.muted) r.play().catch(function(){}); gvUpd(); };
@@ -4193,6 +4255,219 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   var s = null;
   try { var g = await sb.auth.getSession(); s = g.data && g.data.session; } catch(e){}
   if (s) await enter(s.user); else showAuth();
+})();
+</script>
+
+<script>
+/* ===== খেলা: টিক-ট্যাক-টো ও আমাকে কতটা জানো ===== */
+(function(){
+  var G = $('game'), X = $('gX'); if (!G || !X) return;
+  var st = null, kind = null, mySeat = 0, mode = 'online', wait = false, out = null, outT = 0, botT = 0, joinGid = null, joinT = 0, invT = 0, pend = null, custom = false, rc = 0;
+  var NAME = { ttt: '✖⭕ টিক-ট্যাক-টো', kn: '❓ আমাকে কতটা জানো' };
+  function me2(){ return (myProf && myProf.name) || 'আমি'; }
+  function pe2(){ return (peer && peer.name) || 'সাথী'; }
+  function esc(x){ return String(x == null ? '' : x).replace(/[&<>"]/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function n2(n){ return bn(n); }
+  function rs(o){ try { if (funCh && funReady) { funCh.send({ type: 'broadcast', event: 'game', payload: o }); return true; } } catch(e){} return false; }
+  function reconn(){ if (!funReady && typeof startFun === 'function' && (++rc % 3 === 0)) { try { startFun(); } catch(e){} } }
+  function gid(){ return 'x' + Date.now() + Math.floor(Math.random() * 1e4); }
+  /* ---------- সিঙ্ক: প্রতিবার পুরো অবস্থা পাঠানো, সাড়া না এলে আবার ---------- */
+  function push(){
+    st.seq++;
+    if (mode === 'online') { out = { t: 'x_st', gid: st.gid, seq: st.seq, k: kind, S: st }; rs(out); clearInterval(outT); outT = setInterval(function(){ if (!out || !st || out.gid !== st.gid) { clearInterval(outT); return; } reconn(); rs(out); }, 2500); }
+    render();
+  }
+  setInterval(function(){ if (!st || mode !== 'online' || document.hidden || G.classList.contains('hidden') || X.classList.contains('hidden')) return; reconn(); rs({ t: 'x_hb', gid: st.gid, seq: st.seq }); }, 10000);
+  window.__gxHide = function(){ clearTimeout(botT); X.classList.add('hidden'); };
+  function leave(){ clearTimeout(botT); clearInterval(outT); out = null; if (st && mode === 'online') rs({ t: 'x_bye', gid: st.gid }); st = null; kind = null; wait = false; clearInterval(invT); }
+  /* ---------- আসা বার্তা ---------- */
+  var base = window.gameOn;
+  window.gameOn = function(m){
+    if (!m || !m.t || m.t.indexOf('x_') !== 0) { if (base) base(m); return; }
+    if (m.t === 'x_inv') {
+      pend = m; $('gxInvT').textContent = '🎲 ' + pe2() + ' আপনাকে ' + NAME[m.g] + ' খেলতে ডাকছেন!'; $('gxInv').classList.remove('hidden');
+      clearTimeout(window.__gxPT); window.__gxPT = setTimeout(function(){ $('gxInv').classList.add('hidden'); pend = null; }, 45000);
+    } else if (m.t === 'x_cancel') { if (pend && pend.gid === m.gid) { $('gxInv').classList.add('hidden'); pend = null; } }
+    else if (m.t === 'x_acc') {
+      if (st && wait && st.gid === m.gid) { wait = false; clearInterval(invT); st.names[1] = m.name || pe2(); toast('✔ ' + st.names[1] + ' এসেছেন — খেলা শুরু!'); push(); }
+      else if (st && st.gid === m.gid && mode === 'online') { out && rs(out); }
+    } else if (m.t === 'x_st') {
+      var S2 = m.S; if (!S2) return;
+      if (!st && joinGid === m.gid) { st = S2; kind = m.k; mySeat = 1; mode = 'online'; clearInterval(joinT); joinGid = null; render(); }
+      else if (st && st.gid === m.gid && S2.seq > st.seq) { st = S2; render(); }
+      if (st && st.gid === m.gid) rs({ t: 'x_ack', gid: st.gid, seq: st.seq });
+    } else if (m.t === 'x_ack') { if (out && out.gid === m.gid && m.seq >= out.seq) { out = null; clearInterval(outT); } }
+    else if (m.t === 'x_hb') {
+      if (!st || st.gid !== m.gid) return;
+      if (m.seq > st.seq) rs({ t: 'x_need', gid: st.gid }); else if (m.seq < st.seq) rs({ t: 'x_st', gid: st.gid, seq: st.seq, k: kind, S: st });
+    } else if (m.t === 'x_need') { if (st && st.gid === m.gid) rs({ t: 'x_st', gid: st.gid, seq: st.seq, k: kind, S: st }); }
+    else if (m.t === 'x_bye') { if (st && st.gid === m.gid) toast(pe2() + ' খেলা থেকে বেরিয়ে গেছেন'); }
+  };
+  /* ---------- শুরু ---------- */
+  function openView(){ $('gMenu').classList.add('hidden'); $('gLudo').classList.add('hidden'); X.classList.remove('hidden'); $('gTitle').textContent = NAME[kind]; }
+  function startOnline(k){
+    if (typeof peerOnline !== 'undefined' && !peerOnline) toast('সাথী এখন অনলাইনে নেই বলে মনে হচ্ছে — তবুও ডাকা হলো', 4000);
+    kind = k; mySeat = 0; mode = 'online'; st = k === 'ttt' ? newT([me2(), pe2()]) : newK([me2(), pe2()]); wait = true;
+    var inv = { t: 'x_inv', g: k, gid: st.gid, name: me2() };
+    if (!rs(inv)) toast('সংযোগ নেই — একটু পরে চেষ্টা করুন'); clearInterval(invT); var w = 0;
+    invT = setInterval(function(){ if (!wait || ++w > 8) { clearInterval(invT); return; } reconn(); rs(inv); }, 5000);
+    openView(); X.innerHTML = '<div class="gxw"><h3>⏳ ' + esc(pe2()) + '-এর জন্য অপেক্ষা…</h3><p>ওনার ফোনে আমন্ত্রণ গেছে। “খেলুন” চাপলেই শুরু হবে। অ্যাপ খোলা থাকতে হবে।</p><button id="gxCan" class="gxbt">বাতিল</button></div>';
+    $('gxCan').onclick = function(){ wait = false; clearInterval(invT); rs({ t: 'x_cancel', gid: st.gid }); st = null; kind = null; $('gMn').click(); };
+  }
+  function startBot(){ kind = 'ttt'; mySeat = 0; mode = 'bot'; st = newT([me2(), 'কম্পিউটার']); openView(); render(); }
+  $('gxInvY').onclick = function(){
+    if (!pend) return; var m = pend; pend = null; $('gxInv').classList.add('hidden');
+    if (typeof openGame === 'function') openGame('invite');
+    kind = m.g; mode = 'online'; mySeat = 1; st = null; joinGid = m.gid; openView();
+    X.innerHTML = '<div class="gxw"><h3>⏳ সংযোগ হচ্ছে…</h3></div>';
+    var n = 0; clearInterval(joinT); function go(){ rs({ t: 'x_acc', gid: m.gid, name: me2() }); } go();
+    joinT = setInterval(function(){ if (!joinGid || ++n > 8) { clearInterval(joinT); return; } reconn(); go(); }, 2000);
+  };
+  $('gxInvN').onclick = function(){ $('gxInv').classList.add('hidden'); pend = null; };
+  window.__gxCards = function(m){
+    [['ttt', '✖⭕ টিক-ট্যাক-টো', 'তিনটা এক লাইনে বসালেই জয়! দুজনে মিলে বা কম্পিউটারের সাথে।', 1], ['kn', '❓ আমাকে কতটা জানো', 'একজন নিজের উত্তর বাছেন, অন্যজন আন্দাজ করেন। কে কাকে বেশি চেনেন দেখা যাক!', 0]].forEach(function(x){
+      var c = el('div', 'gc'); c.appendChild(el('h3', '', x[1])); c.appendChild(el('p', '', x[2]));
+      var r = el('div', 'r'); var b1 = el('button', '', '👫 ' + pe2() + '-এর সাথে'); b1.onclick = function(){ startOnline(x[0]); }; r.appendChild(b1);
+      if (x[3]) { var b2 = el('button', 'alt', '🤖 কম্পিউটারের সাথে'); b2.onclick = startBot; r.appendChild(b2); }
+      c.appendChild(r); m.appendChild(c);
+    });
+  };
+  /* ---------- টিক-ট্যাক-টো ---------- */
+  var LN = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  function newT(names){ return { gid: gid(), seq: 0, names: names, b: '---------', turn: 0, w: -1, line: null, sc: [0, 0, 0], first: 0 }; }
+  function tw(b){ for (var i = 0; i < 8; i++) { var l = LN[i]; if (b[l[0]] !== '-' && b[l[0]] === b[l[1]] && b[l[0]] === b[l[2]]) return { w: b[l[0]] === 'X' ? 0 : 1, l: l }; } return b.indexOf('-') < 0 ? { w: 2, l: null } : null; }
+  function tPlay(i, seat){
+    if (!st || st.w >= 0 || st.b[i] !== '-' || st.turn !== seat) return;
+    st.b = st.b.substr(0, i) + (seat ? 'O' : 'X') + st.b.substr(i + 1);
+    var r = tw(st.b); if (r) { st.w = r.w; st.line = r.l; st.sc[r.w]++; } else st.turn = 1 - seat;
+    push();
+  }
+  function mm(b, turn){ var r = tw(b); if (r) return r.w === 1 ? 10 : r.w === 0 ? -10 : 0; var best = turn ? -99 : 99; for (var i = 0; i < 9; i++) if (b[i] === '-') { var v = mm(b.substr(0, i) + (turn ? 'O' : 'X') + b.substr(i + 1), 1 - turn); if (turn ? v > best : v < best) best = v; } return best; }
+  function botMove(){
+    var em = []; for (var i = 0; i < 9; i++) if (st.b[i] === '-') em.push(i);
+    if (!em.length) return; var pick;
+    if (Math.random() < .25) pick = em[Math.floor(Math.random() * em.length)];
+    else { var bs = -99, cs = []; em.forEach(function(c){ var v = mm(st.b.substr(0, c) + 'O' + st.b.substr(c + 1), 0); if (v > bs) { bs = v; cs = [c]; } else if (v === bs) cs.push(c); }); pick = cs[Math.floor(Math.random() * cs.length)]; }
+    tPlay(pick, 1);
+  }
+  function rTTT(){
+    var t = '';
+    if (st.w === 2) t = '🤝 ড্র! সমান সমান';
+    else if (st.w >= 0) t = '🏆 ' + st.names[st.w] + ' জিতেছেন! মাশাআল্লাহ';
+    else if (st.turn === mySeat) t = '👆 আপনার চাল (' + (mySeat ? '⭕' : '❌') + ')'; else t = '⏳ ' + st.names[st.turn] + '-এর চাল…';
+    var h = '<div class="gxs">' + esc(t) + '</div><div class="gxp"><div class="pp ' + (st.turn === 0 && st.w < 0 ? 'on' : '') + '" style="background:#e11d48">❌ ' + esc(st.names[0]) + ' · ' + n2(st.sc[0]) + '</div><div class="vs">ড্র ' + n2(st.sc[2]) + '</div><div class="pp ' + (st.turn === 1 && st.w < 0 ? 'on' : '') + '" style="background:#2563eb">⭕ ' + esc(st.names[1]) + ' · ' + n2(st.sc[1]) + '</div></div><div class="ttt">';
+    for (var i = 0; i < 9; i++) { var c = st.b[i], win = st.line && st.line.indexOf(i) >= 0; h += '<button data-i="' + i + '" class="' + (c === 'X' ? 'x ' : c === 'O' ? 'o ' : '') + (win ? 'win' : '') + '">' + (c === 'X' ? '✕' : c === 'O' ? '◯' : '') + '</button>'; }
+    h += '</div><div class="gxb"><button id="gxAg">🔄 আবার খেলুন</button><button id="gxMn">☰ খেলার তালিকা</button></div>';
+    X.innerHTML = h;
+    Array.prototype.forEach.call(X.querySelectorAll('.ttt button'), function(b){ b.onclick = function(){ tPlay(+b.getAttribute('data-i'), mySeat); }; });
+    $('gxAg').onclick = function(){ if (st.w < 0 && st.b !== '---------') { ask2('চলমান খেলা বাদ দিয়ে নতুন করে শুরু করবেন?', again); } else again(); };
+    clearTimeout(botT); if (mode === 'bot' && st.turn === 1 && st.w < 0) botT = setTimeout(botMove, 650);
+  }
+  function again(){ st.first = 1 - st.first; st.b = '---------'; st.turn = st.first; st.w = -1; st.line = null; push(); }
+  /* ---------- আমাকে কতটা জানো ---------- */
+  var QB = [
+    ['আমার প্রিয় রং কোনটি?', ['লাল', 'নীল', 'সবুজ', 'গোলাপি', 'কালো', 'সাদা']],
+    ['আমার প্রিয় খাবার কোনটি?', ['বিরিয়ানি', 'ভাত-মাছ', 'খিচুড়ি', 'পোলাও-রোস্ট', 'ফাস্টফুড', 'মিষ্টি']],
+    ['আমার প্রিয় ঋতু কোনটি?', ['গ্রীষ্ম', 'বর্ষা', 'শরৎ', 'হেমন্ত', 'শীত', 'বসন্ত']],
+    ['আমার প্রিয় ফল কোনটি?', ['আম', 'কাঁঠাল', 'আপেল', 'আঙুর', 'লিচু', 'কলা']],
+    ['আমার প্রিয় ফুল কোনটি?', ['গোলাপ', 'বেলি', 'শাপলা', 'রজনীগন্ধা', 'কদম', 'জবা']],
+    ['আমার প্রিয় পানীয় কোনটি?', ['চা', 'কফি', 'লাচ্ছি', 'ডাবের পানি', 'শরবত', 'জুস']],
+    ['দিনের কোন সময়টা আমার সবচেয়ে প্রিয়?', ['ভোর', 'দুপুর', 'বিকেল', 'সন্ধ্যা', 'গভীর রাত']],
+    ['বেড়াতে গেলে আমি কোথায় যেতে পছন্দ করি?', ['সমুদ্র', 'পাহাড়', 'নদী', 'গ্রাম', 'শহর', 'মক্কা-মদিনা']],
+    ['আমার প্রিয় মিষ্টি কোনটি?', ['রসগোল্লা', 'জিলাপি', 'কালোজাম', 'চমচম', 'পায়েস', 'মিষ্টি দই']],
+    ['সকালের নাস্তায় আমার পছন্দ কী?', ['পরোটা-ডিম', 'রুটি-সবজি', 'খিচুড়ি', 'ভাত', 'পাউরুটি', 'কিছুই না']],
+    ['আমি সাধারণত কখন ঘুমাই?', ['রাত ১০টার আগে', 'রাত ১০–১২টা', 'রাত ১২–২টা', 'রাত ২টার পরে']],
+    ['আমি সাধারণত কখন ঘুম থেকে উঠি?', ['ফজরের সময়', 'সূর্য ওঠার পর', 'সকাল ৮টার পর', 'সকাল ১০টার পর']],
+    ['রাগ হলে আমি কী করি?', ['চুপ করে থাকি', 'বেশি কথা বলি', 'কেঁদে ফেলি', 'ঘুমিয়ে পড়ি', 'বাইরে চলে যাই']],
+    ['বৃষ্টির দিনে আমার কী করতে ভালো লাগে?', ['খিচুড়ি খেতে', 'ঘুমাতে', 'ভিজতে', 'বই পড়তে', 'গল্প করতে']],
+    ['আমি সবচেয়ে বেশি ভয় পাই কিসে?', ['অন্ধকার', 'তেলাপোকা', 'উঁচু জায়গা', 'একা থাকা', 'টিকটিকি', 'পানি']],
+    ['ছুটির দিনে আমি কী করি?', ['ঘুমাই', 'বেড়াতে যাই', 'রান্না করি', 'আত্মীয়ের বাড়ি যাই', 'বই পড়ি']],
+    ['আমার প্রিয় ফাস্টফুড কোনটি?', ['বার্গার', 'পিৎজা', 'ফুচকা', 'চটপটি', 'শর্মা', 'মোমো']],
+    ['যেটা ছাড়া আমার একদম চলে না?', ['মোবাইল', 'চা', 'ঘুম', 'বই', 'জায়নামাজ', 'মিষ্টি']],
+    ['আমার প্রিয় আইসক্রিম কোনটি?', ['চকোলেট', 'ভ্যানিলা', 'আম', 'স্ট্রবেরি', 'কুলফি']],
+    ['শুনতে আমার সবচেয়ে ভালো লাগে কোনটি?', ['কুরআন তিলাওয়াত', 'নাশিদ', 'বয়ান', 'গজল', 'নীরবতা']],
+    ['আমার প্রিয় যানবাহন কোনটি?', ['রিকশা', 'ট্রেন', 'বাস', 'নৌকা', 'বিমান', 'সিএনজি']],
+    ['রাতের খাবারে আমার পছন্দ কী?', ['ভাত', 'রুটি', 'খিচুড়ি', 'নুডলস', 'হালকা কিছু']],
+    ['বাসার কোন জায়গাটা আমার সবচেয়ে প্রিয়?', ['বারান্দা', 'ছাদ', 'রান্নাঘর', 'বিছানা', 'পড়ার টেবিল']],
+    ['আমি কোন ধরনের গল্প পছন্দ করি?', ['ইসলামী ঘটনা', 'রহস্য', 'হাসির', 'ভালোবাসার', 'ভ্রমণের']]
+  ];
+  var NQ = 10;
+  function newK(names){ var s = { gid: gid(), seq: 0, names: names, r: 0, subj: 0, q: null, ans: -1, guess: -1, ph: 'ask', sc: [0, 0], used: [] }; pickQ(s); return s; }
+  function pickQ(s){
+    var free = []; for (var i = 0; i < QB.length; i++) if (s.used.indexOf(i) < 0) free.push(i);
+    if (!free.length) { s.used = []; for (i = 0; i < QB.length; i++) free.push(i); }
+    var k = free[Math.floor(Math.random() * free.length)]; s.used.push(k); s.q = { t: QB[k][0], o: QB[k][1].slice() };
+  }
+  function qHtml(sel, ans, guess, click){
+    var h = '<div class="kq">' + esc(st.q.t) + '</div><div class="ko">';
+    st.q.o.forEach(function(o, i){
+      var cl = '', mk = '';
+      if (ans != null && ans >= 0) { if (i === ans) { cl += ' ans'; mk += ' ✅'; } if (i === guess) { cl += ' gs'; mk += ' 👈'; } }
+      if (sel === i) cl += ' sel';
+      h += '<button class="' + cl + '" data-i="' + i + '"' + (click ? '' : ' disabled') + '>' + esc(o) + mk + '</button>';
+    });
+    return h + '</div>';
+  }
+  function rK(){
+    var nm = st.names, subjN = nm[st.subj], gsN = nm[1 - st.subj], h = '';
+    h += '<div class="gxp"><div class="pp on" style="background:#7c3aed">' + esc(nm[0]) + ' · ' + n2(st.sc[0]) + '</div><div class="vs">' + (st.ph === 'end' ? '' : 'প্রশ্ন ' + n2(st.r + 1) + '/' + n2(NQ)) + '</div><div class="pp on" style="background:#db2777">' + esc(nm[1]) + ' · ' + n2(st.sc[1]) + '</div></div>';
+    var cust = '';
+    if (st.ph === 'ask') {
+      if (mySeat === st.subj) {
+        if (custom) {
+          h += '<div class="gxs">✍ নিজের প্রশ্ন লিখুন</div><div class="kc"><input id="gxCq" maxlength="80" placeholder="প্রশ্ন (যেমন: আমার প্রিয় জায়গা কোনটি?)">';
+          for (var i = 0; i < 4; i++) h += '<input id="gxCo' + i + '" maxlength="40" placeholder="অপশন ' + n2(i + 1) + (i < 2 ? '' : ' (ইচ্ছা)') + '">';
+          h += '<div class="gxb"><button id="gxCok">✔ এই প্রশ্ন দিন</button><button id="gxCno">বাতিল</button></div></div>';
+        } else {
+          h += '<div class="gxs">আপনার আসল উত্তরটি বাছুন — ' + esc(gsN) + ' আন্দাজ করবেন 🤫</div>' + qHtml(-1, null, null, true) + '<div class="gxb"><button id="gxRe">🔄 অন্য প্রশ্ন</button><button id="gxCu">✍ নিজের প্রশ্ন</button></div>';
+        }
+      } else h += '<div class="gxs">⏳ ' + esc(subjN) + ' নিজের উত্তর বাছছেন…</div>' + qHtml(-1, null, null, false);
+    } else if (st.ph === 'guess') {
+      if (mySeat !== st.subj) h += '<div class="gxs">🤔 ' + esc(subjN) + '-এর উত্তর কোনটি মনে হয়?</div>' + qHtml(-1, null, null, true);
+      else h += '<div class="gxs">⏳ ' + esc(gsN) + ' আন্দাজ করছেন…</div>' + qHtml(st.ans, null, null, false);
+    } else if (st.ph === 'rev') {
+      var ok = st.guess === st.ans;
+      h += '<div class="gxs">' + (ok ? '🎉 ঠিক! ' + esc(gsN) + ' ' + esc(subjN) + '-কে ঠিকই চেনেন' : '😅 হলো না — ' + esc(subjN) + '-এর উত্তর ছিল “' + esc(st.q.o[st.ans]) + '”') + '</div>' + qHtml(-1, st.ans, st.guess, false);
+      if (mySeat === 1 - st.subj) h += '<div class="gxb"><button id="gxNx">' + (st.r + 1 >= NQ ? '🏁 ফলাফল দেখুন' : 'পরের প্রশ্ন → আপনি উত্তর দেবেন') + '</button></div>';
+      else h += '<div class="gxs sm">⏳ ' + esc(gsN) + '-এর “পরের প্রশ্ন” চাপার অপেক্ষা…</div>';
+    } else {
+      var a = st.sc[0], b = st.sc[1];
+      h += '<div class="gxs">🏁 খেলা শেষ!</div><div class="kr">' + esc(nm[0]) + ': ' + n2(a) + '/' + n2(NQ / 2) + '<br>' + esc(nm[1]) + ': ' + n2(b) + '/' + n2(NQ / 2) + '</div><div class="gxs">' + (a === b ? '💞 দুজন দুজনকে সমান চেনেন!' : '🏆 ' + esc(a > b ? nm[0] : nm[1]) + ' অন্যজনকে বেশি ভালো চেনেন — মাশাআল্লাহ') + '</div>';
+      h += '<div class="gxb"><button id="gxAk">🔄 আবার খেলুন</button></div>';
+    }
+    h += '<div class="gxb"><button id="gxMn">☰ খেলার তালিকা</button></div>';
+    X.innerHTML = h;
+    Array.prototype.forEach.call(X.querySelectorAll('.ko button'), function(b){ b.onclick = function(){ var i = +b.getAttribute('data-i');
+      if (st.ph === 'ask' && mySeat === st.subj) { st.ans = i; st.ph = 'guess'; push(); }
+      else if (st.ph === 'guess' && mySeat !== st.subj) { st.guess = i; st.ph = 'rev'; if (i === st.ans) st.sc[mySeat]++; push(); } }; });
+    var g = function(id){ return $(id); };
+    if (g('gxRe')) g('gxRe').onclick = function(){ pickQ(st); push(); };
+    if (g('gxCu')) g('gxCu').onclick = function(){ custom = true; render(); };
+    if (g('gxCno')) g('gxCno').onclick = function(){ custom = false; render(); };
+    if (g('gxCok')) g('gxCok').onclick = function(){
+      var q = g('gxCq').value.trim(), o = []; for (var i = 0; i < 4; i++) { var v = g('gxCo' + i).value.trim(); if (v) o.push(v); }
+      if (!q || o.length < 2) { toast('প্রশ্ন আর অন্তত দুটি অপশন লিখুন'); return; }
+      st.q = { t: q, o: o }; custom = false; push();
+    };
+    if (g('gxNx')) g('gxNx').onclick = function(){
+      if (st.r + 1 >= NQ) { st.ph = 'end'; push(); return; }
+      st.r++; st.subj = 1 - st.subj; st.ans = -1; st.guess = -1; st.ph = 'ask'; pickQ(st); push();
+    };
+    if (g('gxAk')) g('gxAk').onclick = function(){ st.r = 0; st.subj = 0; st.ans = -1; st.guess = -1; st.ph = 'ask'; st.sc = [0, 0]; st.used = []; pickQ(st); push(); };
+  }
+  function ask2(msg, yes){
+    var o = document.createElement('div'); o.style.cssText = 'position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:20px';
+    o.innerHTML = '<div style="background:#fff;border-radius:16px;padding:18px;max-width:320px;width:100%;text-align:center"><div style="font-weight:700;margin-bottom:14px;color:#1f2937"></div><div style="display:flex;gap:8px"><button class="gy" style="flex:1;padding:10px;border-radius:12px;border:0;background:#7c3aed;color:#fff;font-weight:700">হ্যাঁ</button><button class="gn" style="flex:1;padding:10px;border-radius:12px;border:2px solid #c4b5fd;background:#fff;color:#6d28d9;font-weight:700">না</button></div></div>';
+    o.querySelector('div div').textContent = msg; o.querySelector('.gy').onclick = function(){ o.remove(); yes(); }; o.querySelector('.gn').onclick = function(){ o.remove(); };
+    document.body.appendChild(o);
+  }
+  function render(){
+    if (!st) return; openView();
+    if (kind === 'ttt') rTTT(); else rK();
+    if ($('gxMn')) $('gxMn').onclick = function(){ leave(); $('gMn').click(); };
+  }
+  /* পেছনের তীর */
+  $('gBack').addEventListener('click', function(){ if (!X.classList.contains('hidden')) { leave(); } }, true);
 })();
 </script>
 
@@ -4786,6 +5061,18 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   g('rsDelC').onclick=function(){var p=P();if(selC<0){note('আগে কিতাবের নামের ঘরে একবার ট্যাপ করে সেটা বাছুন।');return;}if(p.subs.length<=1){note('কমপক্ষে একটা কিতাব থাকতে হবে।');return;}var c=selC;ask('"'+(p.subs[c]||'ফাঁকা ঘর')+'" কিতাবটি সব নম্বরসহ মুছবেন?',function(){p.subs.splice(c,1);p.studs.forEach(function(s){s.m.splice(c,1);});draw();});};
   g('rsAddR').onclick=function(){var p=P();p.studs.push({n:'',d:'',m:p.subs.map(function(){return '';})});draw();setTimeout(function(){var x=pg.querySelector('td[data-n="'+(P().studs.length-1)+'"]');if(x)x.focus();},50);};
   g('rsDelR').onclick=function(){var p=P();if(selR<0){note('আগে ছাত্রের ক্রম নম্বরে একবার ট্যাপ করে সেটা বাছুন।');return;}if(p.studs.length<=1){note('কমপক্ষে একটা সারি থাকতে হবে।');return;}var r=selR;ask((p.studs[r].n||('ক্রম '+bn(r+1)))+' এর সারিটি মুছবেন?',function(){p.studs.splice(r,1);draw();});};
+  function sortBy(dir){
+    var p=P();
+    var rows=p.studs.map(function(st,i){var v=st.m.map(num),named=String(st.n).trim()!=='',any=v.some(function(x){return x!==null;});
+      var key=null;if(any){var t=v.reduce(function(a,x){return a+(x||0);},0);key=p.subs.length?t/p.subs.length:0;}
+      return {st:st,i:i,key:key,on:named||any};});
+    var live=rows.filter(function(r){return r.key!==null;}),rest=rows.filter(function(r){return r.key===null;});
+    live.sort(function(a,b){return dir*(a.key-b.key)||a.i-b.i;});
+    p.studs=live.concat(rest).map(function(r){return r.st;});
+    selR=-1;selC=-1;draw();
+    note(dir>0?'গড় অনুযায়ী ছোট থেকে বড় সাজানো হয়েছে।':'গড় অনুযায়ী বড় থেকে ছোট সাজানো হয়েছে।');
+  }
+  g('rsSA').onclick=function(){sortBy(1);};g('rsSD').onclick=function(){sortBy(-1);};
   g('rsAddP').onclick=function(){pages.splice(idx+1,0,blankFrom(P()));idx++;draw();};
   g('rsDelP').onclick=function(){ask('এই পাতাটি পুরোপুরি মুছবেন?',function(){if(pages.length===1)pages=[blankFrom(P())];else{pages.splice(idx,1);idx=Math.min(idx,pages.length-1);}draw();});};
   g('rsPrev').onclick=function(){if(idx>0){idx--;draw();}};g('rsNext').onclick=function(){if(idx<pages.length-1){idx++;draw();}};
