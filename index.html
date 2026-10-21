@@ -637,8 +637,8 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 #splash .sp-btns .sp-row{flex:0 0 100%;display:flex;gap:12px;justify-content:center;max-width:366px}
 .sp-row button{color:#fff;border:0}
 .sp-row button small{display:block;font-size:10.5px;font-weight:600;opacity:.92;margin-top:1px}
-#spHumBtn{background:linear-gradient(135deg,#f472b6,#e11d48);box-shadow:0 8px 20px rgba(225,29,72,.32)}
-#spSadBtn{background:linear-gradient(135deg,#a855f7,#6d28d9);box-shadow:0 8px 20px rgba(109,40,217,.32)}
+#splash button.hm-t#spHumBtn{background:linear-gradient(135deg,#f472b6,#e11d48);box-shadow:0 8px 20px rgba(225,29,72,.32)}
+#splash button.hm-t#spSadBtn{background:linear-gradient(135deg,#a855f7,#6d28d9);box-shadow:0 8px 20px rgba(109,40,217,.32)}
 @keyframes cpFloat{0%{transform:translate(0,105vh) rotate(0);opacity:0}10%{opacity:.9}100%{transform:translate(var(--dx),-12vh) rotate(var(--r));opacity:0}}
 @keyframes cpPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 @keyframes cpIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
@@ -804,6 +804,156 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 #gInv .b{display:flex;gap:8px}
 #gInv .b button{flex:1;padding:10px;border-radius:12px;font-weight:700;background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff}
 #gInv .b button+button{background:#f3f4f6;color:#374151}
+/* ===== নতুন স্বাগত পাতা (v30): সবুজ-নীল হোম ===== */
+#splash{display:block!important;overflow-y:auto!important;overflow-x:hidden!important;padding:0 0 calc(104px + env(safe-area-inset-bottom))!important;text-align:left!important;-webkit-overflow-scrolling:touch}
+#splash.away{display:none!important}
+#splash .sp-fx{position:fixed!important}
+#splash>.hm-nav{position:fixed!important;z-index:5}
+.hm{position:relative;z-index:2;max-width:440px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) 14px 10px}
+.hm::before{content:"";position:absolute;left:-40px;right:-40px;top:0;height:250px;background:radial-gradient(circle at 85% 20%,#2c7a74 0,transparent 55%),linear-gradient(160deg,#031a1a,#0c3f3d 70%,#14524f);border-radius:0 0 42px 42px;z-index:-1;box-shadow:0 10px 30px rgba(3,26,26,.35)}
+.hm-top{display:flex;align-items:center;gap:12px;color:#fff;margin-bottom:14px}
+.hm-logo{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#ecfdf5,#a7f3d0);display:flex;align-items:center;justify-content:center;font-size:28px;color:#0f766e;flex:none;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.hm-gr{flex:1;min-width:0}
+.hm-gr b{display:block;font-size:19px;line-height:1.25}
+.hm-gr span{display:block;font-size:12.5px;opacity:.88;margin-top:2px}
+.hm-bell{position:relative;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.14);font-size:20px;color:#fff;border:0;flex:none}
+.hm-bell i{position:absolute;right:7px;top:7px;width:10px;height:10px;border-radius:50%;background:#64748b;border:2px solid #0c3f3d}
+.hm-bell.on i{background:#f59e0b}
+.hm-row{display:flex;gap:10px;align-items:stretch}
+.hm-cnt{flex:1;min-width:0;background:rgba(255,255,255,.95);border-radius:26px;padding:7px 7px 9px;box-shadow:0 10px 26px rgba(3,26,26,.2)}
+.hm-cin{background:linear-gradient(160deg,#1d6560,#134a47);border-radius:21px;padding:12px 8px 10px;color:#fff;text-align:center}
+.hm-cin b{display:block;font-size:15.5px;line-height:1.3}
+.hm-cin small{display:block;font-size:11px;opacity:.8;margin-top:1px}
+#hmBars{display:flex;align-items:flex-end;justify-content:space-between;gap:4px;height:88px;margin-top:10px;padding:0 2px}
+#hmBars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:3px}
+#hmBars i{display:block;width:100%;max-width:15px;border-radius:9px;background:#fff;min-height:9px;transition:height .4s}
+#hmBars div.t i{background:#f59e0b}
+#hmBars span{font-size:8.5px;opacity:.8}
+.hm-go{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:8px;font-weight:700;font-size:13.5px;color:#134a47;background:none;border:0;padding:4px}
+.hm-go i{width:26px;height:26px;border-radius:50%;background:#1d6560;color:#fff;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:14px}
+.hm-rank{width:31%;flex:none;display:flex;flex-direction:column;border-radius:22px;overflow:hidden;box-shadow:0 10px 26px rgba(3,26,26,.2)}
+.hm-rank div{flex:1;background:#1d6560;color:#fff;text-align:center;padding:8px 4px;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid rgba(255,255,255,.08)}
+.hm-rank div:nth-child(2){background:#0f3f3d}.hm-rank div:nth-child(3){background:#0a2f2e;border:0}
+.hm-rank b{color:#f59e0b;font-size:17px;line-height:1.1}
+.hm-rank span{font-size:11.5px;line-height:1.25;font-weight:600}
+.hm-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+#splash button.hm-t{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:4px;max-width:none!important;flex:none!important;padding:14px 4px 12px!important;border-radius:20px!important;background:rgba(255,255,255,.96)!important;color:#1f3a36!important;border:0!important;box-shadow:0 6px 18px rgba(3,26,26,.13)!important;font-weight:700;font-size:13.5px!important;line-height:1.25}
+#splash button.hm-t span{font-size:28px;line-height:1}
+#splash button.hm-t small{font-size:10px!important;font-weight:500;color:#6b7280!important;opacity:1!important}
+#splash button.hm-t:active{transform:scale(.95)}
+.hm-pr{margin-top:12px;border-radius:26px;background:linear-gradient(165deg,#1d6560,#0f3f3d);color:#fff;padding:14px 12px 14px;text-align:center;box-shadow:0 10px 26px rgba(3,26,26,.25)}
+.hm-city{display:inline-flex;align-items:center;gap:6px;background:rgba(0,0,0,.35);color:#cdebe6;border:0;border-radius:20px;padding:8px 16px;font-size:13px}
+.hm-pr h3{font-size:20px;margin:8px 0 2px}
+.hm-pr .dt{font-size:12px;opacity:.85}
+.hm-pr .nx{display:inline-block;margin:8px 0 2px;background:rgba(245,158,11,.18);border:1px solid #f59e0b;color:#fde68a;border-radius:14px;padding:5px 12px;font-size:12.5px;font-weight:700}
+.hm-pt{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}
+.hm-pt div{border:1.5px solid rgba(255,255,255,.55);border-radius:14px;padding:8px 1px 7px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px}
+.hm-pt div.n{border-color:#f59e0b;background:rgba(245,158,11,.12)}
+.hm-pt b{font-size:11.5px;line-height:1.2}
+.hm-pt em{font-style:normal;font-size:19px}
+.hm-pt small{font-size:9px;opacity:.85}
+.hm-cf{display:flex;gap:6px;margin-top:10px}
+.hm-cf input{flex:1;padding:9px;border-radius:12px;border:0;font-size:14px;color:#111}
+.hm-cf button{padding:9px 14px;border-radius:12px;background:#f59e0b;color:#1a1200;font-weight:700;border:0}
+.hm .sp-card{margin:12px 0 0!important;max-width:none!important}
+.hm-nav{left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-around;gap:6px;padding:8px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-radius:26px 26px 0 0;box-shadow:0 -8px 24px rgba(3,26,26,.14)}
+#splash .hm-nav button{flex:1;max-width:none!important;background:none!important;border:0!important;box-shadow:none!important;color:#6b7280!important;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px!important;font-weight:700;padding:4px!important}
+#splash .hm-nav button span{font-size:22px}
+#splash .hm-nav button.hm-home{flex:none;width:108px;height:52px;border-radius:26px!important;background:linear-gradient(135deg,#1d6560,#0f3f3d)!important;color:#fff!important;flex-direction:row;justify-content:center;font-size:22px!important;box-shadow:0 6px 16px rgba(15,63,61,.4)!important}
+.hm-msg{position:relative;min-height:196px;border-radius:26px;padding:34px 22px 30px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;overflow:hidden;box-shadow:0 12px 28px rgba(3,26,26,.28);transition:opacity .35s,transform .35s;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hm-msg.sw{opacity:0;transform:scale(.97)}
+.hm-msg::before,.hm-msg::after{position:absolute;font-size:34px;opacity:.5;pointer-events:none}
+.hm-msg::before{right:14px;top:8px}.hm-msg::after{left:14px;bottom:20px}
+.hm-msg .ct{position:absolute;left:14px;top:12px;font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:12px;background:rgba(255,255,255,.28);backdrop-filter:blur(2px)}
+.hm-msg .tx{font-weight:700;line-height:1.75;position:relative;z-index:1}
+.hm-msg .rf{font-size:12px;font-weight:700;opacity:.85}
+.hm-msg .hint{position:absolute;left:0;right:0;bottom:7px;font-size:9.5px;font-style:normal;opacity:.6}
+.hm-msg.d0{background:linear-gradient(145deg,#fff8dc,#fde68a);color:#6b4a00}.hm-msg.d0::before{content:"✦"}.hm-msg.d0::after{content:"✦"}
+.hm-msg.d1{background:linear-gradient(145deg,#ffe4e6,#fb7185);color:#7f1230}.hm-msg.d1::before{content:"🌹"}.hm-msg.d1::after{content:"💗"}
+.hm-msg.d2{background:linear-gradient(145deg,#e0f2fe,#93c5fd);color:#0c3a6b}.hm-msg.d2::before{content:"☁️"}.hm-msg.d2::after{content:"🕊️"}
+.hm-msg.d3{background:linear-gradient(145deg,#064e3b,#0f766e);color:#fef3c7;box-shadow:inset 0 0 0 2px rgba(253,230,138,.55),0 12px 28px rgba(3,26,26,.28)}.hm-msg.d3::before{content:"☪"}.hm-msg.d3::after{content:"✨"}
+.hm-msg.d4{background:linear-gradient(145deg,#f3e8ff,#c4b5fd);color:#3b1d78}.hm-msg.d4::before{content:"🌸"}.hm-msg.d4::after{content:"🦋"}
+.hm-msg.d5{background:linear-gradient(160deg,#fde68a,#fb923c 55%,#e11d48);color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.3)}.hm-msg.d5::before{content:"🌇"}.hm-msg.d5::after{content:"💞"}
+.hm-msg.d6{background:linear-gradient(170deg,#0b1030,#312e81);color:#fde68a}.hm-msg.d6::before{content:"🌙"}.hm-msg.d6::after{content:"⭐"}
+.hm-msg.d7{background:linear-gradient(145deg,#fff7ed,#fdba74);color:#7c2d12}.hm-msg.d7::before{content:"🌼"}.hm-msg.d7::after{content:"🍑"}
+.hm-msg.d8{background:linear-gradient(145deg,#ecfdf5,#6ee7b7);color:#064e3b}.hm-msg.d8::before{content:"🍃"}.hm-msg.d8::after{content:"🌿"}
+.hm-msg.d9{background:linear-gradient(145deg,#4c0519,#9f1239);color:#ffe4e6;box-shadow:inset 0 0 0 2px rgba(251,207,232,.5),0 12px 28px rgba(76,5,25,.35)}.hm-msg.d9::before{content:"💍"}.hm-msg.d9::after{content:"❤️"}
+/* ---- হালকা রং (v31) ---- */
+#settings.onHome{position:fixed;z-index:660}
+.hm::before{background:radial-gradient(circle at 88% 12%,#c9f2e8 0,transparent 55%),linear-gradient(165deg,#d7f3ec,#ebfaf6 65%,rgba(255,255,255,0));box-shadow:none;border-radius:0 0 40px 40px}
+.hm-top{color:#0f4a47}
+.hm-logo{background:#fff;color:#0f766e;box-shadow:0 4px 14px rgba(15,118,110,.18)}
+.hm-bell{background:#fff;color:#0f766e;box-shadow:0 3px 10px rgba(15,118,110,.15)}
+.hm-bell i{border-color:#fff}
+.hm-msg{box-shadow:0 8px 22px rgba(15,118,110,.14)}
+.hm-msg.d1{background:linear-gradient(145deg,#fff1f2,#fecdd3);color:#9f1239}
+.hm-msg.d3{background:linear-gradient(145deg,#ecfdf5,#a7f3d0);color:#065f46;box-shadow:inset 0 0 0 2px rgba(5,150,105,.25),0 8px 22px rgba(15,118,110,.14)}
+.hm-msg.d5{background:linear-gradient(160deg,#fff7c2,#ffd9b8 55%,#ffc9dc);color:#9a3412;text-shadow:none}
+.hm-msg.d6{background:linear-gradient(170deg,#eef2ff,#c7d2fe);color:#3730a3}
+.hm-msg.d9{background:linear-gradient(145deg,#fff1f6,#fbcfe8);color:#9d174d;box-shadow:inset 0 0 0 2px rgba(219,39,119,.22),0 8px 22px rgba(15,118,110,.14)}
+.hm-msg .ct{background:rgba(255,255,255,.6)}
+#splash button.hm-t{box-shadow:0 4px 14px rgba(15,118,110,.1)!important}
+#splash button.hm-t span{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px}
+#hmHadith span{background:#d1fae5}#hmDua span{background:#ede9fe}#spNew span{background:#fef3c7}#spMiftah span{background:#ccfbf1}#spHumBtn span{background:#fce7f3}#spSadBtn span{background:#fae8ff}
+.hm-pr{background:linear-gradient(165deg,#f3fcf9,#d9f3ec);color:#134a47;box-shadow:0 8px 22px rgba(15,118,110,.14)}
+.hm-city{background:#fff;color:#0f766e;box-shadow:0 2px 8px rgba(15,118,110,.14);font-weight:700}
+.hm-pr .dt{opacity:.8}
+.hm-pr .nx{background:#fff7e0;border-color:#f5b83d;color:#8a5a00}
+.hm-pt div{border-color:rgba(19,74,71,.22);background:rgba(255,255,255,.6)}
+.hm-pt div.n{border-color:#f59e0b;background:#fff3d6}
+.hm-nav{background:rgba(255,255,255,.97)}
+#splash .hm-nav button.hm-home{background:linear-gradient(135deg,#6ee7d0,#34d3b6)!important;color:#064e3b!important;box-shadow:0 6px 16px rgba(20,184,166,.35)!important}
+/* ---- ফুটে ওঠা রং (v32) ---- */
+.hm::before{background:radial-gradient(circle at 90% 10%,#fde68a 0,transparent 42%),linear-gradient(160deg,#2dd4bf,#5eead4 55%,rgba(167,243,208,0));height:260px}
+.hm-top{color:#053f3a}
+.hm-gr b{font-size:20px}
+.hm-bell{background:#fff;color:#0d9488;box-shadow:0 4px 12px rgba(13,148,136,.3)}
+.hm-logo{background:linear-gradient(135deg,#fff,#ccfbf1);color:#0d9488;box-shadow:0 5px 14px rgba(13,148,136,.3)}
+.hm-msg{box-shadow:0 12px 26px rgba(0,0,0,.2);text-shadow:0 1px 4px rgba(0,0,0,.22);color:#fff}
+.hm-msg .ct{background:rgba(255,255,255,.38);color:inherit}
+.hm-msg::before,.hm-msg::after{opacity:.75;text-shadow:none}
+.hm-msg.d0{background:linear-gradient(145deg,#fde047,#f59e0b);color:#4a2c00;text-shadow:none}
+.hm-msg.d1{background:linear-gradient(145deg,#fda4af,#f43f5e);color:#fff;box-shadow:0 12px 26px rgba(244,63,94,.4)}
+.hm-msg.d2{background:linear-gradient(145deg,#7dd3fc,#3b82f6);color:#fff;box-shadow:0 12px 26px rgba(59,130,246,.4)}
+.hm-msg.d3{background:linear-gradient(145deg,#6ee7b7,#10b981);color:#022c22;text-shadow:none;box-shadow:0 12px 26px rgba(16,185,129,.4)}
+.hm-msg.d4{background:linear-gradient(145deg,#d8b4fe,#a855f7);color:#fff;box-shadow:0 12px 26px rgba(168,85,247,.4)}
+.hm-msg.d5{background:linear-gradient(150deg,#fde68a,#fb923c 50%,#ec4899);color:#fff;box-shadow:0 12px 26px rgba(236,72,153,.4)}
+.hm-msg.d6{background:linear-gradient(150deg,#a5b4fc,#6366f1);color:#fff;box-shadow:0 12px 26px rgba(99,102,241,.4)}
+.hm-msg.d7{background:linear-gradient(145deg,#fdba74,#f97316);color:#fff;box-shadow:0 12px 26px rgba(249,115,22,.4)}
+.hm-msg.d8{background:linear-gradient(145deg,#5eead4,#0d9488);color:#fff;box-shadow:0 12px 26px rgba(13,148,136,.4)}
+.hm-msg.d9{background:linear-gradient(145deg,#f9a8d4,#db2777);color:#fff;box-shadow:0 12px 26px rgba(219,39,119,.4)}
+#splash button.hm-t{color:#fff!important;text-shadow:0 1px 3px rgba(0,0,0,.25);border:0!important}
+#splash button.hm-t span{background:rgba(255,255,255,.55)!important;text-shadow:none;box-shadow:0 3px 8px rgba(0,0,0,.12)}
+#splash button.hm-t small{color:rgba(255,255,255,.95)!important}
+#splash button.hm-t#hmHadith{background:linear-gradient(150deg,#6ee7b7,#10b981)!important;box-shadow:0 8px 18px rgba(16,185,129,.38)!important}
+#splash button.hm-t#hmDua{background:linear-gradient(150deg,#c4b5fd,#8b5cf6)!important;box-shadow:0 8px 18px rgba(139,92,246,.38)!important}
+#splash button.hm-t#spNew{background:linear-gradient(150deg,#fde047,#f59e0b)!important;color:#4a2c00!important;text-shadow:none;box-shadow:0 8px 18px rgba(245,158,11,.4)!important}
+#splash button.hm-t#spMiftah{background:linear-gradient(150deg,#5eead4,#0d9488)!important;box-shadow:0 8px 18px rgba(13,148,136,.38)!important}
+#splash button.hm-t#spHumBtn{background:linear-gradient(150deg,#f9a8d4,#ec4899)!important;box-shadow:0 8px 18px rgba(236,72,153,.38)!important}
+#splash button.hm-t#spSadBtn{background:linear-gradient(150deg,#e9a5ff,#c026d3)!important;box-shadow:0 8px 18px rgba(192,38,211,.38)!important}
+.hm-pr{background:linear-gradient(160deg,#2dd4bf,#0d9488);color:#fff;box-shadow:0 12px 26px rgba(13,148,136,.4);text-shadow:0 1px 3px rgba(0,0,0,.2)}
+.hm-city{background:#fff;color:#0d9488;text-shadow:none}
+.hm-pr .dt{opacity:.95}
+.hm-pr .nx{background:#fbbf24;border-color:#fbbf24;color:#4a2c00;text-shadow:none}
+.hm-pt div{border-color:rgba(255,255,255,.75);background:rgba(255,255,255,.2)}
+.hm-pt div.n{border-color:#fde047;background:#fbbf24;color:#4a2c00;text-shadow:none}
+.hm-pt div.n small,.hm-pt div.n b{opacity:1}
+#splash .hm-nav button.hm-home{background:linear-gradient(135deg,#2dd4bf,#0d9488)!important;color:#fff!important;box-shadow:0 8px 18px rgba(13,148,136,.45)!important}
+#splash .hm-nav button{color:#4b5563!important}
+/* তাসবিহ পাতা ও হাদিস/দোয়ার শিট */
+#hmSheet{position:fixed;inset:0;z-index:650;display:flex;flex-direction:column}
+#hmSheet.hidden{display:none}
+#hmSheet{background:rgba(0,0,0,.55);align-items:center;justify-content:center;padding:16px}
+#hmSheet .hs{background:#fff;color:#1f2937;border-radius:24px;padding:18px;width:100%;max-width:420px;max-height:88vh;overflow:auto;text-align:center;box-shadow:0 16px 40px rgba(0,0,0,.4)}
+#hmSheet .hh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+#hmSheet .hh b{font-size:19px;color:#0f766e}
+#hmSheet .hh button{width:36px;height:36px;border-radius:50%;background:#ecfdf5;border:0;font-size:16px;color:#0f766e}
+#hsAr{font-size:25px;line-height:2.1;color:#0f3f3d;margin-bottom:8px;direction:rtl;font-family:'Amiri','Scheherazade New','Noto Naskh Arabic',serif}
+#hsTx{font-size:16.5px;line-height:1.8;margin-bottom:8px}
+#hsRf{display:block;color:#0f766e;font-weight:700;margin-bottom:14px}
+#hmSheet .hb{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#hmSheet .hb button{padding:10px 18px;border-radius:14px;background:linear-gradient(135deg,#1d6560,#0f3f3d);color:#fff;border:0;font-weight:700}
+#hmSheet .hb span{font-size:13px;color:#6b7280}
 </style>
 <style>
 #npChoose{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:20px}
@@ -1053,25 +1203,40 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 </div>
 <div id="splash">
   <div class="sp-fx" id="spFx"></div>
-  <div class="sp-moon">☪</div>
-  <div class="sp-bism">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
-  <div class="sp-ar">أَهْلاً وَسَهْلاً</div>
-  <div class="sp-ahlan">আহলান সাহলান</div>
-  <div class="sp-orn"><span></span><b>🌷 ✦ 🌸 ✦ 🌼</b><span></span></div>
-  <div class="sp-names"><span class="gr">যাকওয়ান</span> <i class="hrt">♥️</i> <span class="gr">সাদিয়া</span></div>
-  <div class="sp-hello" id="spHello"></div>
-  <div class="sp-card"><div class="ar2" id="spAr2"></div><div id="spStatus"></div><small id="spRef"></small></div>
-  <div class="sp-btns">
-    <button id="spMiftah" type="button">🕌 আল-মিফতাহ<small>এখানে চাপ দিন</small></button>
-    <div class="sp-row">
-      <button id="spHumBtn" type="button">🌸 হুমাইরা জান্নাত<small>জন্ম থেকে এখন পর্যন্ত</small></button>
-      <button id="spSadBtn" type="button">💞 সাদিয়া<small>বিবাহের পর থেকে</small></button>
+  <div class="hm">
+    <div class="hm-top">
+      <div class="hm-logo">☪</div>
+      <div class="hm-gr"><b>আসসালামু আলাইকুম!</b><span><i id="spHello" style="font-style:normal"></i> · যাকওয়ান ♥️ সাদিয়া</span></div>
+      <button class="hm-bell" id="hmSet" type="button" aria-label="সেটিংস">⚙️</button><button class="hm-bell" id="hmBell" type="button" aria-label="নামাজের সময় স্মরণ">🔔<i></i></button>
     </div>
-    <button id="spNew" type="button">📝 নতুন পাতা<small>লেখার পাতা</small></button>
-    <button id="spGo" type="button">💬 চ্যাট খুলুন<small>আমাদের চ্যাট</small></button>
-    <button id="spGame" type="button">🎮 খেলা <small>লুডু ও আরও</small></button>
+    <div class="hm-msg d0" id="hmMsg" role="button" aria-label="পরের লেখা"><span class="ct" id="hmMc"></span><div class="tx" id="hmMt"></div><small class="rf" id="hmMr"></small><i class="hint">প্রতি ১০ মিনিটে নতুন লেখা · চাপলে পরেরটি ➜</i></div>
+    <div class="hm-tiles">
+      <button class="hm-t" id="hmHadith" type="button"><span>📖</span>হাদিস</button>
+      <button class="hm-t" id="hmDua" type="button"><span>🤲</span>দোয়া</button>
+      <button class="hm-t" id="spNew" type="button"><span>📝</span>নতুন পাতা</button>
+    </div>
+    <div class="hm-pr" id="hmPr">
+      <button class="hm-city" id="hmCity" type="button">📍 <span id="hmCityT">Dhaka</span> ▾</button>
+      <div class="hm-cf hidden" id="hmCf"><input id="hmCityIn" type="text" placeholder="শহর (ইংরেজিতে, যেমন Dhaka)"><button id="hmCityOk" type="button">ঠিক আছে</button></div>
+      <h3>নামাজের সময়</h3>
+      <div class="dt" id="hmDt"></div>
+      <div class="nx" id="hmNx">লোড হচ্ছে…</div>
+      <div class="hm-pt" id="hmPt"></div>
+    </div>
+    <div class="hm-tiles">
+      <button class="hm-t" id="spMiftah" type="button"><span>🕌</span>আল-মিফতাহ</button>
+      <button class="hm-t" id="spHumBtn" type="button"><span>🌸</span>হুমাইরা<small>জন্ম থেকে</small></button>
+      <button class="hm-t" id="spSadBtn" type="button"><span>💞</span>সাদিয়া<small>বিবাহের পর</small></button>
+    </div>
+    <div class="sp-card"><div class="ar2" id="spAr2"></div><div id="spStatus"></div><small id="spRef"></small></div>
+  </div>
+  <div class="hm-nav">
+    <button id="spGo" type="button"><span>💬</span>চ্যাট</button>
+    <button class="hm-home" id="hmHome" type="button">🏠</button>
+    <button id="spGame" type="button"><span>🎮</span>খেলা</button>
   </div>
 </div>
+<div id="hmSheet" class="hidden"><div class="hs"><div class="hh"><b id="hsT"></b><button id="hsX" type="button">✕</button></div><div id="hsAr"></div><div id="hsTx"></div><small id="hsRf"></small><div class="hb"><button id="hsP" type="button">◀ আগের</button><span id="hsN"></span><button id="hsNx" type="button">পরের ▶</button></div></div></div>
 
 <div id="npChoose" class="hidden">
   <div class="npc">
@@ -4468,6 +4633,203 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   }
   /* পেছনের তীর */
   $('gBack').addEventListener('click', function(){ if (!X.classList.contains('hidden')) { leave(); } }, true);
+})();
+</script>
+
+<script>
+/* ===== নতুন স্বাগত পাতার কাজ: তাসবিহ, হাদিস, দোয়া, নামাজের সময় ===== */
+(function(){
+  var sp = $('splash'); if (!sp || !$('hmMsg')) return;
+  /* ---------- ভালোবাসার লেখা: প্রতি ১০ মিনিটে নতুন ডিজাইনে নতুন লেখা ---------- */
+  var CT = { c: '💑 স্বামী-স্ত্রী', k: '👶 সন্তান', f: '🏡 পরিবার', d: '🤲 দোয়া' };
+  var MS = [
+    ['c', 'তুমি পাশে থাকলে সবচেয়ে কঠিন দিনও সহজ হয়ে যায়।'],
+    ['c', 'ভালোবাসা মানে বড় বড় উপহার নয়, রোজকার ছোট্ট যত্নটুকু।'],
+    ['c', 'তোমার একটা হাসিতে আমার সারাদিনের ক্লান্তি মুছে যায়।'],
+    ['c', 'যে সংসারে দুজন দুজনের ভুল ক্ষমা করতে জানে, সেখানে রহমত নেমে আসে।'],
+    ['c', 'আল্লাহ আমাদের এক করেছেন — এই শুকরিয়ার কোনো শেষ নেই।'],
+    ['c', 'রাগের মুহূর্তে চুপ থাকা আর পরে মিষ্টি করে বোঝানো — সুখী দাম্পত্যের চাবি এটাই।'],
+    ['c', 'প্রিয়জনকে “ভালোবাসি” বলতে দেরি কোরো না; আজই বলো।'],
+    ['c', 'দুজনের পথচলা সুন্দর হয়, যখন একজন ক্লান্ত হলে অন্যজন হাত ধরে।'],
+    ['c', 'স্ত্রী মানে শুধু সংসারের সঙ্গী নয়, জান্নাতের পথেরও সঙ্গী।'],
+    ['c', 'একটি কৃতজ্ঞ “জাযাকাল্লাহ” স্ত্রীর সারাদিনের পরিশ্রম সার্থক করে দেয়।'],
+    ['c', 'ভালোবাসা প্রতিদিন নতুন করে বেছে নেওয়ার নাম।'],
+    ['c', 'তোমার সাথে এক কাপ চা-ও যেন সবচেয়ে দামি আয়োজন।'],
+    ['c', 'যত্ন করে জিজ্ঞেস করো, “আজ কেমন কাটল?” — এক প্রশ্নেই মন ভরে যায়।'],
+    ['c', 'একসাথে ফজরের নামাজ, একসাথে দোয়া — এর চেয়ে সুন্দর সকাল আর কী হতে পারে!'],
+    ['c', 'ঝগড়া হলেও রাত পর্যন্ত টেনো না; আগে মিটিয়ে নেওয়াই বুদ্ধিমানের কাজ।'],
+    ['c', 'তুমি আমার ঘর, আমার শান্তি, আমার দোয়ার উত্তর।'],
+    ['c', 'ভালোবাসার সবচেয়ে সুন্দর প্রকাশ — মন দিয়ে কথা শোনা।'],
+    ['c', 'বছর যত যায়, ভালোবাসা যেন পুরোনো না হয়ে আরও গভীর হয়।'],
+    ['c', 'সবার সামনে স্ত্রীর প্রশংসা করা সম্মানের সবচেয়ে সুন্দর রূপ।'],
+    ['c', 'সংসারে সম্মান আর বিশ্বাস থাকলে ভালোবাসা নিজেই বাড়তে থাকে।'],
+    ['c', 'একে অপরের জন্য দোয়া করা ভালোবাসার সবচেয়ে নিঃস্বার্থ উপহার।'],
+    ['c', 'ভালোবাসা মানে দোষ খোঁজা নয়, গুণগুলোকে বড় করে দেখা।'],
+    ['c', 'তোমাকে পেয়ে বুঝেছি, দোয়া কীভাবে কবুল হয়।'],
+    ['c', 'নবীজি ﷺ ঘরের কাজে পরিবারকে সাহায্য করতেন।', 'সহীহ বুখারী ৬৭৬'],
+    ['c', 'তাঁর নিদর্শনের একটি এই যে, তিনি তোমাদের মধ্য থেকেই তোমাদের সঙ্গী সৃষ্টি করেছেন, যাতে তোমরা তাদের কাছে শান্তি পাও; আর তোমাদের মাঝে ভালোবাসা ও দয়া সৃষ্টি করেছেন।', 'সূরা রূম ২১'],
+    ['c', 'তারা তোমাদের পোশাক, আর তোমরা তাদের পোশাক।', 'সূরা বাকারা ১৮৭'],
+    ['c', 'মুমিনদের মধ্যে ঈমানে পরিপূর্ণ সে, যার চরিত্র সুন্দর; আর তোমাদের মধ্যে উত্তম সে, যে স্ত্রীদের কাছে উত্তম।', 'জামে তিরমিযী ১১৬২'],
+    ['c', 'দুনিয়া পুরোটাই ভোগের সামগ্রী, আর দুনিয়ার সর্বোত্তম সামগ্রী নেককার স্ত্রী।', 'সহীহ মুসলিম ১৪৬৭'],
+    ['c', 'যে মানুষের প্রতি কৃতজ্ঞ হয় না, সে আল্লাহর প্রতিও কৃতজ্ঞ হয় না।', 'সুনানে আবু দাউদ ৪৮১১'],
+    ['k', 'সন্তানের একটি হাসিতে মা-বাবার সব কষ্ট ভুলে যায়।'],
+    ['k', 'সন্তানকে সময় দাও — এটাই তার জন্য সবচেয়ে বড় উপহার।'],
+    ['k', 'ছোট্ট হাতের ছোঁয়ায় ঘর ভরে ওঠে আলোয়।'],
+    ['k', 'সন্তান বড় হয় মা-বাবাকে দেখে — তাই নিজেকে আগে সুন্দর করি।'],
+    ['k', 'সন্তানকে বকার পর বুকে টেনে নিতে ভুলো না; সে যেন বোঝে, শাসনের ভেতরেও ভালোবাসা আছে।'],
+    ['k', 'সন্তানের কান্না থামাতে প্রথম ওষুধ — মায়ের কোল আর বাবার হাত।'],
+    ['k', 'প্রতিটি সন্তান আল্লাহর দেওয়া আমানত — যত্নে আর ভালোবাসায় গড়ে তুলি।'],
+    ['k', 'ঘুমানোর আগে সন্তানকে একটি দোয়া শিখিয়ে দেওয়া — এই অভ্যাসই তাকে সারাজীবন আলো দেবে।'],
+    ['k', 'যে সন্তানের মাথায় মা-বাবার দোয়ার ছায়া আছে, তার পথ কখনো অন্ধকার হয় না।'],
+    ['k', 'সন্তানের ভুলে ধৈর্য ধরা মানে তার ভবিষ্যতের গোড়ায় পানি দেওয়া।'],
+    ['k', 'সন্তানের প্রথম পাঠশালা মায়ের কোল।'],
+    ['k', 'যে দয়া করে না, তাকে দয়া করা হয় না।', 'সহীহ বুখারী ৫৯৯৭'],
+    ['k', 'মানুষ মারা গেলে তার আমল বন্ধ হয়ে যায়, তিনটি ছাড়া: সদকায়ে জারিয়া, উপকারী ইলম আর নেক সন্তান, যে তার জন্য দোয়া করে।', 'সহীহ মুসলিম ১৬৩১'],
+    ['f', 'যে ঘরে সালাম আর হাসি আছে, সে ঘরে রহমত থাকে।'],
+    ['f', 'একসাথে বসে খাওয়ার মধ্যেই পরিবারের বরকত।'],
+    ['f', 'পরিবার মানে দুনিয়ার ঝড়ের মাঝেও এক টুকরো নিরাপদ আশ্রয়।'],
+    ['f', 'ঘরের ছোট ছোট স্মৃতিগুলোই একদিন সবচেয়ে দামি সম্পদ হয়ে দাঁড়ায়।'],
+    ['f', 'মা-বাবার সামনে “উফ” শব্দটিও বোলো না — তাঁদের দোয়াই আমাদের সবচেয়ে বড় সম্বল।', 'সূরা বনী ইসরাঈল ২৩'],
+    ['f', 'ঘরে ঢুকে সালাম দাও; তা তোমার ও তোমার পরিবারের জন্য বরকত হবে।', 'জামে তিরমিযী ২৬৯৮'],
+    ['f', 'ব্যস্ততার মাঝেও পরিবারের জন্য একটু সময় বের করো; এই সময়ই সবচেয়ে বড় বিনিয়োগ।'],
+    ['f', 'তোমাদের মধ্যে সর্বোত্তম সে, যে তার পরিবারের কাছে সর্বোত্তম।', 'জামে তিরমিযী ৩৮৯৫'],
+    ['d', 'হে আমাদের রব! আমাদের স্ত্রী ও সন্তানদের থেকে আমাদের চোখের শীতলতা দান করুন এবং আমাদের মুত্তাকীদের নেতা বানান।', 'সূরা ফুরকান ৭৪'],
+    ['d', 'বারাকাল্লাহু লাকুমা ওয়া বারাকা আলাইকুমা ওয়া জামা‘আ বাইনাকুমা ফী খাইর।', 'বিবাহের দোয়া — জামে তিরমিযী ১০৯১'],
+    ['d', 'হে আল্লাহ, আমাদের দুজনের মধ্যে ভালোবাসা ও বরকত দিন, আর জান্নাতেও একসাথে রাখুন।'],
+    ['d', 'হে আল্লাহ, আমাদের ঘর শান্তি, রহমত আর ঈমানের আলোয় ভরে দিন।'],
+    ['d', 'হে আল্লাহ, আমার সন্তানদের হেদায়াত দিন, সুস্থ রাখুন আর হালাল রিযিকে বড় করুন।'],
+    ['d', 'হে আল্লাহ, আমাদের দাম্পত্যকে সবর, শুকর আর ভালোবাসায় পূর্ণ করুন।'],
+    ['c', 'ভালোবাসা শুধু বলার নয়, প্রতিদিনের আচরণে ফুটে ওঠার জিনিস।'],
+    ['c', 'একে অপরের স্বপ্নকে সম্মান করলেই সংসার সুন্দর হয়।'],
+    ['c', 'দিনের শেষে তোমার কাছেই ফিরতে ইচ্ছা করে — এটাই আমার সবচেয়ে বড় সুখ।'],
+    ['c', 'ছোট ছোট ধন্যবাদ বড় বড় অভিমান মুছে দেয়।'],
+    ['c', 'যে ঘরে দুজন দুজনের প্রতি শ্রদ্ধাশীল, সেখানে শান্তি নিজেই বাসা বাঁধে।'],
+    ['c', 'অভিমান করলেও হাত ছেড়ো না; শেষ কথাটা ভালোবাসাই বলবে।'],
+    ['c', 'স্ত্রীর মুখে হাসি ফোটানোর চেষ্টাও ভালো নিয়তে ইবাদতে পরিণত হয়।'],
+    ['c', 'স্বামীর পরিশ্রমের মূল্য বোঝা একজন স্ত্রীর ভালোবাসার সবচেয়ে সুন্দর প্রকাশ।'],
+    ['c', 'একসাথে হাঁটা, একসাথে স্বপ্ন দেখা — ভালোবাসার সহজ সংজ্ঞা।'],
+    ['c', 'সংসারে শেষ কথাটা যেন সবসময় হয় ক্ষমার।'],
+    ['c', 'তুমি ভালো থাকলেই আমি ভালো থাকি — এটাই ভালোবাসা।'],
+    ['c', 'বিয়ে মানে দুটি মনের মিল, আর দুটি পরিবারের বন্ধন।'],
+    ['c', 'সুখী দাম্পত্যের গোপন কথা: রোজ একটু বেশি ধৈর্য, একটু বেশি হাসি।'],
+    ['c', 'কঠিন সময়ে তোমার একটা “আমি আছি” আমাকে সবকিছুর শক্তি দেয়।'],
+    ['k', 'সন্তানের হাতে বই আর মুখে দোয়া — এর চেয়ে সুন্দর সম্পদ আর কী!'],
+    ['k', 'মা-বাবার আদর্শই সন্তানের সবচেয়ে বড় শিক্ষক।'],
+    ['k', 'সন্তানের সামনে কখনো মিথ্যা বোলো না; সে যা দেখে তা-ই শেখে।'],
+    ['k', 'প্রতিদিন সন্তানকে অন্তত একবার বলো, “তোমাকে নিয়ে আমি গর্বিত।”'],
+    ['k', 'সন্তানের সাথে খেলা করা মানে তার মনের দরজা খুলে দেওয়া।'],
+    ['k', 'শিশুর ছোট ছোট প্রশ্নের ধৈর্য ধরে উত্তর দেওয়া তার জ্ঞানের পথ খুলে দেয়।'],
+    ['k', 'সন্তানের সাথে মিলে নামাজ পড়া — ঘরে ঈমানের বীজ বোনার সবচেয়ে সুন্দর উপায়।'],
+    ['k', 'সন্তান যখন “মা” বা “বাবা” বলে ডাকে, দুনিয়ার সব ক্লান্তি হারিয়ে যায়।'],
+    ['k', 'সন্তানের ভালো গুণের প্রশংসা করো; সে আরও ভালো হতে চাইবে।'],
+    ['k', 'শাসনের চেয়ে বোঝানো বেশি কার্যকর — বিশেষ করে ছোটদের মনে।'],
+    ['k', 'প্রতিটি সন্তান আলাদা ফুল; কারও সাথে তুলনা না করে তাকে ফুটতে দাও।'],
+    ['k', 'মা-বাবার একটি আন্তরিক দোয়া সন্তানের জীবনের দিক বদলে দিতে পারে।'],
+    ['f', 'বড়দের সম্মান আর ছোটদের স্নেহ — পরিবারের সবচেয়ে সুন্দর নিয়ম।'],
+    ['f', 'পরিবারের মাঝে বসে প্রাণ খুলে হাসতে পারা আল্লাহর এক বিশাল নিয়ামত।'],
+    ['f', 'যেখানে একে অপরের জন্য ত্যাগ আছে, সেখানেই প্রকৃত পরিবার।'],
+    ['f', 'ঘরের প্রতিটি সদস্যের প্রতি কৃতজ্ঞ থাকাই সংসারের বরকত।'],
+    ['f', 'একসাথে ভ্রমণ, একসাথে গল্প — স্মৃতিগুলোই সারাজীবনের পুঁজি।'],
+    ['f', 'যে চায় তার রিযিক প্রশস্ত হোক ও আয়ু বৃদ্ধি পাক, সে যেন আত্মীয়তার সম্পর্ক রক্ষা করে।', 'সহীহ বুখারী ৫৯৮৫'],
+    ['f', 'নামাজ ঠিক সময়ে পড়ার পর আল্লাহর কাছে সবচেয়ে প্রিয় আমল মা-বাবার সাথে সদ্ব্যবহার।', 'সহীহ বুখারী ৫২৭'],
+    ['f', 'মায়ের সেবা জান্নাতের এক সহজ পথ — এই কথা মনে রেখে মায়ের পাশে থাকি।'],
+    ['f', 'ঘরে কুরআনের তিলাওয়াত থাকলে ঘরে আলো থাকে।'],
+    ['f', 'একটি সুন্দর পরিবার গড়ে ওঠে ভালোবাসা, ত্যাগ আর দোয়ায়।'],
+    ['d', 'হে আল্লাহ, আমাদের পরিবারকে একে অপরের জন্য সান্ত্বনা ও রহমতের কারণ বানিয়ে দিন।'],
+    ['d', 'হে আল্লাহ, আমাদের সন্তানদের নেককার বানান এবং তাদের আমাদের চোখের শীতলতা করুন।'],
+    ['d', 'হে আল্লাহ, আমাদের গুনাহ মাফ করুন এবং আমাদের ঘরে বরকত দিন।'],
+    ['d', 'হে আল্লাহ, আমাদের ভালোবাসাকে আপনার সন্তুষ্টির পথে কবুল করুন।'],
+    ['d', 'হে আমাদের রব, আমাদের পক্ষ থেকে কবুল করুন; নিশ্চয়ই আপনি সর্বশ্রোতা, সর্বজ্ঞ।', 'সূরা বাকারা ১২৭'],
+    ['d', 'হে আল্লাহ, আমাদের সবাইকে জান্নাতে একসাথে করুন।'],
+    ['d', 'হে আল্লাহ, আমাদের পরিবারকে সব বিপদ ও ফিতনা থেকে হেফাজত করুন।'],
+    ['d', 'হে আমার রব, আমাকে সৎকর্মশীলদের একজন (সন্তান) দান করুন।', 'সূরা সাফফাত ১০০']
+  ];
+  var DN = 10, mOff = 0, mSlot = -1;
+  function slotNow(){ return Math.floor(Date.now() / 600000); }
+  function showMsg(anim){
+    var n = MS.length, s = slotNow(), i = (((s * 17 + mOff) % n) + n) % n, e = MS[i], d = (i * 7 + 3) % DN, box = $('hmMsg'), len = e[1].length;
+    function put(){
+      box.className = 'hm-msg d' + d; $('hmMc').textContent = CT[e[0]]; $('hmMt').textContent = '❝ ' + e[1] + ' ❞'; $('hmMr').textContent = e[2] ? '— ' + e[2] : '';
+      $('hmMt').style.fontSize = len < 60 ? '21px' : len < 110 ? '18px' : '15.5px';
+    }
+    mSlot = s;
+    if (anim) { box.classList.add('sw'); setTimeout(function(){ put(); box.classList.add('sw'); setTimeout(function(){ box.classList.remove('sw'); }, 30); }, 330); } else put();
+  }
+  $('hmMsg').onclick = function(){ mOff++; showMsg(true); };
+  setInterval(function(){ if (slotNow() !== mSlot) { mOff = 0; showMsg(true); } }, 15000);
+  showMsg(false);
+  /* ---------- হাদিস ও দোয়া ---------- */
+  var HD = [
+    ['নিশ্চয়ই সব কাজ নিয়তের ওপর নির্ভরশীল।', 'সহীহ বুখারী ১, সহীহ মুসলিম ১৯০৭'],
+    ['তোমাদের মধ্যে সর্বোত্তম সেই ব্যক্তি, যে কুরআন শেখে এবং অন্যকে শেখায়।', 'সহীহ বুখারী ৫০২৭'],
+    ['যে ব্যক্তি আল্লাহ ও আখিরাতে বিশ্বাস রাখে, সে যেন ভালো কথা বলে, নয়তো চুপ থাকে।', 'সহীহ বুখারী ৬০১৮, সহীহ মুসলিম ৪৭'],
+    ['তোমাদের কেউ প্রকৃত মুমিন হবে না, যতক্ষণ না সে নিজের জন্য যা পছন্দ করে, তার ভাইয়ের জন্যও তা-ই পছন্দ করে।', 'সহীহ বুখারী ১৩, সহীহ মুসলিম ৪৫'],
+    ['তোমাদের মধ্যে সর্বোত্তম সে, যে তার পরিবারের কাছে সর্বোত্তম। আর আমি আমার পরিবারের কাছে সর্বোত্তম।', 'জামে তিরমিযী ৩৮৯৫'],
+    ['সহজ করো, কঠিন করো না। সুসংবাদ দাও, মানুষকে দূরে সরিয়ে দিয়ো না।', 'সহীহ বুখারী ৬৯, সহীহ মুসলিম ১৭৩৪'],
+    ['দুটি বাক্য জিহ্বায় হালকা, মীযানে ভারী এবং দয়াময়ের কাছে প্রিয়: “সুবহানাল্লাহি ওয়া বিহামদিহী, সুবহানাল্লাহিল আযীম”।', 'সহীহ বুখারী ৬৪০৬, সহীহ মুসলিম ২৬৯৪'],
+    ['পবিত্রতা ঈমানের অর্ধেক।', 'সহীহ মুসলিম ২২৩'],
+    ['প্রকৃত মুসলিম সে-ই, যার জিহ্বা ও হাত থেকে অন্য মুসলিমরা নিরাপদ থাকে।', 'সহীহ বুখারী ১০, সহীহ মুসলিম ৪০'],
+    ['তুমি যেখানেই থাকো আল্লাহকে ভয় করো। মন্দ কাজের পর ভালো কাজ করো, তা মন্দকে মুছে দেবে। আর মানুষের সাথে উত্তম আচরণ করো।', 'জামে তিরমিযী ১৯৮৭'],
+    ['যে ব্যক্তি কাউকে ভালো কাজের পথ দেখায়, সে ওই কাজ সম্পাদনকারীর সমান সওয়াব পায়।', 'সহীহ মুসলিম ১৮৯৩'],
+    ['তোমার ভাইয়ের সামনে হাসিমুখে থাকাও সদকা।', 'জামে তিরমিযী ১৯৫৬']
+  ];
+  var DU = [
+    ['رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ', 'হে আমাদের রব! আমাদের দুনিয়াতে কল্যাণ দিন, আখিরাতেও কল্যাণ দিন এবং আগুনের আযাব থেকে রক্ষা করুন।', 'সূরা বাকারা ২০১'],
+    ['رَبِّ زِدْنِي عِلْمًا', 'হে আমার রব, আমার জ্ঞান বাড়িয়ে দিন।', 'সূরা ত্বহা ১১৪'],
+    ['رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ وَاجْعَلْنَا لِلْمُتَّقِينَ إِمَامًا', 'হে আমাদের রব! আমাদের স্ত্রী ও সন্তানদের থেকে আমাদের চোখের শীতলতা দান করুন এবং আমাদের মুত্তাকীদের নেতা বানান।', 'সূরা ফুরকান ৭৪'],
+    ['رَبَّنَا لَا تُؤَاخِذْنَا إِنْ نَسِينَا أَوْ أَخْطَأْنَا', 'হে আমাদের রব! আমরা ভুলে গেলে বা ভুল করলে আমাদের পাকড়াও করবেন না।', 'সূরা বাকারা ২৮৬'],
+    ['رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي', 'হে আমার রব, আমার বক্ষ প্রশস্ত করে দিন এবং আমার কাজ সহজ করে দিন।', 'সূরা ত্বহা ২৫-২৬'],
+    ['اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ', 'হে আল্লাহ, আমি আপনার কাছে ক্ষমা ও নিরাপত্তা চাই।', 'সুনানে ইবনে মাজাহ ৩৮৭১'],
+    ['بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا', 'ঘুমানোর দোয়া: হে আল্লাহ, আপনার নামেই আমি মরি (ঘুমাই) ও বাঁচি (জাগি)।', 'সহীহ বুখারী ৬৩১২'],
+    ['الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ', 'ঘুম থেকে উঠার দোয়া: সব প্রশংসা আল্লাহর, যিনি মৃত্যুর পর আমাদের জীবিত করেছেন, আর তাঁর কাছেই ফিরে যেতে হবে।', 'সহীহ বুখারী ৬৩১২'],
+    ['بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ', 'ঘর থেকে বের হওয়ার দোয়া: আল্লাহর নামে, আল্লাহর ওপর ভরসা করলাম; আল্লাহ ছাড়া কোনো শক্তি ও ক্ষমতা নেই।', 'সুনানে আবু দাউদ ৫০৯৫'],
+    ['رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنْتَ السَّمِيعُ الْعَلِيمُ', 'হে আমাদের রব, আমাদের পক্ষ থেকে কবুল করুন; নিশ্চয়ই আপনি সর্বশ্রোতা, সর্বজ্ঞ।', 'সূরা বাকারা ১২৭'],
+    ['رَبَّنَا اغْفِرْ لِي وَلِوَالِدَيَّ وَلِلْمُؤْمِنِينَ يَوْمَ يَقُومُ الْحِسَابُ', 'হে আমাদের রব, হিসাবের দিনে আমাকে, আমার পিতামাতাকে ও মুমিনদের ক্ষমা করুন।', 'সূরা ইবরাহীম ৪১'],
+    ['رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِنْ لَدُنْكَ رَحْمَةً', 'হে আমাদের রব, হেদায়াত দেওয়ার পর আমাদের অন্তর বাঁকা করবেন না এবং আপনার পক্ষ থেকে আমাদের রহমত দান করুন।', 'সূরা আলে ইমরান ৮']
+  ];
+  var cur = { k: '', i: 0 };
+  function sheet(){
+    var h = cur.k === 'h', L = h ? HD : DU, e = L[cur.i];
+    $('hsT').textContent = h ? '📖 হাদিস' : '🤲 দোয়া';
+    $('hsAr').textContent = h ? '' : e[0]; $('hsAr').style.display = h ? 'none' : '';
+    $('hsTx').textContent = h ? '❝ ' + e[0] + ' ❞' : e[1];
+    $('hsRf').textContent = '— ' + (h ? e[1] : e[2]);
+    $('hsN').textContent = bn(cur.i + 1) + '/' + bn(L.length);
+  }
+  function openSheet(k){ var L = k === 'h' ? HD : DU, d = new Date(); cur.k = k; cur.i = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5) % L.length; sheet(); $('hmSheet').classList.remove('hidden'); }
+  $('hmHadith').onclick = function(){ openSheet('h'); }; $('hmDua').onclick = function(){ openSheet('d'); };
+  $('hsX').onclick = function(){ $('hmSheet').classList.add('hidden'); };
+  $('hmSheet').onclick = function(e){ if (e.target === this) this.classList.add('hidden'); };
+  $('hsNx').onclick = function(){ var L = cur.k === 'h' ? HD : DU; cur.i = (cur.i + 1) % L.length; sheet(); };
+  $('hsP').onclick = function(){ var L = cur.k === 'h' ? HD : DU; cur.i = (cur.i + L.length - 1) % L.length; sheet(); };
+  /* ---------- নামাজের সময় ---------- */
+  var PT = null, ICON = { Fajr: '🌅', Dhuhr: '☀️', Asr: '🌤', Maghrib: '🌇', Isha: '🌙' }, NAMEB = { Fajr: 'ফজর', Dhuhr: 'যোহর', Asr: 'আসর', Maghrib: 'মাগরিব', Isha: 'ইশা' }, ORD = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+  function mins(s){ var p = String(s).split(':'); return (+p[0]) * 60 + (+p[1]); }
+  function prRender(){
+    $('hmCityT').textContent = settings.city || 'Dhaka';
+    try { $('hmDt').textContent = new Date().toLocaleDateString('bn-BD', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); } catch(e){}
+    if (!PT) { $('hmNx').textContent = 'সময় আনা যায়নি — নেট দেখে এখানে চাপুন'; $('hmPt').innerHTML = ''; return; }
+    var now = new Date(), nowM = now.getHours() * 60 + now.getMinutes(), nx = null, i;
+    for (i = 0; i < 5; i++) if (mins(PT[ORD[i]]) > nowM) { nx = ORD[i]; break; }
+    var diff = nx ? mins(PT[nx]) - nowM : 1440 - nowM + mins(PT.Fajr), hh = Math.floor(diff / 60), mm = diff % 60;
+    $('hmNx').textContent = '⏳ ' + (nx ? ({ Fajr: 'ফজরের', Dhuhr: 'যোহরের', Asr: 'আসরের', Maghrib: 'মাগরিবের', Isha: 'ইশার' })[nx] : 'আগামীকাল ফজরের') + ' বাকি ' + (hh ? bn(hh) + ' ঘণ্টা ' : '') + bn(mm) + ' মিনিট';
+    var h = ''; ORD.forEach(function(k){ var t = time12(PT[k]).split(' '); h += '<div class="' + (k === nx || (!nx && k === 'Fajr') ? 'n' : '') + '"><small>' + t[0] + ' ' + t[1] + '</small><em>' + ICON[k] + '</em><b>' + NAMEB[k] + '</b></div>'; });
+    $('hmPt').innerHTML = h;
+  }
+  async function prLoad(force){ $('hmNx').textContent = 'লোড হচ্ছে…'; try { PT = await loadPrayer(force); } catch(e){ PT = null; } prRender(); }
+  $('hmNx').onclick = function(){ if (!PT) prLoad(true); };
+  $('hmCity').onclick = function(){ var f = $('hmCf'); f.classList.toggle('hidden'); $('hmCityIn').value = settings.city || 'Dhaka'; };
+  $('hmCityOk').onclick = function(){ var v = $('hmCityIn').value.trim(); if (!v) return; settings.city = v; lsSet('settings', settings); $('hmCf').classList.add('hidden'); prLoad(true); };
+  setInterval(function(){ if (!sp.classList.contains('away')) prRender(); }, 30000);
+  /* ঘণ্টা: সালাতের সময় স্মরণ চালু/বন্ধ */
+  function bell(){ $('hmBell').classList.toggle('on', !!settings.prayerRemind); }
+  $('hmBell').onclick = function(){ var c = $('setPray'); c.checked = !settings.prayerRemind; if (c.onchange) c.onchange(); bell(); toast(settings.prayerRemind ? '🔔 নামাজের সময় স্মরণ চালু' : '🔕 নামাজের সময় স্মরণ বন্ধ'); };
+  $('hmSet').onclick = function(){ var st = $('settings'); st.classList.add('onHome'); try { openSettings(); } catch(e){ st.classList.remove('hidden'); } };
+  try { new MutationObserver(function(){ var st = $('settings'); if (st.classList.contains('hidden') && st.classList.contains('onHome')) st.classList.remove('onHome'); }).observe($('settings'), { attributes: true, attributeFilter: ['class'] }); } catch(e){}
+  $('hmHome').onclick = function(){ sp.scrollTo({ top: 0, behavior: 'smooth' }); };
+  bell(); prLoad(false);
+  var ob = window.__spShow; window.__spShow = function(){ if (ob) ob(); showMsg(false); prRender(); bell(); };
+  window.__spBack = window.__spShow;
 })();
 </script>
 
