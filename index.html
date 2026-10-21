@@ -940,6 +940,42 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 .hm-pt div.n small,.hm-pt div.n b{opacity:1}
 #splash .hm-nav button.hm-home{background:linear-gradient(135deg,#2dd4bf,#0d9488)!important;color:#fff!important;box-shadow:0 8px 18px rgba(13,148,136,.45)!important}
 #splash .hm-nav button{color:#4b5563!important}
+/* ---- সাদা ও হালকা হলুদ (v33) ---- */
+.hm .sp-card{display:none!important}
+.hm::before{background:linear-gradient(180deg,#fff3c4 0%,#fff8dc 60%,rgba(255,252,240,0));box-shadow:none;height:250px}
+.hm-top{color:#4a3a10}
+.hm-gr span{opacity:.8}
+.hm-logo{background:#fff;color:#b8860b;border:1.5px solid #f1e3b0;box-shadow:0 4px 12px rgba(184,134,11,.15)}
+.hm-bell{background:#fff;color:#b8860b;border:1.5px solid #f1e3b0;box-shadow:0 3px 10px rgba(184,134,11,.12)}
+.hm-bell i{border-color:#fff}
+.hm-msg{color:#4a3a10;text-shadow:none!important;box-shadow:0 8px 22px rgba(184,134,11,.16)!important;border:1.5px solid #f1e3b0}
+.hm-msg .ct{background:rgba(240,200,80,.25);color:#7a5a00}
+.hm-msg::before,.hm-msg::after{color:#d4a82a;opacity:.55;font-size:30px;text-shadow:none}
+.hm-msg .rf{color:#8a6a10}
+.hm-msg.d0{background:#fff}.hm-msg.d0::before{content:"✦"}.hm-msg.d0::after{content:"✦"}
+.hm-msg.d1{background:linear-gradient(145deg,#fffbe6,#fff0a8)}.hm-msg.d1::before{content:"❀"}.hm-msg.d1::after{content:"❀"}
+.hm-msg.d2{background:linear-gradient(145deg,#fffef6,#f8f0d4)}.hm-msg.d2::before{content:"❖"}.hm-msg.d2::after{content:"❖"}
+.hm-msg.d3{background:#fff;box-shadow:inset 6px 0 0 #f1c84b,0 8px 22px rgba(184,134,11,.16)!important}.hm-msg.d3::before{content:"✿"}.hm-msg.d3::after{content:"✿"}
+.hm-msg.d4{background:linear-gradient(145deg,#fff8ee,#ffeccc)}.hm-msg.d4::before{content:"✧"}.hm-msg.d4::after{content:"✧"}
+.hm-msg.d5{background:#fffbe0;outline:2px solid #f6e49a;outline-offset:-8px}.hm-msg.d5::before{content:"❁"}.hm-msg.d5::after{content:"❁"}
+.hm-msg.d6{background:linear-gradient(145deg,#fbf5e2,#f1e6c3)}.hm-msg.d6::before{content:"❦"}.hm-msg.d6::after{content:"❦"}
+.hm-msg.d7{background:linear-gradient(180deg,#fff,#fff3c4)}.hm-msg.d7::before{content:"☙"}.hm-msg.d7::after{content:"❧"}
+.hm-msg.d8{background:#fffef9;outline:2px dotted #ecd98a;outline-offset:-8px}.hm-msg.d8::before{content:"❋"}.hm-msg.d8::after{content:"❋"}
+.hm-msg.d9{background:linear-gradient(145deg,#fff4b8,#ffe8a0)}.hm-msg.d9::before{content:"✺"}.hm-msg.d9::after{content:"✺"}
+#splash button.hm-t#hmHadith,#splash button.hm-t#hmDua,#splash button.hm-t#spNew,#splash button.hm-t#spMiftah,#splash button.hm-t#spHumBtn,#splash button.hm-t#spSadBtn{background:#fff!important;color:#4a3a10!important;text-shadow:none!important;border:1.5px solid #f3e7b8!important;box-shadow:0 5px 14px rgba(184,134,11,.12)!important}
+#splash button.hm-t span{background:#fff4c2!important;box-shadow:none!important}
+#splash button.hm-t small{color:#8a7a50!important}
+.hm-pr{background:#fff;color:#4a3a10;text-shadow:none;border:1.5px solid #f3e7b8;box-shadow:0 8px 22px rgba(184,134,11,.14)}
+.hm-city{background:#fff8dc;color:#7a5a00;border:1.5px solid #f1e3b0;box-shadow:none}
+.hm-pr .dt{color:#8a7a50;opacity:1}
+.hm-pr .nx{background:#fff3c4;border:1.5px solid #f1c84b;color:#6b4a00}
+.hm-pt div{border-color:#efe1a6;background:#fffdf3;color:#4a3a10}
+.hm-pt div.n{border-color:#f1c84b;background:#fff0a8;color:#4a3a10}
+.hm-cf input{border:1.5px solid #f1e3b0}
+.hm-cf button{background:#f1c84b;color:#4a3a10}
+.hm-nav{background:#fff;box-shadow:0 -6px 20px rgba(184,134,11,.12);border-top:1px solid #f6ecc0}
+#splash .hm-nav button{color:#8a7a50!important}
+#splash .hm-nav button.hm-home{background:linear-gradient(135deg,#ffe58a,#fbd24c)!important;color:#5a4300!important;box-shadow:0 6px 16px rgba(241,200,75,.5)!important}
 /* তাসবিহ পাতা ও হাদিস/দোয়ার শিট */
 #hmSheet{position:fixed;inset:0;z-index:650;display:flex;flex-direction:column}
 #hmSheet.hidden{display:none}
@@ -3958,6 +3994,7 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   /* ---------- স্বাগত পাতার থিম ---------- */
   var SPIMG = {};
   var SPT = [
+    { id: 'cream', n: '🤍 সাদা-হলদে (ডিফল্ট)', bg: 'linear-gradient(180deg,#fffef9 0%,#fffaea 55%,#fff3c9 100%)', leaf: ['#ecd99a', '#f5e9b9', '#e0c878'], pet: ['#fff', '#fde9a8', '#f7e1b5', '#fff6d0'], bf: [['#f0c75e', '#fff3c4'], ['#e9b949', '#fde68a'], ['#f6d57a', '#fffbe6']] },
     { id: 'lavender', n: '💜 ল্যাভেন্ডার', bg: 'linear-gradient(160deg,#f3e8ff 0%,#e9d5ff 45%,#fbcfe8 100%)', leaf: ['#c4b5fd', '#a78bfa', '#ddd6fe'], pet: ['#c9a7e8', '#e6c6f2', '#f7d3e8', '#a78bfa'], bf: [['#8b5cf6', '#e9d5ff'], ['#ec4899', '#fbcfe8'], ['#6366f1', '#c7d2fe'], ['#f472b6', '#fde68a']] },
     { id: 'gold', n: '✨ সোনালি নকশা', bg: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\'%3E%3Cpath d=\'M30 6l5 11 12-4-4 12 11 5-11 5 4 12-12-4-5 11-5-11-12 4 4-12-11-5 11-5-4-12 12 4z\' fill=\'none\' stroke=\'%23b8860b\' stroke-opacity=\'.22\' stroke-width=\'1.2\'/%3E%3C/svg%3E"),linear-gradient(160deg,#fffbeb 0%,#fef3c7 55%,#fde68a 100%)', leaf: ['#d4a017', '#f5c542', '#e8b923'], pet: ['#fde68a', '#fff', '#fcd34d', '#f59e0b'], bf: [['#f59e0b', '#fde68a'], ['#d97706', '#fef3c7'], ['#b45309', '#fde68a'], ['#eab308', '#fff7cc']] },
     { id: 'mint', n: '🍃 পুদিনা সকাল', bg: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'36\' height=\'36\'%3E%3Ccircle cx=\'9\' cy=\'9\' r=\'2.2\' fill=\'%23fff\' fill-opacity=\'.7\'/%3E%3Ccircle cx=\'27\' cy=\'27\' r=\'1.6\' fill=\'%23fff\' fill-opacity=\'.6\'/%3E%3C/svg%3E"),linear-gradient(170deg,#ecfdf5 0%,#d1fae5 50%,#a7f3d0 100%)', leaf: ['#10b981', '#34d399', '#6ee7b7'], pet: ['#fff', '#fde68a', '#a7f3d0', '#fbcfe8'], bf: [['#14b8a6', '#99f6e4'], ['#f59e0b', '#fde68a'], ['#ec4899', '#fbcfe8'], ['#0ea5e9', '#bae6fd']] },
@@ -3974,9 +4011,9 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   ];
   function spById(id){ for (var i = 0; i < SPT.length; i++) if (SPT[i].id === id) return SPT[i]; return SPT[0]; }
   function spResolve(){
-    var id = settings.spTheme || 'lavender';
+    var id = settings.spTheme || 'cream';
     if (id === 'auto') { var pool = SPT.filter(function(t){ return t.id !== 'auto' && t.id !== 'custom'; }); return pool[Math.floor(Date.now() / 864e5) % pool.length]; }
-    if (id === 'custom' && !lsGet('spCustom', '')) id = 'lavender';
+    if (id === 'custom' && !lsGet('spCustom', '')) id = 'cream';
     return spById(id);
   }
   var spSeed = 5, spUid = 0;
@@ -4021,7 +4058,7 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
   window.spApplyTheme = spApplyTheme;
   window.spBuildPicker = function(){
     var w = $('spThemes'); if (!w) return; w.textContent = '';
-    var cur = settings.spTheme || 'lavender';
+    var cur = settings.spTheme || 'cream';
     SPT.forEach(function(t){
       if (t.id === 'custom' && !lsGet('spCustom', '')) return;
       var b = el('button', 'spTile' + (t.id === cur ? ' on' : ''), t.n); b.type = 'button';
