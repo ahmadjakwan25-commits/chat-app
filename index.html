@@ -1357,10 +1357,15 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
       <button class="hm-t" id="hmDua" type="button"><span>🤲</span>দোয়া</button>
       <button class="hm-t" id="spNew" type="button"><span>📝</span>নতুন পাতা</button>
     </div>
-    <div class="hm-pr" id="hmPr">
+    <div class="hm-pr hm-yt" id="hmYt" role="button" tabindex="0" aria-label="ইসলামিক ভিডিও">
+      <h3>▶️ ইসলামিক ভিডিও</h3>
+      <div class="dt">কুরআন তিলাওয়াত · ওয়াজ · হাদিস · সীরাত — শুধু ইসলামিক বিষয়</div>
+      <div class="nx" id="hmYtGo">ভিডিও খুঁজুন ➜</div>
+    </div>
+    <div class="hidden" id="hmPr" aria-hidden="true">
       <button class="hm-city" id="hmCity" type="button">📍 <span id="hmCityT">Dhaka</span> ▾</button>
       <div class="hm-cf hidden" id="hmCf"><input id="hmCityIn" type="text" placeholder="শহর (ইংরেজিতে, যেমন Dhaka)"><button id="hmCityOk" type="button">ঠিক আছে</button></div>
-      <h3>নামাজের সময়</h3>
+      
       <div class="dt" id="hmDt"></div>
       <div class="nx" id="hmNx">লোড হচ্ছে…</div>
       <div class="hm-pt" id="hmPt"></div>
@@ -7811,6 +7816,234 @@ pdBtns();
 })();
 </script>
 <!-- ===== এডিটিং মডিউল (শেষ) ===== -->
+
+<!-- ===== ইসলামিক ইউটিউব মডিউল (শুরু) ===== -->
+<style>
+#yt{position:fixed;inset:0;z-index:98;background:var(--bg);color:var(--text);display:flex;flex-direction:column;font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}
+#yt.hidden{display:none!important}
+#yt button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+#yt .ytb{display:flex;align-items:center;gap:6px;padding:calc(6px + env(safe-area-inset-top)) 8px 6px;background:var(--accent);color:var(--on-accent)}
+#yt .ytb button{min-width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.18);font-weight:700;font-size:17px}
+#yt .ytb .t{flex:1;font-weight:700;font-size:17px}
+#ytPl{flex:none;background:#000}
+#ytPl .fr{position:relative;width:100%;aspect-ratio:16/9;background:#000}
+#ytPl iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+#ytPl .inf{display:flex;gap:8px;align-items:center;padding:8px 10px;background:var(--panel);border-bottom:1px solid var(--line)}
+#ytPl .inf div{flex:1;min-width:0}
+#ytPl .inf b{display:block;font-size:14px;line-height:1.3}
+#ytPl .inf small{color:var(--muted)}
+#ytPl .inf button{height:36px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-weight:600;font-size:13px}
+#yt .ytsb{display:flex;gap:8px;padding:8px 10px;background:var(--panel);border-bottom:1px solid var(--line)}
+#yt .ytsb input{flex:1;min-width:0;height:42px;border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:0 12px;font-size:16px}
+#yt .ytsb button{width:46px;height:42px;border-radius:12px;background:var(--accent);color:var(--on-accent);font-size:19px}
+#yt .ytch{display:flex;gap:7px;overflow-x:auto;padding:8px 10px;background:var(--panel);border-bottom:1px solid var(--line);scrollbar-width:none}
+#yt .ytch::-webkit-scrollbar{display:none}
+#yt .ytch button{flex:none;height:34px;padding:0 13px;border-radius:17px;border:1px solid var(--line);background:var(--bg);font-size:14px;font-weight:600;white-space:nowrap}
+#ytList{flex:1;min-height:0;overflow-y:auto;padding:8px 10px calc(14px + env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
+#ytList .vc{display:flex;gap:10px;width:100%;text-align:left;padding:8px;margin-bottom:8px;border-radius:14px;background:var(--panel);border:1px solid var(--line)}
+#ytList .vc img{flex:none;width:136px;aspect-ratio:16/9;object-fit:cover;border-radius:10px;background:#222}
+#ytList .vc div{flex:1;min-width:0}
+#ytList .vc b{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:14.5px;line-height:1.35}
+#ytList .vc small{display:block;margin-top:4px;color:var(--muted);font-size:12.5px}
+#ytList .msg{text-align:center;color:var(--muted);padding:26px 14px;line-height:1.6;font-size:14.5px}
+#ytList .more{display:block;margin:6px auto 0;height:42px;padding:0 22px;border-radius:12px;background:var(--accent);color:var(--on-accent);font-weight:700}
+#ytKey{position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center}
+#ytKey.hidden{display:none!important}
+#ytKey .bx{width:100%;max-width:560px;background:var(--panel);color:var(--text);border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom));max-height:90%;overflow-y:auto;font-family:"Hind Siliguri",system-ui,sans-serif}
+#ytKey h3{font-size:17px;margin-bottom:8px}
+#ytKey ol{margin:0 0 10px 20px;font-size:14px;line-height:1.7}
+#ytKey input{width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text);padding:0 10px;font-size:15px}
+#ytKey .rw{display:flex;gap:8px;margin-top:10px}
+#ytKey .rw button{flex:1;min-height:42px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-weight:600;font-family:inherit;font-size:15px}
+#ytKey .rw button.pri{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+</style>
+
+<div id="yt" class="hidden">
+  <div class="ytb">
+    <button id="ytBack" type="button" aria-label="ফিরে যান">←</button>
+    <button id="ytHome" type="button" aria-label="স্বাগত পাতা">🏠</button>
+    <div class="t">▶️ ইসলামিক ভিডিও</div>
+    <button id="ytSet" type="button" aria-label="সেটিংস">⚙️</button>
+  </div>
+  <div id="ytPl" class="hidden">
+    <div class="fr" id="ytFr"></div>
+    <div class="inf"><div><b id="ytPlT"></b><small id="ytPlC"></small></div><button id="ytPlX" type="button">✕ বন্ধ</button></div>
+  </div>
+  <form class="ytsb" id="ytForm" action="javascript:void(0)">
+    <input id="ytQ" type="search" placeholder="ইসলামিক ভিডিও খুঁজুন…" enterkeyhint="search" autocomplete="off">
+    <button type="submit" aria-label="খুঁজুন">🔍</button>
+  </form>
+  <div class="ytch" id="ytCh"></div>
+  <div id="ytList"></div>
+</div>
+<div id="ytKey" class="hidden"><div class="bx">
+  <h3>🔑 ইউটিউব API কী বসান</h3>
+  <ol>
+    <li>console.cloud.google.com এ গিয়ে নতুন প্রজেক্ট বানান।</li>
+    <li>“APIs &amp; Services → Library” থেকে <b>YouTube Data API v3</b> চালু (Enable) করুন।</li>
+    <li>“Credentials → Create credentials → API key” দিয়ে কী বানান।</li>
+    <li>নিরাপত্তার জন্য কীর শর্তে “HTTP referrers” দিয়ে <b>https://ahmadjakwan25-commits.github.io/*</b> দিন।</li>
+    <li>কীটি নিচে বসিয়ে সেভ করুন। (প্রতি ফোনে একবার)</li>
+  </ol>
+  <input id="ytKeyIn" type="text" placeholder="AIza…" autocomplete="off" autocapitalize="off" spellcheck="false">
+  <div class="rw"><button type="button" id="ytKeyNo">বন্ধ করুন</button><button type="button" id="ytKeyDel">কী মুছুন</button><button type="button" id="ytKeyOk" class="pri">সেভ করুন</button></div>
+</div></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(i){return document.getElementById(i);};
+function say(m,ms){try{if(typeof window.toast==='function'){window.toast(m,ms);return;}}catch(e){}alert(m);}
+
+/* এখানে চাইলে আপনার API কী সরাসরি বসাতে পারেন (কীতে HTTP referrer শর্ত দেওয়া থাকলে নিরাপদ) */
+var KEY_CONST='AIzaSyBU7On465jmt0LZA729u19l_pCLs6yzKIs';
+function getKey(){var k=KEY_CONST;try{k=localStorage.getItem('ytKey')||k;}catch(e){}return (k||'').trim();}
+
+/* ---------- ফিল্টার তালিকা ---------- */
+/* কখনোই অনুমতি নেই */
+var STRONG=['sex','sexy','porn','porno','pornhub','nude','nudes','naked','xxx','18+','erotic','bikini','hentai','onlyfans','পর্ন','পর্নো','সেক্স','সেক্সি','যৌন','নগ্ন','নগ্নতা','অশ্লীল','বিকিনি','চুদা','চোদা','মাগি','মাগী','খানকি'];
+/* বিনোদন/অনৈসলামিক — তবে “হারাম/বিধান” জাতীয় শব্দ থাকলে (যেমন “গান বাজনা হারাম কেন”) অনুমতি */
+var WEAK=['song','songs','music','dj','remix','mashup','dance','dancing','lyrics','concert','band','movie','movies','film','cinema','drama','natok','comedy','funny','prank','roast','gameplay','gaming','pubg','freefire','romantic','romance','kiss','girlfriend','boyfriend','horror','ghost','tiktok','reels','hot','item',
+ 'গান','গানের','নাচ','নৃত্য','সঙ্গীত','সংগীত','বাজনা','বাদ্যযন্ত্র','মুভি','সিনেমা','চলচ্চিত্র','নাটক','কমেডি','ফানি','হাসির','প্র্যাঙ্ক','প্রাঙ্ক','গেম','গেমিং','প্রেম','রোমান্টিক','রোমান্স','চুমু','চুম্বন','গার্লফ্রেন্ড','বয়ফ্রেন্ড','হরর','ভূতের','টিকটক','রিলস','ডিজে','রিমিক্স','ব্যান্ড','কনসার্ট','আইটেম','বিনোদন','রাশিফল','জ্যোতিষ','পূজা','কীর্তন','ভজন','কবিগান','পালাগান','ইয়াবা','মদ','জুয়া','গাঁজা','ক্যাসিনো','বেটিং','casino','betting','gambling'];
+var WEAK_PHRASES=['love story','free fire','item song','hot song','web series','ওয়েব সিরিজ','লাভ স্টোরি','ভালোবাসার গল্প'];
+/* এই শব্দ থাকলে দুর্বল শব্দ অনুমোদিত (ধর্মীয় বিধান/সতর্কতা) */
+var RULING=['হারাম','হালাল','নিষিদ্ধ','নিষেধ','জায়েজ','জায়েয','বিধান','শরিয়ত','শরীয়ত','ফতোয়া','ফাতওয়া','ক্ষতি','কুফল','বর্জন','তওবা','তাওবা','haram','halal','ruling','forbidden','fatwa','prohibited','sharia'];
+var ISL=['ইসলাম','ইসলামিক','ইসলামী','ইসলামিয়া','কুরআন','কোরআন','কোরান','কুরান','তিলাওয়াত','কেরাত','ক্বিরাত','কিরাত','কিরআত','সূরা','সুরা','আয়াত','হাদিস','হাদীস','সুন্নাহ','সুন্নত','নামাজ','নামায','সালাত','রোজা','রোযা','রমজান','রমযান','যাকাত','জাকাত','হজ','হজ্জ','হজ্ব','উমরাহ','ওমরা','উমরা','দোয়া','দুআ','দোআ','জিকির','যিকির','জিকর','আল্লাহ','আল্লাহর','রাসুল','রাসূল','নবী','নবীজি','সাহাবি','সাহাবী','সাহাবা','সীরাত','সিরাত','ওয়াজ','বয়ান','মাহফিল','তাফসির','তাফসীর','মাসআলা','মাসায়েল','মাসাইল','ফতোয়া','ফাতওয়া','ফিকহ','আকিদা','আকীদা','ঈমান','ইমান','তাওহিদ','তাওহীদ','জান্নাত','জাহান্নাম','আখেরাত','আখিরাত','কিয়ামত','কবর','মুসলিম','মুসলমান','মাদরাসা','মাদ্রাসা','মসজিদ','খুতবা','জুমা','জুমার','জুম্মা','ঈদ','কাবা','কাবা','মদিনা','মক্কা','মাক্কা','নাশিদ','হামদ','নাত','নাতে','গজল','আলেম','আলিম','উলামা','ওলামা','মুফতি','মুফতী','মাওলানা','শায়খ','শাইখ','হুজুর','উস্তাদ','তাজবিদ','তাজবীদ','আম্বিয়া','দ্বীন','দীন','দ্বীনি','শরিয়ত','শরীয়ত','হালাল','হারাম','তওবা','তাওবা','ইস্তিগফার','দরুদ','দুরূদ','ইতিকাফ','ইতেকাফ','লাইলাতুল','শবে','মিলাদ','ইসলাহ','আমল','আখলাক','তারাবি','তারাবীহ','ফজর','জোহর','যোহর','আসর','মাগরিব','এশা','ইশা','কালিমা','কালেমা','আযান','আজান','ইমাম','সবর','সবুর','তাকওয়া','আহলে','উম্মাহ','খিলাফত','ইসলামিক','সাদকা','সদকা','কুরবানি','কোরবানি','আকীকা','জানাজা','জানাযা','মিরাজ','মেরাজ','হিজরত','ইফতার','সেহরি','সাহরি','বিসমিল্লাহ','আলহামদুলিল্লাহ','সুবহানাল্লাহ',
+ 'islam','islamic','muslim','muslims','quran','qur\'an','koran','quranic','tilawat','tilawah','recitation','surah','sura','ayat','ayah','hadith','hadees','sunnah','sunnat','salah','salat','namaz','prayer','ramadan','ramzan','zakat','hajj','umrah','dua','duas','zikr','dhikr','allah','prophet','muhammad','mohammad','sahaba','sahabah','seerah','sirah','waz','waaz','bayan','mahfil','tafsir','tafseer','fatwa','fiqh','aqidah','aqeedah','iman','imaan','tawhid','tawheed','jannah','jahannam','akhirah','akhirat','qiyamah','mosque','masjid','khutbah','khutba','jumuah','jummah','eid','kaaba','kabah','makkah','mecca','madinah','medina','nasheed','hamd','naat','naats','sheikh','shaykh','shaikh','mufti','maulana','mawlana','ustadh','ulama','alim','tajweed','tajwid','deen','sharia','halal','haram','tawbah','tawba','istighfar','durood','darood','itikaf','laylatul','shab','milad','ruqyah','sabr','taqwa','ummah','khilafah','sadaqah','qurbani','janazah','miraj','hijrah','iftar','suhoor','sehri','bismillah','alhamdulillah','subhanallah','ameen','amin','ibadah','ibadat','azan','adhan','imam','nabi','rasul','rasool','anbiya','prophets','khatm','hifz','hafiz','qari','qaris','قرآن','القرآن','إسلام','الإسلام','الله','محمد','صلاة','دعاء','حديث','سورة','تلاوة','خطبة','رمضان','حج','عمرة'];
+function norm(s){return String(s||'').toLowerCase().replace(/[‌‍]/g,'');}
+function toks(s){return norm(s).split(/[^\p{L}\p{M}\p{N}+']+/u).filter(Boolean);}
+var SUF=['','ের','র','টি','টা','গুলো','গুলি','ে','কে','য়','ও','ই','এর','ার','ায়','ীয়','ীর','ের','েরও','টির','দের','রা','রাও'];
+function bnHas(tok,term){if(tok===term)return true;if(tok.indexOf(term)!==0)return false;return SUF.indexOf(tok.slice(term.length))>=0;}
+function setHas(tokens,list,loose){
+  for(var i=0;i<tokens.length;i++){
+    var t=tokens[i];
+    for(var j=0;j<list.length;j++){
+      var w=list[j];
+      if(t===w)return w;
+      if(/[^\x00-\x7f]/.test(w)&&t.length>w.length&&(loose?(t.indexOf(w)===0&&t.length-w.length<=5):bnHas(t,w)))return w;
+    }
+  }
+  return '';
+}
+function phraseHas(text,list){for(var i=0;i<list.length;i++)if(text.indexOf(list[i])>=0)return list[i];return '';}
+/* একটি লেখা (প্রশ্ন বা ভিডিওর বিবরণ) অনৈসলামিক/খারাপ কি না */
+function badText(text){
+  var n=norm(text),tk=toks(text);
+  if(n.indexOf('18+')>=0||n.indexOf('xxx')>=0)return 'x';
+  var s=setHas(tk,STRONG,false);if(s)return s;
+  var w=setHas(tk,WEAK,false)||phraseHas(n,WEAK_PHRASES);
+  if(w){var ruled=setHas(tk,RULING,true);if(!ruled)return w;}
+  return '';
+}
+function isIslamic(text){return !!setHas(toks(text),ISL,true);}
+function dec(s){var t=document.createElement('textarea');t.innerHTML=s;return t.value;}
+window.__ytFilter={bad:badText,isl:isIslamic};
+
+/* ---------- খোলা/বন্ধ ---------- */
+var openFrom=null;
+function ytOpen(){
+  var sp=$('splash');if(sp)sp.classList.add('away');
+  $('yt').classList.remove('hidden');
+  if(!$('ytList').childNodes.length)showHint();
+}
+function ytClose(){
+  closePlayer();$('yt').classList.add('hidden');
+  if(window.__spShow)window.__spShow();else{var sp=$('splash');if(sp){sp.classList.remove('out');sp.classList.remove('away');}}
+}
+$('ytBack').onclick=ytClose;$('ytHome').onclick=ytClose;
+var hy=$('hmYt');if(hy){hy.onclick=ytOpen;hy.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();ytOpen();}};}
+window.__ytOpen=ytOpen;
+
+/* ---------- প্লেয়ার ---------- */
+function play(v){
+  var fr=$('ytFr');fr.innerHTML='';
+  var f=document.createElement('iframe');
+  f.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+  f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.setAttribute('allowfullscreen','');f.title=v.title;
+  fr.appendChild(f);$('ytPlT').textContent=v.title;$('ytPlC').textContent=v.ch;$('ytPl').classList.remove('hidden');
+}
+function closePlayer(){$('ytFr').innerHTML='';$('ytPl').classList.add('hidden');}
+$('ytPlX').onclick=closePlayer;
+
+/* ---------- তালিকা ---------- */
+var CHIPS=['কুরআন তিলাওয়াত','ওয়াজ মাহফিল','হাদিসের বয়ান','সীরাতে রাসুল','নামাজ শিক্ষা','দোয়া ও জিকির','হজ্জ ও উমরাহ','ইসলামিক হামদ নাত','শিশুদের ইসলামিক শিক্ষা','কাসাসুল আম্বিয়া','রমজানের আমল','আখেরাতের স্মরণ'];
+var ch=$('ytCh');
+CHIPS.forEach(function(c){var b=document.createElement('button');b.type='button';b.textContent=c;b.onclick=function(){$('ytQ').value=c;search(c,false);};ch.appendChild(b);});
+var list=$('ytList');
+function msg(t){var d=document.createElement('div');d.className='msg';d.textContent=t;return d;}
+function showHint(){list.innerHTML='';list.appendChild(msg('এখানে শুধু ইসলামিক ভিডিও দেখানো হয়।\nউপরে সার্চ করুন অথবা কোনো বিষয়ে চাপুন।'));list.firstChild.style.whiteSpace='pre-line';}
+var ST={q:'',next:'',shown:0,busy:false,seen:{}};
+var cache={};
+function card(v){
+  var b=document.createElement('button');b.type='button';b.className='vc';
+  var im=document.createElement('img');im.loading='lazy';im.alt='';im.src=v.thumb;b.appendChild(im);
+  var d=document.createElement('div'),t=document.createElement('b'),s=document.createElement('small');
+  t.textContent=v.title;s.textContent=v.ch+(v.date?' · '+v.date:'');d.appendChild(t);d.appendChild(s);b.appendChild(d);
+  b.onclick=function(){play(v);};return b;
+}
+function fmtDate(iso){try{return new Date(iso).toLocaleDateString('bn-BD',{year:'numeric',month:'short'});}catch(e){return '';}}
+function keyDialog(){$('ytKeyIn').value=getKey();$('ytKey').classList.remove('hidden');}
+$('ytSet').onclick=keyDialog;
+$('ytKeyNo').onclick=function(){$('ytKey').classList.add('hidden');};
+$('ytKeyOk').onclick=function(){var v=$('ytKeyIn').value.trim();if(!v)return;try{localStorage.setItem('ytKey',v);}catch(e){}$('ytKey').classList.add('hidden');say('API কী সেভ হয়েছে ✅');};
+$('ytKeyDel').onclick=function(){try{localStorage.removeItem('ytKey');}catch(e){}$('ytKeyIn').value='';say('কী মুছে গেছে');};
+function errText(j){
+  var r=(j.error&&j.error.errors&&j.error.errors[0]&&j.error.errors[0].reason)||'',m=(j.error&&j.error.message)||'';
+  if(r==='quotaExceeded'||/quota/i.test(m))return 'আজকের ফ্রি সীমা শেষ হয়ে গেছে। কাল আবার চেষ্টা করুন।';
+  if(r==='keyInvalid'||/API key not valid/i.test(m))return 'API কী ঠিক নেই। ⚙️ চেপে সঠিক কী বসান।';
+  if(r==='accessNotConfigured'||/has not been used|disabled/i.test(m))return 'গুগল ক্লাউডে “YouTube Data API v3” চালু করা হয়নি।';
+  if(/referer/i.test(m)||r==='forbidden')return 'এই কীটি এই ওয়েবসাইটে চলবে না। কীর HTTP referrer শর্ত ঠিক করুন।';
+  return 'ভিডিও আনা যায়নি ('+(m||r||'অজানা ত্রুটি')+')';
+}
+function search(q,more){
+  q=(q||'').trim();if(!q||ST.busy)return;
+  if(!more){
+    var b=badText(q);
+    if(b){closePlayer();list.innerHTML='';list.appendChild(msg('⛔ এই বিষয়ে সার্চ করা যাবে না।\nশুধু ইসলামিক বিষয়ে খুঁজুন।'));list.firstChild.style.whiteSpace='pre-line';return;}
+  }
+  var key=getKey();if(!key){keyDialog();return;}
+  if(!more){ST.q=q;ST.next='';ST.shown=0;ST.seen={};list.innerHTML='';}
+  var qq=isIslamic(q)?q:q+' islamic';
+  ST.busy=true;var loading=msg('খোঁজা হচ্ছে…');list.appendChild(loading);
+  var tries=0;
+  function fetchPage(){
+    tries++;
+    var url='https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=25&safeSearch=strict&videoEmbeddable=true&regionCode=BD&q='+encodeURIComponent(qq)+(ST.next?'&pageToken='+encodeURIComponent(ST.next):'')+'&key='+encodeURIComponent(key);
+    var ck=url;
+    var p=cache[ck]?Promise.resolve(cache[ck]):fetch(url).then(function(r){return r.json();});
+    return p.then(function(j){
+      if(j.error){throw new Error(errText(j));}
+      cache[ck]=j;ST.next=j.nextPageToken||'';
+      var add=[];
+      (j.items||[]).forEach(function(it){
+        if(!it.id||!it.id.videoId||ST.seen[it.id.videoId])return;
+        var sn=it.snippet||{},title=dec(sn.title||''),chn=dec(sn.channelTitle||''),desc=dec((sn.description||'').slice(0,200));
+        var all=title+' '+chn+' '+desc;
+        if(badText(all))return;
+        if(!isIslamic(title+' '+chn+' '+desc))return;
+        ST.seen[it.id.videoId]=1;
+        var th=(sn.thumbnails&&(sn.thumbnails.medium||sn.thumbnails.default||{}).url)||'';
+        add.push({id:it.id.videoId,title:title,ch:chn,thumb:th,date:fmtDate(sn.publishedAt)});
+      });
+      add.forEach(function(v){list.appendChild(card(v));});
+      ST.shown+=add.length;
+      if(!add.length&&ST.next&&tries<3)return fetchPage();
+    });
+  }
+  fetchPage().then(function(){
+    loading.remove();ST.busy=false;
+    var old=list.querySelector('.more');if(old)old.remove();
+    if(!ST.shown){list.appendChild(msg('এই বিষয়ে কোনো ইসলামিক ভিডিও পাওয়া যায়নি।\nঅন্য শব্দে খুঁজে দেখুন।'));list.lastChild.style.whiteSpace='pre-line';return;}
+    if(ST.next){var mb=document.createElement('button');mb.type='button';mb.className='more';mb.textContent='আরও দেখুন ▾';mb.onclick=function(){mb.remove();search(ST.q,true);};list.appendChild(mb);}
+  },function(e){
+    loading.remove();ST.busy=false;
+    list.appendChild(msg('⚠️ '+(e&&e.message&&e.message!=='Failed to fetch'?e.message:'ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।')));
+  });
+}
+$('ytForm').addEventListener('submit',function(e){e.preventDefault();var q=$('ytQ').value;try{$('ytQ').blur();}catch(x){}search(q,false);});
+})();
+</script>
+<!-- ===== ইসলামিক ইউটিউব মডিউল (শেষ) ===== -->
 
 </body>
 </html>
