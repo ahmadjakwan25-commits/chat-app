@@ -7549,6 +7549,9 @@ function say(m,ms){try{if(typeof window.toast==='function'){window.toast(m,ms);r
 /* এখানে চাইলে আপনার API কী সরাসরি বসাতে পারেন (কীতে HTTP referrer শর্ত দেওয়া থাকলে নিরাপদ) */
 var KEY_CONST='AIzaSyBU7On465jmt0LZA729u19l_pCLs6yzKIs';
 function getKey(){var k=KEY_CONST;try{k=localStorage.getItem('ytKey')||k;}catch(e){}return (k||'').trim();}
+/* ভরসাযোগ্য চ্যানেল: এদের ভিডিও “তালিকা” থেকে আসে (৫০টি = ১ ইউনিট), সার্চের মতো ১০০ ইউনিট লাগে না */
+var CHANNELS=[{k:'holytune',name:'Holy Tune',id:'UCUNkaUjhRArzU4Tm_TPSDlg'}];
+function chOf(k){for(var i=0;i<CHANNELS.length;i++)if(CHANNELS[i].k===k)return CHANNELS[i];return null;}
 
 /* ---------- ফিল্টার তালিকা ---------- */
 /* কখনোই অনুমতি নেই */
@@ -7703,7 +7706,7 @@ function pal(id){var h=0;id=String(id||'');for(var i=0;i<id.length;i++)h=(h*31+i
 
 var CHIPS=['কুরআন তিলাওয়াত','ওয়াজ মাহফিল','হাদিসের বয়ান','সীরাতে রাসুল','নামাজ শিক্ষা','দোয়া ও জিকির','হজ্জ ও উমরাহ','ইসলামিক হামদ নাত','শিশুদের ইসলামিক শিক্ষা','কাসাসুল আম্বিয়া','রমজানের আমল','আখেরাতের স্মরণ'];
 var ch=$('ytCh');
-(function(){var b=document.createElement('button');b.type='button';b.className='all';b.textContent='✨ সব ইসলামিক';b.onclick=function(){$('ytQ').value='';feed(true);};ch.appendChild(b);})();
+(function(){var b=document.createElement('button');b.type='button';b.className='all';b.textContent='✨ সব ইসলামিক';b.onclick=function(){$('ytQ').value='';feed(true);};ch.appendChild(b);CHANNELS.forEach(function(c){var x=document.createElement('button');x.type='button';x.className='all';x.textContent='📺 '+c.name;x.onclick=function(){$('ytQ').value='';showChannel(c,false);};ch.appendChild(x);});})();
 CHIPS.forEach(function(c,ci){var b=document.createElement('button');b.type='button';b.textContent=c;var cp=PAL[ci%PAL.length];b.style.background='hsla('+cp[0]+',85%,52%,.2)';b.style.borderColor='hsla('+cp[0]+',75%,45%,.7)';b.onclick=function(){$('ytQ').value=c;search(c,false);};ch.appendChild(b);});
 var list=$('ytList');
 function msg(t){var d=document.createElement('div');d.className='msg';d.textContent=t;return d;}
@@ -7716,7 +7719,7 @@ function isFav(id){return favGet().some(function(x){return x.id===id;});}
 function favToggle(v){
   var a=favGet(),i=-1;a.forEach(function(x,k){if(x.id===v.id)i=k;});
   if(i>=0){a.splice(i,1);favSet(a);say('সংরক্ষিত তালিকা থেকে সরানো হয়েছে');}
-  else{a.unshift({id:v.id,title:v.title,ch:v.ch,thumb:v.thumb,date:v.date||''});favSet(a);say('❤️ সংরক্ষিত হয়েছে');}
+  else{a.unshift({id:v.id,title:v.title,ch:v.ch,thumb:v.thumb,date:v.date||'',src:v.src||''});favSet(a);say('❤️ সংরক্ষিত হয়েছে');}
   favSync();
 }
 function favSync(){
@@ -7811,6 +7814,7 @@ function addMore(fn){var mb=document.createElement('button');mb.type='button';mb
 function feedSave(){try{localStorage.setItem('ytFeed',JSON.stringify({t:Date.now(),q:ST.q,next:ST.next,items:(ST.items||[]).slice(0,30)}));}catch(e){}}
 function feedLoad(){try{var c=JSON.parse(localStorage.getItem('ytFeed')||'null');if(c&&c.items&&c.items.length&&Date.now()-c.t<4*3600*1000)return c;}catch(e){}return null;}
 function feed(force){
+  if(CHANNELS.length&&!force){showChannel(CHANNELS[Math.floor(Math.random()*CHANNELS.length)],false);return;}
   MODE='';var c=force?null:feedLoad();list.innerHTML='';
   if(c){
     ST.q=c.q;ST.next=c.next||'';ST.shown=c.items.length;ST.seen={};ST.items=c.items.slice();ST.isFeed=true;
@@ -7842,7 +7846,7 @@ function vidFetch(q,token){
 function relStart(v){
   var q=(v.title||'').replace(/[|｜【】\[\]()]+/g,' ').replace(/\s+/g,' ').trim().slice(0,70);
   if(!isIslamic(q))q+=' islamic';
-  var me=relST={q:q,next:'',seen:{},busy:false};me.seen[v.id]=1;
+  var chx=v.src?chOf(v.src):null;var me=relST={q:q,next:'',seen:{},busy:false,isCh:!!chx,ch:chx};me.seen[v.id]=1;
   list.innerHTML='';list.appendChild(head('🎬 এ ধরনের আরও ভিডিও'));list.scrollTop=0;
   relMore(me);
 }
@@ -7851,7 +7855,7 @@ function relMore(me){
   var loading=msg('খোঁজা হচ্ছে…');list.appendChild(loading);var got=0,tries=0;
   function step(){
     tries++;
-    return vidFetch(me.q,me.next).then(function(r){
+    return (me.isCh?chRel(me):vidFetch(me.q,me.next)).then(function(r){
       me.next=r.next;if(me!==relST||!playing)return;
       r.add.forEach(function(v){if(me.seen[v.id])return;me.seen[v.id]=1;got++;list.appendChild(card(v));});
       if(got<4&&me.next&&tries<3)return step();
@@ -7899,12 +7903,55 @@ $('ytPlN').onclick=function(){nextVideo();};
 /* ---------- সার্চ গণনা ---------- */
 function bnN(n){return String(n).replace(/\d/g,function(d){return '০১২৩৪৫৬৭৮৯'[d];});}
 function ptDay(){try{return new Date().toLocaleDateString('en-CA',{timeZone:'America/Los_Angeles'});}catch(e){return new Date().toISOString().slice(0,10);}}
-function qGet(){try{var o=JSON.parse(localStorage.getItem('ytQuota')||'{}')||{};if(o.d!==ptDay()){o.d=ptDay();o.n=0;}o.n=o.n||0;o.t=o.t||0;return o;}catch(e){return {d:ptDay(),n:0,t:0};}}
-function qInc(){var o=qGet();o.n++;o.t++;try{localStorage.setItem('ytQuota',JSON.stringify(o));}catch(e){}qShow();}
+function qGet(){try{var o=JSON.parse(localStorage.getItem('ytQuota')||'{}')||{};if(o.d!==ptDay()){o.d=ptDay();o.n=0;o.m=0;}o.n=o.n||0;o.m=o.m||0;o.t=o.t||0;return o;}catch(e){return {d:ptDay(),n:0,m:0,t:0};}}
+function qInc(k){var o=qGet();if(k==='l'){o.m++;}else{o.n++;o.t++;}try{localStorage.setItem('ytQuota',JSON.stringify(o));}catch(e){}qShow();}
 function qShow(){
-  var o=qGet(),left=Math.max(0,100-o.n),el=$('ytQt');
-  if(el){el.textContent='🔎 আজ '+bnN(o.n)+' সার্চ · বাকি প্রায় '+bnN(left)+(left<=10?' ⚠️':'');}
-  var d=$('ytQd');if(d)d.textContent='🔎 আজ এই ফোনে '+bnN(o.n)+'টি সার্চ হয়েছে (বাকি প্রায় '+bnN(left)+'টি) · এখন পর্যন্ত মোট '+bnN(o.t)+'টি। প্রতিদিনের ফ্রি সীমা প্রায় ১০০ সার্চ, বাংলাদেশ সময় দুপুর ১-২টার দিকে নতুন হয়।';
+  var o=qGet(),left=Math.max(0,Math.floor((10000-o.n*100-o.m)/100)),el=$('ytQt');
+  if(el){el.textContent='🔎 আজ '+bnN(o.n)+' সার্চ'+(o.m?' · '+bnN(o.m)+' তালিকা':'')+' · বাকি প্রায় '+bnN(left)+' সার্চ'+(left<=10?' ⚠️':'');}
+  var d=$('ytQd');if(d)d.textContent='🔎 আজ এই ফোনে '+bnN(o.n)+'টি সার্চ ও '+bnN(o.m)+'টি চ্যানেল-তালিকা আনা হয়েছে (বাকি প্রায় '+bnN(left)+'টি সার্চের সমান) · এখন পর্যন্ত মোট '+bnN(o.t)+'টি সার্চ। সার্চে ১০০ আর তালিকায় ১ ইউনিট লাগে; দিনে ১০,০০০ ইউনিট ফ্রি, বাংলাদেশ সময় দুপুর ১-২টার দিকে নতুন হয়।';
+}
+
+/* ---------- ভরসাযোগ্য চ্যানেলের ভিডিও (সস্তা: ৫০টি ভিডিও = ১ ইউনিট) ---------- */
+function shuf(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=a[i];a[i]=a[j];a[j]=x;}return a;}
+function chPage(ch,token){
+  var ck='ytCh_'+ch.k+'_'+(token||'0'),c=null;
+  try{c=JSON.parse(localStorage.getItem(ck)||'null');}catch(e){}
+  if(c&&c.items&&Date.now()-c.t<6*3600*1000)return Promise.resolve(c);
+  var key=getKey();if(!key)return Promise.reject(new Error('⚙️ চেপে আগে API কী বসান।'));
+  var url='https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId='+encodeURIComponent('UU'+ch.id.slice(2))+(token?'&pageToken='+encodeURIComponent(token):'')+'&key='+encodeURIComponent(key);
+  qInc('l');
+  return fetch(url).then(function(r){return r.json();}).then(function(j){
+    if(j.error)throw new Error(errText(j));
+    var items=[];
+    (j.items||[]).forEach(function(it){
+      var sn=it.snippet||{},vid=sn.resourceId&&sn.resourceId.videoId,title=dec(sn.title||'');
+      if(!vid||/^(private|deleted) video$/i.test(title))return;
+      if(setHas(toks(title),STRONG,false))return;
+      var th=(sn.thumbnails&&(sn.thumbnails.medium||sn.thumbnails.default||{}).url)||'';
+      items.push({id:vid,title:title,ch:dec(sn.videoOwnerChannelTitle||sn.channelTitle||ch.name),thumb:th,date:fmtDate(sn.publishedAt),src:ch.k});
+    });
+    var o={t:Date.now(),items:items,next:j.nextPageToken||''};
+    try{localStorage.setItem(ck,JSON.stringify(o));}catch(e){}
+    return o;
+  });
+}
+function chRel(me){return chPage(me.ch,me.next).then(function(o){return {add:shuf(o.items.slice()),next:o.next};});}
+var CH=null;
+function showChannel(ch,more){
+  MODE='';var me;
+  if(!more){closePlayer(false);list.innerHTML='';me=CH={ch:ch,next:'',seen:{}};list.appendChild(head('📺 '+ch.name+' — সর্বশেষ ভিডিও'));}
+  else me=CH;
+  if(!me||me.busy)return;me.busy=true;
+  var loading=msg('খোঁজা হচ্ছে…');list.appendChild(loading);
+  chPage(ch,me.next).then(function(o){
+    me.busy=false;if(me!==CH)return;loading.remove();me.next=o.next;
+    var n=0;o.items.forEach(function(v){if(me.seen[v.id])return;me.seen[v.id]=1;n++;list.appendChild(card(v));});
+    if(!n&&!list.querySelector('.vc')){list.appendChild(msg('কোনো ভিডিও পাওয়া যায়নি।'));return;}
+    if(me.next)addMore(function(){showChannel(ch,true);});
+  },function(e){
+    me.busy=false;if(me!==CH)return;loading.remove();
+    list.appendChild(msg('⚠️ '+(e&&e.message&&e.message!=='Failed to fetch'?e.message:'ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।')));
+  });
 }
 $('ytForm').addEventListener('submit',function(e){e.preventDefault();var q=$('ytQ').value;try{$('ytQ').blur();}catch(x){}search(q,false);});
 })();
