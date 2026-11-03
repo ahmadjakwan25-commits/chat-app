@@ -8855,6 +8855,13 @@ apply();
 #nbEd .tb{border:1px solid var(--nbLine);background:var(--nbPanel);color:var(--nbT);border-radius:10px;padding:7px 11px;cursor:pointer;font:inherit;font-size:14px}
 #nbEd .tb.on{background:var(--nbAcc);color:var(--nbAccT);border-color:transparent}
 #nbSt{font-size:12px;opacity:.9}
+#nbEd .nbTop #nbDzBtn{font-size:19px}
+#nbEd .nbTop #nbDzBtn.on{background:rgba(255,255,255,.45)}
+#nbDz{position:absolute;right:8px;top:calc(56px + env(safe-area-inset-top));z-index:7;width:min(94vw,390px);max-height:64vh;overflow-y:auto;box-sizing:border-box;padding:12px;border-radius:16px;background:var(--nbPanel);color:var(--nbT);border:1px solid var(--nbLine);box-shadow:0 12px 32px rgba(0,0,0,.35);display:flex;flex-direction:column;gap:8px}
+#nbDz.hidden{display:none!important}
+#nbDz .nbDzHd{display:flex;align-items:center;justify-content:space-between}
+#nbDz .nbDzHd b{font-size:15.5px}
+#nbDz .nbDzHd button{width:32px;height:32px;border:0;border-radius:50%;background:rgba(127,127,127,.18);color:inherit;font-size:15px;cursor:pointer}
 #nbTh{position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.5);display:flex;align-items:flex-end}
 #nbTh .box{width:100%;max-height:75vh;overflow-y:auto;background:var(--nbPanel);color:var(--nbT);border-radius:20px 20px 0 0;padding:14px}
 #nbTh h3{margin:0;font-size:17px;flex:1}
@@ -8920,13 +8927,16 @@ apply();
   <div id="nbList"></div>
   <button class="nbFab" id="nbNew" type="button">＋</button>
   <div id="nbEd" class="hidden">
-    <div class="nbTop"><button id="nbEdBack" type="button">←</button><b id="nbEdTitle">নোট</b><span id="nbSt"></span></div>
+    <div class="nbTop"><button id="nbEdBack" type="button">←</button><b id="nbEdTitle">নোট</b><span id="nbSt"></span><button id="nbDzBtn" type="button" aria-label="রং ও পাতার ডিজাইন" title="রং ও ডিজাইন">🎨</button></div>
     <div class="nbEdBody">
       <input id="nbT" class="t" type="text" placeholder="শিরোনাম" maxlength="200">
       <textarea id="nbB" placeholder="এখানে লিখুন…"></textarea>
-      <div class="nbTools" id="nbSw"></div>
-      <div class="nbLbl">📄 পাতার ডিজাইন</div>
-      <div class="nbTools" id="nbDs"></div>
+      <div id="nbDz" class="hidden"><div class="nbDzHd"><b>🎨 রং ও ডিজাইন</b><button id="nbDzX" type="button" aria-label="বন্ধ করুন">✕</button></div>
+        <div class="nbLbl" id="nbSwL">🎨 পাতার রং</div>
+        <div class="nbTools" id="nbSw"></div>
+        <div class="nbLbl">📄 পাতার ডিজাইন</div>
+        <div class="nbTools" id="nbDs"></div>
+      </div>
       <div class="nbTools"><button class="tb" id="nbPin" type="button">📌 পিন</button><button class="tb" id="nbShare" type="button">👥 শেয়ার</button><button class="tb" id="nbPdf" type="button">📄 PDF</button><button class="tb" id="nbJpg" type="button">🖼 JPG</button><button class="tb" id="nbDel" type="button">🗑️ ডিলেটে পাঠান</button></div>
     </div>
   </div>
@@ -9056,14 +9066,18 @@ apply();
     G('nbT').style.background=n.color;G('nbB').style.backgroundColor=n.color;G('nbB').dataset.ds=designOf(n);buildDs();
     G('nbT').readOnly=G('nbB').readOnly=ro;
     G('nbPin').classList.toggle('on',!!n.pinned);G('nbShare').classList.toggle('on',!!n.shared);
-    G('nbPin').style.display=G('nbShare').style.display=G('nbDel').style.display=G('nbSw').style.display=ro?'none':'';
+    G('nbPin').style.display=G('nbShare').style.display=G('nbDel').style.display=G('nbSw').style.display=ro?'none':'';G('nbSwL').style.display=ro?'none':'';
     G('nbEdTitle').textContent=ro?'সঙ্গীর নোট (শুধু দেখা)':'নোট';
     [].forEach.call(G('nbSw').children,function(s){s.classList.toggle('on',s.dataset.c===n.color);});
     status('');
   }
-  function openNote(n){cur=n;ed.classList.remove('hidden');paint();}
-  function closeEd(){flush();ed.classList.add('hidden');cur=null;sortNotes();render();}
+  function dz(on){var b=G('nbDz');b.classList.toggle('hidden',!on);G('nbDzBtn').classList.toggle('on',!!on);}
+  function openNote(n){cur=n;dz(false);ed.classList.remove('hidden');paint();}
+  function closeEd(){flush();dz(false);ed.classList.add('hidden');cur=null;sortNotes();render();}
   G('nbSw').innerHTML=COLORS.map(function(c){return '<span class="sw" data-c="'+c+'" style="background:'+c+'"></span>';}).join('');
+  G('nbDzBtn').onclick=function(e){e.stopPropagation();dz(G('nbDz').classList.contains('hidden'));};
+  G('nbDzX').onclick=function(){dz(false);};
+  ed.addEventListener('click',function(e){var b=G('nbDz');if(!b.classList.contains('hidden')&&!b.contains(e.target)&&e.target!==G('nbDzBtn'))dz(false);});
   G('nbSw').onclick=function(e){var c=e.target.dataset&&e.target.dataset.c;if(!c||!cur||!mine(cur))return;cur.color=c;paint();queue();};
   G('nbT').oninput=G('nbB').oninput=function(){if(cur&&mine(cur))queue();};
   G('nbPin').onclick=function(){if(!cur)return;cur.pinned=!cur.pinned;paint();queue();};
