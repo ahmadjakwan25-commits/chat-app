@@ -1360,6 +1360,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
       <button class="hm-t" id="spMiftah" type="button"><span>🕌</span>আল-মিফতাহ</button>
       <button class="hm-t" id="spHumBtn" type="button"><span>🌸</span>হুমাইরা<small>জন্ম থেকে</small></button>
       <button class="hm-t" id="spSadBtn" type="button"><span>💞</span>সাদিয়া<small>বিবাহের পর</small></button>
+      <button class="hm-t" id="spNote" type="button"><span>📒</span>নোট খাতা<small>অনলাইনে সেভ</small></button>
     </div>
     <div class="sp-card"><div class="ar2" id="spAr2"></div><div id="spStatus"></div><small id="spRef"></small></div>
   </div>
@@ -7496,6 +7497,10 @@ pdBtns();
 #ytList .vc .dlx{right:10px;top:10px}
 #ytList .vc .yo{max-width:100%;font-size:11.5px;padding:5px 8px}
 #ytList .msg,#ytList .more{grid-column:1/-1}
+#ytList .subch{grid-column:1/-1;display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;height:40px;min-height:40px;box-sizing:border-box;padding:2px 0 8px;scrollbar-width:none}
+#ytList .subch::-webkit-scrollbar{display:none}
+#ytList .subch button{flex:none;height:30px;padding:0 11px;border-radius:15px;border:1px solid var(--line);background:var(--bg);font-size:12.5px;font-weight:600;white-space:nowrap;color:var(--text)}
+#ytList .subch button.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
 #ytList .msg.hd{text-align:left;font-weight:700;padding:2px 2px 0;color:var(--text);font-size:14.5px}
 #yt.playing .ytsb,#yt.playing .ytch{display:none}
 #ytPl .ctl{display:flex;gap:8px;padding:6px 10px;background:var(--panel);border-bottom:1px solid var(--line)}
@@ -7550,8 +7555,32 @@ function say(m,ms){try{if(typeof window.toast==='function'){window.toast(m,ms);r
 var KEY_CONST='AIzaSyBU7On465jmt0LZA729u19l_pCLs6yzKIs';
 function getKey(){var k=KEY_CONST;try{k=localStorage.getItem('ytKey')||k;}catch(e){}return (k||'').trim();}
 /* ভরসাযোগ্য চ্যানেল: এদের ভিডিও “তালিকা” থেকে আসে (৫০টি = ১ ইউনিট), সার্চের মতো ১০০ ইউনিট লাগে না */
-var CHANNELS=[{k:'holytune',name:'Holy Tune',id:'UCUNkaUjhRArzU4Tm_TPSDlg'}];
-function chOf(k){for(var i=0;i<CHANNELS.length;i++)if(CHANNELS[i].k===k)return CHANNELS[i];return null;}
+/* ========== বিষয়ভিত্তিক চ্যানেল তালিকা ==========
+   '@হ্যান্ডেল' = চ্যানেল (সস্তা: ১ ইউনিট) · {q:'নাম'} = নাম ধরে চ্যানেল খুঁজে নেয় (একবারই ১০০ ইউনিট) · {topic:'বিষয়'} = সার্চ বাটন */
+var CATS=[
+ {k:'gojol',t:'🎵 হামদ ও নাত',ch:['@shafinahmadofficial','@holytunebdofficial','@annafee_official','@arafahrecord','@alaminislamicmedia','@mujahidbulbul','@truthofummah','@atnbanglaislamic','@paradisetv77']},
+ {k:'quran',t:'📖 কুরআন তিলাওয়াত',ch:['@iqraqurantvbd','@prioqurantv','@quraneralotv','@MisharyRashidAlafasy',{q:'Abdul Rahman Al Sudais Official',n:'সুদাইস'},{q:'Maher Al Muaiqly Quran',n:'মাহের আল-মুয়াইকিলি'},{q:'Yasser Al Dosari Quran',n:'ইয়াসির আদ-দোসারি'},{q:'Saad Al Ghamdi Quran',n:'সাদ আল-গামিদি'}]},
+ {k:'waz',t:'🎙 ওয়াজ মাহফিল',ch:['@islamicwazbograofficial','@kuakatatv','@thebanglawazhd','@islamictvwaz','@olipurimedia5094','@saidiwaz','@mbanglawaz','@NewBanglawazlive','@WazJeddahWazBangla','@BWSVC','@SotterMoshal','@yakubtv90']},
+ {k:'alem',t:'🕌 আলেমদের বয়ান',ch:['@sheikhahmadullahofficial','@abutawhaamuhammadadnan','@ShaikhMotiurRahmanOfficial','@AbuBakarMdZakaria','@naseelshahrukh','@abdulhamid62','@abdulbdhamid','@abuafnan','@abdurraquibbokhari','@DrMohammadMonzurEIlahi','@MustafizRahmani','@MahMudQuaSim','@ustadhahmadullahsaidpury6980','@TareqBinAbdulMalik']},
+ {k:'dawah',t:'🏫 দাওয়াহ ও তাফসীর',ch:['@TafseerulQuranTablig','@ICDLectures','@addawahinstitute9696','@AhlehadeethAndolonBangladesh','@SalafiDawahSylhet','@alitisamtv','@annaseehadawahcenter','@AsSalafi1','@AsSalafiFoundation','@AtTahreekTV','@HadithbdTube','@call2tawheedbangla648','@IslamHouseBn','@IIECChannel','@ImamBukhariTrustOfficial','@deeneralo','@paiib','@tawhidmediabd']},
+ {k:'eng',t:'🌍 ইংরেজি / উর্দু লেকচার',ch:['@muftimenk','@yaqeeninstituteofficial','@bayyinah','@TariqJamilOfficial','@IslamChannel','@OneIslamProductions','@MercifulServant','@TheProphetsPath','@FreeQuranEducation','@TheDailyReminder']},
+ {k:'kids',t:'🧒 শিশুদের ইসলামিক',ch:['@muslimkidstv-11',{q:'One4Kids Official',n:'One4Kids'},{q:'Zaky Islamic Cartoon',n:'Zaky'},{topic:'Muslim Kids Islamic Education',n:'Muslim Kids শিক্ষা'},{topic:'Arabic Alphabet for Kids Islamic',n:'আরবি বর্ণমালা (শিশু)'}]}
+];
+var CHS={},CATBY={};
+CATS.forEach(function(c){
+  CATBY[c.k]=c;c.chs=[];c.hasQ=false;
+  c.ch.forEach(function(e){
+    var o;
+    if(typeof e==='string'){o={k:e.slice(1).toLowerCase(),h:e,n:e,cat:c.k};}
+    else if(e.topic){o={k:'t_'+c.k+'_'+e.topic.length,topic:e.topic,n:e.n,cat:c.k};}
+    else{o={k:'q_'+e.q.toLowerCase().replace(/[^a-z0-9]+/g,'_'),q:e.q,n:e.n,cat:c.k};c.hasQ=true;}
+    if(!o.topic)CHS[o.k]=o;
+    c.chs.push(o);
+  });
+});
+function chOf(k){return CHS[k]||null;}
+function chMap(){try{return JSON.parse(localStorage.getItem('ytChMap')||'{}')||{};}catch(e){return {};}}
+function chName(c){var e=chMap()[c.k];return (e&&e.n)||c.n||c.h||c.q||'';}
 
 /* ---------- ফিল্টার তালিকা ---------- */
 /* কখনোই অনুমতি নেই */
@@ -7706,7 +7735,7 @@ function pal(id){var h=0;id=String(id||'');for(var i=0;i<id.length;i++)h=(h*31+i
 
 var CHIPS=['কুরআন তিলাওয়াত','ওয়াজ মাহফিল','হাদিসের বয়ান','সীরাতে রাসুল','নামাজ শিক্ষা','দোয়া ও জিকির','হজ্জ ও উমরাহ','ইসলামিক হামদ নাত','শিশুদের ইসলামিক শিক্ষা','কাসাসুল আম্বিয়া','রমজানের আমল','আখেরাতের স্মরণ'];
 var ch=$('ytCh');
-(function(){var b=document.createElement('button');b.type='button';b.className='all';b.textContent='✨ সব ইসলামিক';b.onclick=function(){$('ytQ').value='';feed(true);};ch.appendChild(b);CHANNELS.forEach(function(c){var x=document.createElement('button');x.type='button';x.className='all';x.textContent='📺 '+c.name;x.onclick=function(){$('ytQ').value='';showChannel(c,false);};ch.appendChild(x);});})();
+(function(){var b=document.createElement('button');b.type='button';b.className='all';b.textContent='✨ সব ইসলামিক';b.onclick=function(){$('ytQ').value='';feed(true);};ch.appendChild(b);CATS.forEach(function(c){var x=document.createElement('button');x.type='button';x.className='all';x.textContent=c.t;x.onclick=function(){$('ytQ').value='';showCat(c);};ch.appendChild(x);});})();
 CHIPS.forEach(function(c,ci){var b=document.createElement('button');b.type='button';b.textContent=c;var cp=PAL[ci%PAL.length];b.style.background='hsla('+cp[0]+',85%,52%,.2)';b.style.borderColor='hsla('+cp[0]+',75%,45%,.7)';b.onclick=function(){$('ytQ').value=c;search(c,false);};ch.appendChild(b);});
 var list=$('ytList');
 function msg(t){var d=document.createElement('div');d.className='msg';d.textContent=t;return d;}
@@ -7814,7 +7843,7 @@ function addMore(fn){var mb=document.createElement('button');mb.type='button';mb
 function feedSave(){try{localStorage.setItem('ytFeed',JSON.stringify({t:Date.now(),q:ST.q,next:ST.next,items:(ST.items||[]).slice(0,30)}));}catch(e){}}
 function feedLoad(){try{var c=JSON.parse(localStorage.getItem('ytFeed')||'null');if(c&&c.items&&c.items.length&&Date.now()-c.t<4*3600*1000)return c;}catch(e){}return null;}
 function feed(force){
-  if(CHANNELS.length&&!force){showChannel(CHANNELS[Math.floor(Math.random()*CHANNELS.length)],false);return;}
+  if(!force){defaultCat();return;}
   MODE='';var c=force?null:feedLoad();list.innerHTML='';
   if(c){
     ST.q=c.q;ST.next=c.next||'';ST.shown=c.items.length;ST.seen={};ST.items=c.items.slice();ST.isFeed=true;
@@ -7907,20 +7936,42 @@ function qGet(){try{var o=JSON.parse(localStorage.getItem('ytQuota')||'{}')||{};
 function qInc(k){var o=qGet();if(k==='l'){o.m++;}else{o.n++;o.t++;}try{localStorage.setItem('ytQuota',JSON.stringify(o));}catch(e){}qShow();}
 function qShow(){
   var o=qGet(),left=Math.max(0,Math.floor((10000-o.n*100-o.m)/100)),el=$('ytQt');
-  if(el){el.textContent='🔎 আজ '+bnN(o.n)+' সার্চ'+(o.m?' · '+bnN(o.m)+' তালিকা':'')+' · বাকি প্রায় '+bnN(left)+' সার্চ'+(left<=10?' ⚠️':'');}
+  if(el){el.textContent='🔎 '+bnN(o.n)+' সার্চ'+(o.m?' · '+bnN(o.m)+' তালিকা':'')+' · বাকি '+bnN(left)+(left<=10?' ⚠️':'');}
   var d=$('ytQd');if(d)d.textContent='🔎 আজ এই ফোনে '+bnN(o.n)+'টি সার্চ ও '+bnN(o.m)+'টি চ্যানেল-তালিকা আনা হয়েছে (বাকি প্রায় '+bnN(left)+'টি সার্চের সমান) · এখন পর্যন্ত মোট '+bnN(o.t)+'টি সার্চ। সার্চে ১০০ আর তালিকায় ১ ইউনিট লাগে; দিনে ১০,০০০ ইউনিট ফ্রি, বাংলাদেশ সময় দুপুর ১-২টার দিকে নতুন হয়।';
 }
 
 /* ---------- ভরসাযোগ্য চ্যানেলের ভিডিও (সস্তা: ৫০টি ভিডিও = ১ ইউনিট) ---------- */
 function shuf(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=a[i];a[i]=a[j];a[j]=x;}return a;}
+function apiKeyErr(){return new Error('⚙️ চেপে আগে API কী বসান।');}
+/* চ্যানেলের আপলোড-তালিকার আইডি (একবার বের করে ফোনে জমিয়ে রাখা হয়) */
+function chUp(ch){
+  var m=chMap(),e=m[ch.k];
+  if(e&&e.bad)return Promise.reject(new Error('“'+chName(ch)+'” চ্যানেলটি পাওয়া যায়নি।'));
+  if(e&&e.up)return Promise.resolve(e.up);
+  var key=getKey();if(!key)return Promise.reject(apiKeyErr());
+  var url;
+  if(ch.h){url='https://www.googleapis.com/youtube/v3/channels?part=snippet&forHandle='+encodeURIComponent(ch.h)+'&key='+encodeURIComponent(key);qInc('l');}
+  else{url='https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&maxResults=1&q='+encodeURIComponent(ch.q)+'&key='+encodeURIComponent(key);qInc();}
+  return fetch(url).then(function(r){return r.json();}).then(function(j){
+    if(j.error)throw new Error(errText(j));
+    var it=(j.items||[])[0],id=it&&(ch.h?it.id:((it.snippet&&it.snippet.channelId)||(it.id&&it.id.channelId)));
+    var mm=chMap();
+    if(!id){mm[ch.k]={bad:1};try{localStorage.setItem('ytChMap',JSON.stringify(mm));}catch(x){}throw new Error('“'+chName(ch)+'” চ্যানেলটি পাওয়া যায়নি।');}
+    var up='UU'+String(id).slice(2),nm=(it.snippet&&(it.snippet.title||it.snippet.channelTitle))||ch.n;
+    mm[ch.k]={up:up,n:nm};try{localStorage.setItem('ytChMap',JSON.stringify(mm));}catch(x){}
+    return up;
+  });
+}
 function chPage(ch,token){
   var ck='ytCh_'+ch.k+'_'+(token||'0'),c=null;
   try{c=JSON.parse(localStorage.getItem(ck)||'null');}catch(e){}
   if(c&&c.items&&Date.now()-c.t<6*3600*1000)return Promise.resolve(c);
-  var key=getKey();if(!key)return Promise.reject(new Error('⚙️ চেপে আগে API কী বসান।'));
-  var url='https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId='+encodeURIComponent('UU'+ch.id.slice(2))+(token?'&pageToken='+encodeURIComponent(token):'')+'&key='+encodeURIComponent(key);
-  qInc('l');
-  return fetch(url).then(function(r){return r.json();}).then(function(j){
+  return chUp(ch).then(function(up){
+    var key=getKey();if(!key)throw apiKeyErr();
+    var url='https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId='+encodeURIComponent(up)+(token?'&pageToken='+encodeURIComponent(token):'')+'&key='+encodeURIComponent(key);
+    qInc('l');
+    return fetch(url).then(function(r){return r.json();});
+  }).then(function(j){
     if(j.error)throw new Error(errText(j));
     var items=[];
     (j.items||[]).forEach(function(it){
@@ -7928,7 +7979,7 @@ function chPage(ch,token){
       if(!vid||/^(private|deleted) video$/i.test(title))return;
       if(setHas(toks(title),STRONG,false))return;
       var th=(sn.thumbnails&&(sn.thumbnails.medium||sn.thumbnails.default||{}).url)||'';
-      items.push({id:vid,title:title,ch:dec(sn.videoOwnerChannelTitle||sn.channelTitle||ch.name),thumb:th,date:fmtDate(sn.publishedAt),src:ch.k});
+      items.push({id:vid,title:title,ch:dec(sn.videoOwnerChannelTitle||sn.channelTitle||chName(ch)),thumb:th,date:fmtDate(sn.publishedAt),ts:Date.parse(sn.publishedAt)||0,src:ch.k});
     });
     var o={t:Date.now(),items:items,next:j.nextPageToken||''};
     try{localStorage.setItem(ck,JSON.stringify(o));}catch(e){}
@@ -7936,16 +7987,58 @@ function chPage(ch,token){
   });
 }
 function chRel(me){return chPage(me.ch,me.next).then(function(o){return {add:shuf(o.items.slice()),next:o.next};});}
-var CH=null;
+
+/* বিষয়ের ট্যাব: ঐ বিষয়ের সব চ্যানেল থেকে মিলিয়ে (প্রতি চ্যানেলের ভিডিও পালা করে) */
+var CH=null,CT=null;
+function subRow(cat,active){
+  var d=document.createElement('div');d.className='subch';
+  var all=document.createElement('button');all.type='button';all.textContent='📋 সব';if(!active)all.className='on';all.onclick=function(){showCat(cat);};d.appendChild(all);
+  cat.chs.forEach(function(c){
+    var b=document.createElement('button');b.type='button';b.textContent=(c.topic?'🔎 ':'')+(c.topic?c.n:chName(c));if(c.k===active)b.className='on';
+    b.onclick=function(){if(c.topic){$('ytQ').value=c.topic;search(c.topic,false);}else showChannel(c,false);};
+    d.appendChild(b);
+  });
+  return d;
+}
+function interleave(lists){
+  var out=[],seen={},i=0,more=true;
+  while(more){more=false;for(var k=0;k<lists.length;k++){var v=lists[k][i];if(v){more=true;if(!seen[v.id]){seen[v.id]=1;out.push(v);}}}i++;}
+  return out;
+}
+function renderMore(me){
+  var end=Math.min(me.pool.length,me.shown+40);
+  for(var i=me.shown;i<end;i++)list.appendChild(card(me.pool[i]));
+  me.shown=end;
+  if(me.shown<me.pool.length)addMore(function(){if(me===CT)renderMore(me);});
+}
+function showCat(cat){
+  closePlayer(false);MODE='';list.innerHTML='';CH=null;
+  var me=CT={cat:cat,pool:[],shown:0};
+  list.appendChild(head(cat.t));list.appendChild(subRow(cat,''));
+  var loading=msg('ভিডিও আনা হচ্ছে…'+(cat.hasQ&&!chMap()[cat.chs.filter(function(c){return c.q;})[0].k]?'\nপ্রথমবার কয়েকটি চ্যানেল খুঁজে নিতে একটু সময় লাগবে।':''));loading.style.whiteSpace='pre-line';list.appendChild(loading);
+  var chs=cat.chs.filter(function(c){return !c.topic;});
+  Promise.all(chs.map(function(c){return chPage(c,'').then(function(o){return {c:c,items:o.items};},function(e){return {c:c,err:e};});})).then(function(rs){
+    if(me!==CT)return;loading.remove();
+    var lists=[],err=null;
+    rs.forEach(function(r){if(r.items)lists.push(r.items.slice().sort(function(a,b){return (b.ts||0)-(a.ts||0);}));else if(!err)err=r.err;});
+    me.pool=interleave(lists);
+    var old=list.querySelector('.subch');if(old)old.replaceWith(subRow(cat,''));
+    if(!me.pool.length){list.appendChild(msg('⚠️ '+(err&&err.message&&err.message!=='Failed to fetch'?err.message:'ভিডিও পাওয়া যায়নি। ইন্টারনেট দেখে আবার চেষ্টা করুন।')));return;}
+    renderMore(me);
+  });
+}
+function defaultCat(){var ok=CATS.filter(function(c){return !c.hasQ;});showCat(ok[Math.floor(Math.random()*ok.length)]);}
+/* একটি চ্যানেল */
 function showChannel(ch,more){
   MODE='';var me;
-  if(!more){closePlayer(false);list.innerHTML='';me=CH={ch:ch,next:'',seen:{}};list.appendChild(head('📺 '+ch.name+' — সর্বশেষ ভিডিও'));}
+  if(!more){closePlayer(false);list.innerHTML='';CT=null;me=CH={ch:ch,next:'',seen:{}};list.appendChild(head('📺 '+chName(ch)));if(ch.cat&&CATBY[ch.cat])list.appendChild(subRow(CATBY[ch.cat],ch.k));}
   else me=CH;
   if(!me||me.busy)return;me.busy=true;
   var loading=msg('খোঁজা হচ্ছে…');list.appendChild(loading);
   chPage(ch,me.next).then(function(o){
     me.busy=false;if(me!==CH)return;loading.remove();me.next=o.next;
     var n=0;o.items.forEach(function(v){if(me.seen[v.id])return;me.seen[v.id]=1;n++;list.appendChild(card(v));});
+    var hd=list.querySelector('.msg.hd');if(hd)hd.textContent='📺 '+chName(ch);
     if(!n&&!list.querySelector('.vc')){list.appendChild(msg('কোনো ভিডিও পাওয়া যায়নি।'));return;}
     if(me.next)addMore(function(){showChannel(ch,true);});
   },function(e){
@@ -8394,6 +8487,266 @@ apply();
 })();
 </script>
 <!-- ===== স্বাগতম পাতার থীম (শেষ) ===== -->
+<!-- ===== নোট খাতা (Supabase) ===== -->
+<style>
+#nbk{--nbBg:var(--bg);--nbBar:var(--accent);--nbBarT:var(--on-accent);--nbPanel:var(--panel);--nbT:var(--text);--nbM:var(--muted);--nbLine:var(--line);--nbAcc:var(--accent);--nbAccT:var(--on-accent);
+  position:fixed;inset:0;z-index:97;background:var(--nbBg);background-size:cover;color:var(--nbT);display:flex;flex-direction:column;font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}
+#nbk.hidden{display:none!important}
+#nbk .nbTop{display:flex;align-items:center;gap:6px;padding:calc(6px + env(safe-area-inset-top)) 8px 6px;background:var(--nbBar);color:var(--nbBarT)}
+#nbk .nbTop b{flex:1;font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#nbk .nbTop button{min-width:38px;height:38px;padding:0 8px;border:0;border-radius:10px;background:rgba(255,255,255,.2);color:inherit;font-weight:700;font-size:17px;cursor:pointer}
+#nbk .nbSearch{display:flex;gap:8px;padding:8px 10px;background:var(--nbPanel);border-bottom:1px solid var(--nbLine)}
+#nbk .nbSearch input{flex:1;min-width:0;height:40px;box-sizing:border-box;padding:0 12px;border-radius:12px;border:1px solid var(--nbLine);background:var(--nbBg);color:var(--nbT);font:inherit;font-size:16px}
+#nbk .nbSearch button{height:40px;border:1px solid var(--nbLine);background:var(--nbPanel);color:var(--nbT);border-radius:12px;padding:0 12px;font:inherit;font-size:14px;cursor:pointer}
+#nbk .nbSearch button.on{background:var(--nbAcc);color:var(--nbAccT);border-color:transparent}
+#nbList{flex:1;overflow-y:auto;padding:10px 10px 90px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;align-content:start}
+#nbk .nbCard{border-radius:14px;padding:10px 12px;min-height:90px;color:#3a2f10;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.14);overflow:hidden;position:relative}
+#nbk .nbCard h4{margin:0 0 4px;font-size:15px;word-break:break-word;padding-right:18px}
+#nbk .nbCard p{margin:0;font-size:13px;opacity:.85;white-space:pre-wrap;word-break:break-word;max-height:72px;overflow:hidden}
+#nbk .nbCard small{display:block;margin-top:6px;font-size:11px;opacity:.7}
+#nbk .nbCard .nbPin{position:absolute;top:6px;right:8px;font-size:13px}
+#nbk .nbCard .nbAct{display:flex;gap:6px;margin-top:8px}
+#nbk .nbCard .nbAct button{flex:1;border:0;border-radius:8px;padding:6px 4px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;background:rgba(0,0,0,.12);color:#3a2f10}
+#nbk .nbEmpty{grid-column:1/-1;text-align:center;color:var(--nbM);padding:40px 10px}
+#nbk .nbFab{position:absolute;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:50%;border:0;background:var(--nbAcc);color:var(--nbAccT);font-size:28px;box-shadow:0 6px 18px rgba(0,0,0,.3);cursor:pointer}
+#nbk .nbTrashBar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--nbPanel);border-bottom:1px solid var(--nbLine);font-size:13px;color:var(--nbM)}
+#nbk .nbTrashBar span{flex:1}
+#nbk .nbTrashBar button{border:0;border-radius:10px;padding:7px 12px;background:#dc2626;color:#fff;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+#nbEd{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--nbBg)}
+#nbEd.hidden,#nbTh.hidden,#nbk .hidden{display:none!important}
+#nbEd .nbEdBody{flex:1;display:flex;flex-direction:column;padding:12px;gap:10px;overflow-y:auto}
+#nbEd input.t,#nbEd textarea{width:100%;box-sizing:border-box;border:0;border-radius:14px;padding:12px;font:inherit;color:#3a2f10;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+#nbEd input.t{font-size:18px;font-weight:700}
+#nbEd textarea{flex:1;min-height:45vh;resize:none;line-height:1.7;font-size:16px}
+#nbEd .nbTools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#nbEd .sw{width:30px;height:30px;border-radius:50%;border:2px solid var(--nbLine);cursor:pointer}
+#nbEd .sw.on{border-color:var(--nbAcc);box-shadow:0 0 0 2px var(--nbAcc)}
+#nbEd .tb{border:1px solid var(--nbLine);background:var(--nbPanel);color:var(--nbT);border-radius:10px;padding:7px 11px;cursor:pointer;font:inherit;font-size:14px}
+#nbEd .tb.on{background:var(--nbAcc);color:var(--nbAccT);border-color:transparent}
+#nbSt{font-size:12px;opacity:.9}
+#nbTh{position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.5);display:flex;align-items:flex-end}
+#nbTh .box{width:100%;max-height:75vh;overflow-y:auto;background:var(--nbPanel);color:var(--nbT);border-radius:20px 20px 0 0;padding:14px}
+#nbTh h3{margin:0 0 10px;font-size:16px}
+#nbThG{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+#nbThG .spTile{position:relative;height:84px;border-radius:14px;border:2.5px solid transparent;color:#fff;font:700 12px/1.2 inherit;display:flex;align-items:flex-end;justify-content:center;padding:0 3px 6px;text-shadow:0 1px 3px rgba(0,0,0,.7);box-shadow:0 2px 8px rgba(0,0,0,.2);cursor:pointer}
+#nbThG .spTile.on{border-color:#fff;box-shadow:0 0 0 2.5px var(--nbAcc)}
+#nbThG .spTile.on::after{content:"✓";position:absolute;top:4px;right:6px;background:var(--nbAcc);color:var(--nbAccT);border-radius:50%;width:20px;height:20px;font-size:13px;display:flex;align-items:center;justify-content:center;text-shadow:none}
+/* হোম টাইলের থীম — অন্য টাইলের মতোই */
+#splash button.hm-t#spNote{background:linear-gradient(150deg,#fde047,#f59e0b)!important;color:#4a2c00!important;text-shadow:none;box-shadow:0 8px 18px rgba(245,158,11,.4)!important}
+#splash[data-tt="rainbow"] button.hm-t#spNote{background:linear-gradient(150deg,#fde047,#f59e0b)!important;color:#fff!important;border:0!important;box-shadow:0 8px 18px rgba(245,158,11,0.4)!important;text-shadow:0 1px 3px rgba(0,0,0,.3)!important;}
+#splash[data-tt="rainbow"] button.hm-t#spNote span{background:rgba(255,255,255,.58)!important;box-shadow:none!important;color:inherit!important}
+#splash[data-tt="rainbow"] button.hm-t#spNote small{color:#fff!important;text-shadow:none!important}
+#splash[data-tt="glass"] button.hm-t#spNote{background:linear-gradient(145deg,rgba(255,255,255,.8),rgba(255,255,255,.35))!important;color:#134a47!important;border:1.5px solid rgba(255,255,255,.95)!important;box-shadow:0 8px 22px rgba(15,118,110,.2)!important;text-shadow:none!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
+#splash[data-tt="glass"] button.hm-t#spNote span{background:rgba(255,255,255,.85)!important;box-shadow:none!important;color:inherit!important}
+#splash[data-tt="glass"] button.hm-t#spNote small{color:#3f6b66!important;text-shadow:none!important}
+#splash[data-tt="neon"] button.hm-t#spNote{background:linear-gradient(160deg,#0f172a,#020617)!important;color:#e2e8f0!important;border:1.5px solid #facc15!important;box-shadow:0 0 14px rgba(250,204,21,0.55)!important;text-shadow:none!important;}
+#splash[data-tt="neon"] button.hm-t#spNote span{background:rgba(250,204,21,0.18)!important;box-shadow:none!important;color:inherit!important}
+#splash[data-tt="neon"] button.hm-t#spNote small{color:#94a3b8!important;text-shadow:none!important}
+#splash[data-tt="pastel"] button.hm-t#spNote{background:#fef9c3!important;color:#854d0e!important;border:0!important;box-shadow:0 5px 14px rgba(133,77,14,0.15)!important;text-shadow:none!important;}
+#splash[data-tt="pastel"] button.hm-t#spNote span{background:#ffffff!important;box-shadow:none!important;color:inherit!important}
+#splash[data-tt="pastel"] button.hm-t#spNote small{color:#854d0e!important;text-shadow:none!important}
+#splash[data-tt="emerald"] button.hm-t#spNote{background:linear-gradient(160deg,#047857,#064e3b)!important;color:#fef3c7!important;border:1.5px solid rgba(253,230,138,.65)!important;box-shadow:0 8px 18px rgba(6,78,59,.4)!important;text-shadow:none!important;}
+#splash[data-tt="emerald"] button.hm-t#spNote span{background:linear-gradient(135deg,#fde68a,#fbbf24)!important;box-shadow:none!important;color:#064e3b!important}
+#splash[data-tt="emerald"] button.hm-t#spNote small{color:#fef3c7!important;text-shadow:none!important}
+#splash[data-tt="ocean"] button.hm-t#spNote{background:linear-gradient(160deg,#38bdf8,#1d4ed8)!important;color:#ffffff!important;border:0!important;box-shadow:0 8px 18px rgba(29,78,216,.4)!important;text-shadow:none!important;}
+#splash[data-tt="ocean"] button.hm-t#spNote span{background:rgba(255,255,255,.6)!important;box-shadow:none!important;color:#1e3a8a!important}
+#splash[data-tt="ocean"] button.hm-t#spNote small{color:#ffffff!important;text-shadow:none!important}
+#splash[data-tt="rose"] button.hm-t#spNote{background:linear-gradient(160deg,#fb7185,#be123c)!important;color:#ffffff!important;border:0!important;box-shadow:0 8px 18px rgba(190,18,60,.4)!important;text-shadow:none!important;}
+#splash[data-tt="rose"] button.hm-t#spNote span{background:rgba(255,255,255,.6)!important;box-shadow:none!important;color:#9f1239!important}
+#splash[data-tt="rose"] button.hm-t#spNote small{color:#ffffff!important;text-shadow:none!important}
+#splash[data-tt="sunset"] button.hm-t#spNote{background:linear-gradient(160deg,#fbbf24,#f97316 50%,#db2777)!important;color:#fff!important;border:0!important;box-shadow:0 8px 18px rgba(249,115,22,.4)!important;text-shadow:0 1px 3px rgba(0,0,0,.25)!important;}
+#splash[data-tt="sunset"] button.hm-t#spNote span{background:rgba(255,255,255,.6)!important;box-shadow:none!important;color:inherit!important}
+#splash[data-tt="sunset"] button.hm-t#spNote small{color:#fff!important;text-shadow:none!important}
+#splash[data-tt="outline"] button.hm-t#spNote{background:#ffffff!important;color:#854d0e!important;border:2px solid #f59e0b!important;box-shadow:0 4px 10px rgba(245,158,11,0.18)!important;text-shadow:none!important;}
+#splash[data-tt="outline"] button.hm-t#spNote span{background:#fef9c3!important;box-shadow:none!important;color:inherit!important}
+#splash[data-tt="outline"] button.hm-t#spNote small{color:#854d0e!important;text-shadow:none!important}
+#splash[data-tt="royal"] button.hm-t#spNote{background:linear-gradient(160deg,#6d28d9,#3b0764)!important;color:#fde68a!important;border:1.5px solid rgba(253,230,138,.7)!important;box-shadow:0 8px 18px rgba(59,7,100,.45)!important;text-shadow:none!important;}
+#splash[data-tt="royal"] button.hm-t#spNote span{background:linear-gradient(135deg,#fde68a,#f59e0b)!important;box-shadow:none!important;color:#3b0764!important}
+#splash[data-tt="royal"] button.hm-t#spNote small{color:#fde68a!important;text-shadow:none!important}
+#splash[data-tt="blackgold"] button.hm-t#spNote{background:linear-gradient(160deg,#27272a,#09090b)!important;color:#fcd34d!important;border:1.5px solid #b8860b!important;box-shadow:0 8px 18px rgba(0,0,0,.45)!important;text-shadow:none!important;}
+#splash[data-tt="blackgold"] button.hm-t#spNote span{background:linear-gradient(135deg,#fde68a,#d4a82a)!important;box-shadow:none!important;color:#3a2a00!important}
+#splash[data-tt="blackgold"] button.hm-t#spNote small{color:#fcd34d!important;text-shadow:none!important}
+#splash[data-tt="candy"] button.hm-t#spNote{background:#fde68a!important;color:#3b1d4a!important;border:2px dashed rgba(255,255,255,.95)!important;box-shadow:0 6px 14px rgba(0,0,0,.1)!important;text-shadow:none!important;}
+#splash[data-tt="candy"] button.hm-t#spNote span{background:rgba(255,255,255,.8)!important;box-shadow:none!important;color:inherit!important}
+#splash[data-tt="candy"] button.hm-t#spNote small{color:#5b3a6b!important;text-shadow:none!important}
+#spNote span{background:#fef3c7}
+#splash button.hm-t#spNote{background:#fff!important;color:#4a3a10!important;text-shadow:none!important;border:1.5px solid #f3e7b8!important;box-shadow:0 5px 14px rgba(184,134,11,.12)!important}
+</style>
+<div id="nbk" class="hidden">
+  <div class="nbTop"><button id="nbBack" type="button">←</button><button id="nbHome" type="button">🏠</button><b id="nbHead">📒 নোট খাতা</b><button id="nbThBtn" type="button">🎨</button></div>
+  <div class="nbSearch"><input id="nbQ" type="search" placeholder="নোট খুঁজুন…"><button id="nbTrashBtn" type="button">🗑️ ডিলেট</button></div>
+  <div class="nbTrashBar hidden" id="nbTrashBar"><span>ডিলেট করা নোট এখানে থাকে। ফিরিয়ে আনতে বা চিরতরে মুছতে পারবেন।</span><button id="nbEmpty" type="button">সব মুছুন</button></div>
+  <div id="nbList"></div>
+  <button class="nbFab" id="nbNew" type="button">＋</button>
+  <div id="nbEd" class="hidden">
+    <div class="nbTop"><button id="nbEdBack" type="button">←</button><b id="nbEdTitle">নোট</b><span id="nbSt"></span></div>
+    <div class="nbEdBody">
+      <input id="nbT" class="t" type="text" placeholder="শিরোনাম" maxlength="200">
+      <textarea id="nbB" placeholder="এখানে লিখুন…"></textarea>
+      <div class="nbTools" id="nbSw"></div>
+      <div class="nbTools"><button class="tb" id="nbPin" type="button">📌 পিন</button><button class="tb" id="nbShare" type="button">👥 শেয়ার</button><button class="tb" id="nbDel" type="button">🗑️ ডিলেটে পাঠান</button></div>
+    </div>
+  </div>
+  <div id="nbTh" class="hidden"><div class="box"><h3>🎨 নোট খাতার থীম</h3><div id="nbThG"></div></div></div>
+</div>
+<script>
+(function(){
+  var COLORS=['#fff8dc','#ffe4e1','#e0f7e9','#e0efff','#f1e4ff','#ffe9c7','#eeeeee'];
+  var TH=[
+   {id:'auto',n:'🎨 অ্যাপের থীম',tile:'linear-gradient(135deg,#f472b6,#a78bfa,#38bdf8)'},
+   {id:'cream',n:'📜 কাগজ',v:{bg:'repeating-linear-gradient(#fffaf0 0 31px,#f1e2b8 31px 32px)',bar:'linear-gradient(135deg,#fde047,#f59e0b)',bart:'#4a2c00',panel:'#fffdf5',t:'#3b2f0b',m:'#8a7a4a',line:'#f3e7b8',acc:'#f59e0b',acct:'#4a2c00'}},
+   {id:'rose',n:'🌹 গোলাপি',v:{bg:'linear-gradient(160deg,#fff1f2,#ffe4e6 50%,#fbcfe8)',bar:'linear-gradient(135deg,#fb7185,#e11d48)',bart:'#fff',panel:'#fff5f7',t:'#4c0519',m:'#9f4a60',line:'#fecdd3',acc:'#e11d48',acct:'#fff'}},
+   {id:'ocean',n:'🌊 সাগর',v:{bg:'linear-gradient(180deg,#e0f2fe,#bae6fd)',bar:'linear-gradient(135deg,#38bdf8,#0369a1)',bart:'#fff',panel:'#f0f9ff',t:'#0c4a6e',m:'#4b7a99',line:'#bae6fd',acc:'#0284c7',acct:'#fff'}},
+   {id:'emerald',n:'🌿 সবুজ',v:{bg:'linear-gradient(180deg,#ecfdf5,#d1fae5)',bar:'linear-gradient(135deg,#34d399,#047857)',bart:'#fff',panel:'#f0fdf9',t:'#064e3b',m:'#4b8a74',line:'#a7f3d0',acc:'#059669',acct:'#fff'}},
+   {id:'royal',n:'👑 রাজকীয়',v:{bg:'linear-gradient(180deg,#2e1065,#4c1d95)',bar:'linear-gradient(135deg,#7c3aed,#4c1d95)',bart:'#fde68a',panel:'#3b1a7a',t:'#f5f3ff',m:'#c4b5fd',line:'#6d28d9',acc:'#fbbf24',acct:'#3b0764'}},
+   {id:'sunset',n:'🌇 গোধূলি',v:{bg:'linear-gradient(180deg,#fde68a,#fdba74 40%,#fb7185 75%,#c084fc)',bar:'linear-gradient(135deg,#f97316,#db2777)',bart:'#fff',panel:'#fff7ed',t:'#431407',m:'#9a5b3c',line:'#fed7aa',acc:'#ea580c',acct:'#fff'}},
+   {id:'night',n:'🌙 রাত',v:{bg:'linear-gradient(180deg,#0b1030,#1e1b4b 60%,#312e81)',bar:'linear-gradient(135deg,#1e1b4b,#312e81)',bart:'#fde68a',panel:'#17154a',t:'#e0e7ff',m:'#a5b4fc',line:'#3730a3',acc:'#fcd34d',acct:'#1e1b4b'}},
+   {id:'blackgold',n:'🖤 কালো-সোনালি',v:{bg:'#0a0a0a',bar:'linear-gradient(135deg,#1c1917,#44340c)',bart:'#fcd34d',panel:'#171717',t:'#fef3c7',m:'#c9a94b',line:'#44340c',acc:'#fbbf24',acct:'#0a0a0a'}}
+  ];
+  var notes=[], cur=null, timer=null, chan=null, loadedFor=null, trashView=false;
+  function G(i){return document.getElementById(i);}
+  var root=G('nbk'), list=G('nbList'), ed=G('nbEd');
+  function cacheKey(){return 'nbk_'+(window.me&&me.id||'x');}
+  function T(m){try{if(window.toast)toast(m);}catch(e){}}
+  function mine(n){return window.me&&n.owner===me.id;}
+  function sortNotes(){notes.sort(function(a,b){return (!!b.pinned-!!a.pinned)||(new Date(b.updated_at)-new Date(a.updated_at));});}
+  function esc(s){return String(s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function trashed(n){return !!n.deleted_at;}
+  function applyTheme(){
+    var id=(window.settings&&settings.nbTheme)||'cream',t=TH.filter(function(x){return x.id===id;})[0]||TH[1];
+    var S=root.style,k=['--nbBg','--nbBar','--nbBarT','--nbPanel','--nbT','--nbM','--nbLine','--nbAcc','--nbAccT'];
+    k.forEach(function(x){S.removeProperty(x);});S.background='';
+    if(t.v){S.setProperty('--nbBg',t.v.bg);S.setProperty('--nbBar',t.v.bar);S.setProperty('--nbBarT',t.v.bart);S.setProperty('--nbPanel',t.v.panel);S.setProperty('--nbT',t.v.t);S.setProperty('--nbM',t.v.m);S.setProperty('--nbLine',t.v.line);S.setProperty('--nbAcc',t.v.acc);S.setProperty('--nbAccT',t.v.acct);}
+    G('nbQ').style.background=t.v?t.v.panel:'';
+  }
+  function buildThemes(){
+    var cid=(window.settings&&settings.nbTheme)||'cream',g=G('nbThG');g.innerHTML='';
+    TH.forEach(function(t){var b=document.createElement('button');b.type='button';b.className='spTile'+(t.id===cid?' on':'');b.textContent=t.n;
+      b.style.background=t.tile||(t.v.bar);
+      b.onclick=function(){settings.nbTheme=t.id;try{lsSet('settings',settings);}catch(e){}applyTheme();buildThemes();};g.appendChild(b);});
+  }
+  function render(){
+    var q=(G('nbQ').value||'').trim().toLowerCase();
+    var a=notes.filter(function(n){return (trashView?trashed(n):!trashed(n))&&(!q||(n.title+' '+n.body).toLowerCase().indexOf(q)>-1);});
+    if(trashView)a=a.filter(mine);
+    G('nbTrashBar').classList.toggle('hidden',!trashView||!a.length);
+    G('nbTrashBtn').classList.toggle('on',trashView);
+    G('nbTrashBtn').textContent=trashView?'← নোট':'🗑️ ডিলেট';
+    G('nbHead').textContent=trashView?'🗑️ ডিলেট করা নোট':'📒 নোট খাতা';
+    G('nbNew').classList.toggle('hidden',trashView);
+    if(!a.length){list.innerHTML='<div class="nbEmpty">'+(q?'কিছু পাওয়া যায়নি':trashView?'ডিলেট করা কোনো নোট নেই':'কোনো নোট নেই। ＋ চাপুন।')+'</div>';return;}
+    list.innerHTML=a.map(function(n){
+      var d=new Date(trashed(n)?n.deleted_at:n.updated_at);
+      var tag=trashed(n)?'🗑️ ডিলেট: ':(mine(n)?(n.shared?'👥 শেয়ার করা · ':''):'👤 সঙ্গীর নোট · ');
+      return '<div class="nbCard" data-id="'+n.id+'" style="background:'+esc(n.color)+'">'+(n.pinned&&!trashView?'<span class="nbPin">📌</span>':'')+'<h4>'+esc(n.title||'শিরোনামহীন')+'</h4><p>'+esc(n.body)+'</p><small>'+tag+d.toLocaleDateString('bn-BD')+'</small>'+
+        (trashView?'<div class="nbAct"><button data-a="restore">↩️ ফিরিয়ে আনুন</button><button data-a="purge">❌ চিরতরে মুছুন</button></div>':'')+'</div>';
+    }).join('');
+  }
+  function loadCache(){try{var s=localStorage.getItem(cacheKey());if(s){notes=JSON.parse(s)||[];sortNotes();}}catch(e){}}
+  function saveCache(){try{localStorage.setItem(cacheKey(),JSON.stringify(notes));}catch(e){}}
+  function load(){
+    if(!window.sb||!window.me)return;
+    sb.from('notebook').select('*').order('updated_at',{ascending:false}).then(function(r){
+      if(r.error){T('নোট লোড হয়নি: '+r.error.message);return;}
+      notes=r.data||[];sortNotes();saveCache();if(ed.classList.contains('hidden'))render();
+    });
+    if(!chan&&loadedFor!==me.id){
+      loadedFor=me.id;
+      try{chan=sb.channel('nbk-rt').on('postgres_changes',{event:'*',schema:'public',table:'notebook'},function(p){
+        if(p.eventType==='DELETE'){notes=notes.filter(function(n){return n.id!==p.old.id;});}
+        else{var n=p.new,i=notes.findIndex(function(x){return x.id===n.id;});
+          if(cur&&cur.id===n.id&&mine(n))return;
+          if(i>-1)notes[i]=n;else notes.push(n);}
+        sortNotes();saveCache();if(!root.classList.contains('hidden')&&ed.classList.contains('hidden'))render();
+      }).subscribe();}catch(e){}
+    }
+  }
+  function status(t){G('nbSt').textContent=t;}
+  function rowOf(n){return {id:n.id,owner:me.id,title:n.title,body:n.body,color:n.color,pinned:!!n.pinned,shared:!!n.shared,deleted_at:n.deleted_at||null,created_at:n.created_at,updated_at:n.updated_at};}
+  function upsert(n,after){
+    sb.from('notebook').upsert(rowOf(n),{onConflict:'id'}).then(function(r){
+      if(r.error)T('সেভ হয়নি: '+r.error.message);
+      if(after)after(r);
+    });
+  }
+  function persist(){
+    if(!cur||!mine(cur))return;
+    cur.title=G('nbT').value;cur.body=G('nbB').value;cur.updated_at=new Date().toISOString();
+    if(notes.indexOf(cur)<0&&!notes.some(function(x){return x.id===cur.id;}))notes.push(cur);
+    saveCache();status('সেভ হচ্ছে…');
+    upsert(cur,function(r){status(r.error?'⚠️ সেভ হয়নি':'✅ সেভ হয়েছে');});
+  }
+  function queue(){status('…');clearTimeout(timer);timer=setTimeout(persist,700);}
+  function flush(){if(timer){clearTimeout(timer);timer=null;persist();}}
+  function paint(){
+    var n=cur,ro=!mine(n);
+    G('nbT').value=n.title;G('nbB').value=n.body;
+    G('nbT').style.background=G('nbB').style.background=n.color;
+    G('nbT').readOnly=G('nbB').readOnly=ro;
+    G('nbPin').classList.toggle('on',!!n.pinned);G('nbShare').classList.toggle('on',!!n.shared);
+    G('nbPin').style.display=G('nbShare').style.display=G('nbDel').style.display=G('nbSw').style.display=ro?'none':'';
+    G('nbEdTitle').textContent=ro?'সঙ্গীর নোট (শুধু দেখা)':'নোট';
+    [].forEach.call(G('nbSw').children,function(s){s.classList.toggle('on',s.dataset.c===n.color);});
+    status('');
+  }
+  function openNote(n){cur=n;ed.classList.remove('hidden');paint();}
+  function closeEd(){flush();ed.classList.add('hidden');cur=null;sortNotes();render();}
+  G('nbSw').innerHTML=COLORS.map(function(c){return '<span class="sw" data-c="'+c+'" style="background:'+c+'"></span>';}).join('');
+  G('nbSw').onclick=function(e){var c=e.target.dataset&&e.target.dataset.c;if(!c||!cur||!mine(cur))return;cur.color=c;paint();queue();};
+  G('nbT').oninput=G('nbB').oninput=function(){if(cur&&mine(cur))queue();};
+  G('nbPin').onclick=function(){if(!cur)return;cur.pinned=!cur.pinned;paint();queue();};
+  G('nbShare').onclick=function(){if(!cur)return;cur.shared=!cur.shared;paint();queue();T(cur.shared?'সঙ্গী এখন এই নোট দেখতে পারবে':'নোট এখন শুধু আপনার');};
+  /* ডিলেট = ট্র্যাশে পাঠানো (মুছে যায় না) */
+  G('nbDel').onclick=function(){
+    if(!cur)return;
+    clearTimeout(timer);timer=null;
+    cur.title=G('nbT').value;cur.body=G('nbB').value;
+    cur.deleted_at=new Date().toISOString();cur.updated_at=cur.deleted_at;cur.pinned=false;
+    var n=cur;saveCache();upsert(n);
+    cur=null;ed.classList.add('hidden');render();T('ডিলেট অপশনে রাখা হয়েছে 🗑️');
+  };
+  G('nbNew').onclick=function(){
+    if(!window.me){T('আগে লগইন করুন');return;}
+    var now=new Date().toISOString();
+    var id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():(window.uuid?uuid():String(Date.now()));
+    openNote({id:id,owner:me.id,title:'',body:'',color:COLORS[0],pinned:false,shared:false,deleted_at:null,created_at:now,updated_at:now});
+    G('nbT').focus();
+  };
+  list.onclick=function(e){
+    var c=e.target.closest('.nbCard');if(!c)return;
+    var n=notes.find(function(x){return x.id===c.dataset.id;});if(!n)return;
+    var a=e.target.dataset&&e.target.dataset.a;
+    if(a==='restore'){n.deleted_at=null;n.updated_at=new Date().toISOString();saveCache();upsert(n);render();T('নোট ফিরিয়ে আনা হয়েছে ✅');return;}
+    if(a==='purge'){
+      if(!confirm('এই নোট চিরতরে মুছে যাবে। নিশ্চিত?'))return;
+      notes=notes.filter(function(x){return x.id!==n.id;});saveCache();render();
+      sb.from('notebook').delete().eq('id',n.id).then(function(r){if(r.error)T('মোছা যায়নি: '+r.error.message);});return;
+    }
+    if(trashView)return;
+    openNote(n);
+  };
+  G('nbEmpty').onclick=function(){
+    var ids=notes.filter(function(n){return trashed(n)&&mine(n);}).map(function(n){return n.id;});
+    if(!ids.length||!confirm('ডিলেট করা সব নোট চিরতরে মুছে যাবে। নিশ্চিত?'))return;
+    notes=notes.filter(function(n){return ids.indexOf(n.id)<0;});saveCache();render();
+    sb.from('notebook').delete().in('id',ids).then(function(r){if(r.error)T('মোছা যায়নি: '+r.error.message);});
+  };
+  G('nbTrashBtn').onclick=function(){trashView=!trashView;render();};
+  G('nbThBtn').onclick=function(){buildThemes();G('nbTh').classList.remove('hidden');};
+  G('nbTh').onclick=function(e){if(e.target===G('nbTh'))G('nbTh').classList.add('hidden');};
+  G('nbQ').oninput=render;
+  G('nbEdBack').onclick=closeEd;
+  function close(){flush();root.classList.add('hidden');ed.classList.add('hidden');G('nbTh').classList.add('hidden');cur=null;trashView=false;if(window.__spShow)window.__spShow();}
+  G('nbBack').onclick=function(){if(trashView){trashView=false;render();}else close();};
+  G('nbHome').onclick=close;
+  window.addEventListener('pagehide',flush);
+  var b=G('spNote');
+  if(b)b.onclick=function(){
+    var sp=G('splash');if(sp)sp.classList.add('away');
+    applyTheme();trashView=false;root.classList.remove('hidden');loadCache();render();load();
+  };
+})();
+</script>
 
 </body>
 </html>
