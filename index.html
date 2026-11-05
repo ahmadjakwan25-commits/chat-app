@@ -1188,6 +1188,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 
   <!-- চ্যাট -->
   <div id="top" class="hidden">
+    <button class="ib" id="btnFeedBack" aria-label="ফিডে ফিরুন">←</button>
     <div class="brand">যাকওয়ান <span class="hrt">♥️</span> সাদিয়া</div>
     <div class="avatar" id="peerAv">?</div>
     <div id="peerInfo"><div id="peerName">…</div><div id="peerStatus"></div></div>
@@ -1196,6 +1197,8 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <button class="ib" id="btnVideo" aria-label="ভিডিও কল">🎥</button>
     <button class="ib" id="btnMenu" aria-label="সেটিংস">⋮</button>
   </div>
+
+  <div id="fHead"><div class="fbrand">যাকওয়ান <span>♥️</span> সাদিয়া</div><button type="button" id="fMsg" aria-label="মেসেজ">💬<b id="fBadge" class="hidden"></b></button></div>
   <div id="sqlBar" class="hidden">⚠️ নতুন ফিচার চালু করতে Supabase-এ migration.sql চালাতে হবে। এখানে ট্যাপ করে দেখুন</div>
   <div id="netBar" class="hidden">নেট নেই। মেসেজ লিখে রাখুন, নেট এলে নিজে থেকে যাবে।</div>
   <div id="pinBar" class="hidden"></div>
@@ -1203,6 +1206,15 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   <div id="chatBg" class="hidden">
     <div id="list"></div>
     <button id="toBottom" class="hidden" aria-label="নিচে যান">↓</button>
+  </div>
+
+  <div id="feed" class="hidden">
+    <div class="fcomp">
+      <div class="fpv" id="fPv"><textarea id="fTxt" rows="2" placeholder="মনে কী চলছে?"></textarea></div>
+      <div class="fsw" id="fSw"></div>
+      <div class="fact"><span id="fHint"></span><button type="button" id="fPost">পোস্ট করুন</button></div>
+    </div>
+    <div id="fList"></div>
   </div>
   <div id="replyBar" class="hidden"></div>
   <div id="emojiPanel" class="hidden"></div>
@@ -9332,5 +9344,104 @@ apply();
 })();
 </script>
 
+<style>
+#fHead{display:none;align-items:center;justify-content:space-between;padding:8px 14px;padding-top:calc(8px + env(safe-area-inset-top));background:var(--panel);border-bottom:1px solid var(--line)}
+#app.feedMode #fHead{display:flex}
+#app.feedMode #top{display:none!important}
+.fbrand{font-size:22px;font-weight:800;color:var(--accent)}
+#fMsg{position:relative;width:42px;height:42px;border-radius:50%;border:0;background:var(--bg);font-size:21px;cursor:pointer}
+#fBadge{position:absolute;top:-2px;right:-2px;min-width:18px;height:18px;border-radius:9px;background:#ef4444;color:#fff;font-size:11px;line-height:18px;padding:0 4px}
+#app.feedMode #chatBg,#app.feedMode #replyBar,#app.feedMode #emojiPanel,#app.feedMode #sugBar,#app.feedMode #styBar,#app.feedMode #bar,#app.feedMode #pinBar,#app.feedMode #cdBar{display:none!important}
+#feed{flex:1;min-height:0;overflow-y:auto;background:var(--bg);padding:10px;display:none}
+#app.feedMode #feed{display:block}
+.fcomp,.fpost{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px}
+.fpv{border-radius:12px;min-height:70px;display:flex;align-items:center;justify-content:center}
+.fpv textarea{width:100%;border:0;background:transparent;resize:none;font:inherit;font-size:16px;color:var(--text);outline:none;padding:8px;min-height:60px}
+.fpv.hb{padding:18px 8px;min-height:150px}
+.fpv.hb textarea{text-align:center;font-size:22px;font-weight:700;color:#fff;min-height:100px}
+.fpv.hb textarea::placeholder{color:rgba(255,255,255,.75)}
+.fsw{display:flex;gap:8px;margin:8px 0;overflow-x:auto}
+.fsw i{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--line);cursor:pointer}
+.fsw i.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.fact{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.fact span{color:var(--muted);font-size:12px}
+.fact button{background:var(--accent);color:var(--on-accent);border:0;border-radius:10px;padding:8px 18px;font-weight:700;font-family:inherit;font-size:14px}
+.fact button:disabled{opacity:.5}
+.fhead{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.fav{width:38px;height:38px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center;font-weight:700}
+.fhead b{display:block;font-size:15px}.fhead small{color:var(--muted);font-size:12px}
+.fhead .fdel{margin-left:auto;background:transparent;border:0;font-size:18px;color:var(--muted)}
+.fbody{white-space:pre-wrap;word-break:break-word;font-size:16px;line-height:1.5}
+.fcard{border-radius:12px;min-height:170px;display:flex;align-items:center;justify-content:center;text-align:center;padding:22px;color:#fff;font-size:22px;font-weight:700;line-height:1.4;white-space:pre-wrap;word-break:break-word}
+.fempty{text-align:center;color:var(--muted);padding:30px 10px}
+</style>
+<script>
+(function(){
+  var BGS=['linear-gradient(135deg,#0f766e,#14b8a6)','linear-gradient(135deg,#7c3aed,#ec4899)','linear-gradient(135deg,#f97316,#ef4444)','linear-gradient(135deg,#2563eb,#06b6d4)','linear-gradient(135deg,#16a34a,#a3e635)','linear-gradient(135deg,#1f2937,#4b5563)'];
+  var curBg='', posts=[], started=false, ch=null;
+  function g(i){return document.getElementById(i);}
+  function nameOf(id){ if(me&&id===me.id) return (myProf&&myProf.name)||'আমি'; return (peer&&peer.name)||'অন্যজন'; }
+  function ago(iso){ var s=(Date.now()-new Date(iso))/1000; if(s<60) return 'এইমাত্র'; if(s<3600) return bn(Math.floor(s/60))+' মিনিট আগে'; if(s<86400) return bn(Math.floor(s/3600))+' ঘণ্টা আগে'; return fmtDay(iso)+', '+fmtTime(iso); }
+  function setMode(m){
+    g('app').classList.toggle('feedMode', m==='feed');
+    g('feed').classList.remove('hidden');
+    if(m==='feed') startFeed();
+    else { try{ toBottom(); }catch(e){} }
+  }
+  function buildSw(){
+    var sw=g('fSw'); sw.textContent='';
+    [''].concat(BGS).forEach(function(b){
+      var i=document.createElement('i'); i.style.background=b||'var(--panel)'; if(b===curBg) i.className='on';
+      i.onclick=function(){ curBg=b; buildSw(); g('fPv').className='fpv'+(b?' hb':''); g('fPv').style.background=b; };
+      sw.appendChild(i);
+    });
+  }
+  function render(){
+    var L=g('fList'); L.textContent='';
+    if(!posts.length){ L.appendChild(el('div','fempty','এখনো কোনো পোস্ট নেই। প্রথম পোস্টটি আপনিই করুন!')); return; }
+    posts.forEach(function(p){
+      var c=el('div','fpost'), h=el('div','fhead');
+      h.appendChild(el('div','fav',Array.from(nameOf(p.author))[0]));
+      var w=document.createElement('div'); w.appendChild(el('b',null,nameOf(p.author))); w.appendChild(el('small',null,ago(p.created_at))); h.appendChild(w);
+      if(me&&p.author===me.id){ var d=el('button','fdel','🗑'); d.onclick=function(){ delPost(p); }; h.appendChild(d); }
+      c.appendChild(h);
+      if(p.body){
+        if(p.bg){ var k=el('div','fcard',p.body); k.style.background=p.bg; c.appendChild(k); }
+        else c.appendChild(el('div','fbody',p.body));
+      }
+      L.appendChild(c);
+    });
+  }
+  async function load(){
+    var r=await sb.from('posts').select('*').order('created_at',{ascending:false}).limit(50);
+    if(r.error){ g('fList').textContent=''; g('fList').appendChild(el('div','fempty','ফিড চালু করতে Supabase-এ feed.sql চালাতে হবে।')); return; }
+    posts=r.data||[]; render();
+  }
+  async function delPost(p){
+    if(!confirm('এই পোস্ট মুছে ফেলবেন?')) return;
+    var r=await sb.from('posts').delete().eq('id',p.id);
+    if(r.error){ toast('মোছা যায়নি'); return; }
+    posts=posts.filter(function(x){return x.id!==p.id;}); render();
+  }
+  async function doPost(){
+    var t=g('fTxt').value.trim(); if(!t){ toast('কিছু লিখুন'); return; }
+    var b=g('fPost'); b.disabled=true;
+    var r=await sb.from('posts').insert({body:t,bg:curBg||null}).select().single();
+    b.disabled=false;
+    if(r.error){ toast('পোস্ট হয়নি: '+r.error.message); return; }
+    g('fTxt').value=''; curBg=''; buildSw(); g('fPv').className='fpv'; g('fPv').style.background='';
+    if(!posts.some(function(x){return x.id===r.data.id;})){ posts.unshift(r.data); render(); }
+  }
+  function startFeed(){
+    if(started) return; started=true; buildSw(); g('fPost').onclick=doPost;
+    load();
+    ch=sb.channel('feed-posts').on('postgres_changes',{event:'*',schema:'public',table:'posts'},function(){ load(); }).subscribe();
+  }
+  g('fMsg').onclick=function(){ setMode('chat'); };
+  g('btnFeedBack').onclick=function(){ setMode('feed'); };
+  var _enter=window.enter;
+  window.enter=async function(u){ var r=await _enter.apply(this,arguments); setMode('feed'); return r; };
+})();
+</script>
 </body>
 </html>
