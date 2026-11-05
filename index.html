@@ -1198,7 +1198,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <button class="ib" id="btnMenu" aria-label="সেটিংস">⋮</button>
   </div>
 
-  <div id="fHead"><div class="fbrand">যাকওয়ান <span>♥️</span> সাদিয়া</div><button type="button" id="fMsg" aria-label="মেসেজ">💬<b id="fBadge" class="hidden"></b></button></div>
+  <div id="fHead"><div class="fbrand">যাকওয়ান <span>♥️</span> সাদিয়া</div><div class="fhb"><button type="button" id="fAdd" aria-label="নতুন পোস্ট">＋</button><button type="button" id="fMsg" aria-label="মেসেজ">💬<b id="fBadge" class="hidden"></b></button></div></div>
   <div id="sqlBar" class="hidden">⚠️ নতুন ফিচার চালু করতে Supabase-এ migration.sql চালাতে হবে। এখানে ট্যাপ করে দেখুন</div>
   <div id="netBar" class="hidden">নেট নেই। মেসেজ লিখে রাখুন, নেট এলে নিজে থেকে যাবে।</div>
   <div id="pinBar" class="hidden"></div>
@@ -1209,13 +1209,23 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   </div>
 
   <div id="feed" class="hidden">
-    <div class="fcomp">
-      <div class="fpv" id="fPv"><textarea id="fTxt" rows="2" placeholder="মনে কী চলছে?"></textarea></div>
-      <div class="fsw" id="fSw"></div>
-      <div class="fact"><span id="fHint"></span><button type="button" id="fPost">পোস্ট করুন</button></div>
+    <div class="fcr">
+      <div class="fcr1"><div class="fav" id="fMeAv"></div><button type="button" id="fPill">মনে কী চলছে?</button></div>
+      <div class="fcr2"><button type="button" data-a="vid"><i style="color:#f3425f">🎥</i> ভিডিও</button><button type="button" data-a="img"><i style="color:#45bd62">🖼️</i> ছবি</button><button type="button" data-a="card"><i style="color:#1877f2">🅰️</i> কার্ড</button></div>
     </div>
     <div id="fList"></div>
   </div>
+  <div id="fCompose" class="hidden">
+    <div class="cph"><button type="button" id="cX">✕</button><b>পোস্ট তৈরি করুন</b><button type="button" id="cGo" disabled>পোস্ট</button></div>
+    <div class="cpb">
+      <div class="cpu"><div class="fav" id="cAv"></div><div><b id="cNm"></b><small>👥 শুধু আমরা দুজন</small></div></div>
+      <div class="cpt" id="cT"><textarea id="fTxt" placeholder="মনে কী চলছে?"></textarea></div>
+      <div class="cpm" id="cM"></div>
+      <div class="fsw" id="fSw"></div>
+    </div>
+    <div class="cpf"><button type="button" id="cPh">🖼️ ছবি/ভিডিও</button><input type="file" id="fFile" accept="image/*,video/*" class="hidden"></div>
+  </div>
+  <div id="fLb" class="hidden"><img alt=""></div>
   <div id="replyBar" class="hidden"></div>
   <div id="emojiPanel" class="hidden"></div>
   <div id="sugBar" class="hidden"></div>
@@ -9345,69 +9355,147 @@ apply();
 </script>
 
 <style>
-#fHead{display:none;align-items:center;justify-content:space-between;padding:8px 14px;padding-top:calc(8px + env(safe-area-inset-top));background:var(--panel);border-bottom:1px solid var(--line)}
+#fHead{display:none;align-items:center;justify-content:space-between;padding:6px 12px;padding-top:calc(6px + env(safe-area-inset-top));background:var(--panel);position:relative;z-index:3}
 #app.feedMode #fHead{display:flex}
 #app.feedMode #top{display:none!important}
-.fbrand{font-size:22px;font-weight:800;color:var(--accent)}
-#fMsg{position:relative;width:42px;height:42px;border-radius:50%;border:0;background:var(--bg);font-size:21px;cursor:pointer}
-#fBadge{position:absolute;top:-2px;right:-2px;min-width:18px;height:18px;border-radius:9px;background:#ef4444;color:#fff;font-size:11px;line-height:18px;padding:0 4px}
+.fbrand{font-size:24px;font-weight:800;color:#1877f2;letter-spacing:-.3px}
+.fhb{display:flex;gap:8px}
+.fhb button{position:relative;width:38px;height:38px;border-radius:50%;border:0;background:var(--bg);color:var(--text);font-size:19px;cursor:pointer;font-family:inherit}
+#fBadge{position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;border-radius:9px;background:#f02849;color:#fff;font-size:11px;line-height:18px;padding:0 4px}
 #app.feedMode #chatBg,#app.feedMode #replyBar,#app.feedMode #emojiPanel,#app.feedMode #sugBar,#app.feedMode #styBar,#app.feedMode #bar,#app.feedMode #pinBar,#app.feedMode #cdBar{display:none!important}
-#feed{flex:1;min-height:0;overflow-y:auto;background:var(--bg);padding:10px;display:none}
+#feed{flex:1;min-height:0;overflow-y:auto;background:var(--bg);display:none;overscroll-behavior:contain}
 #app.feedMode #feed{display:block}
-.fcomp,.fpost{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px}
-.fpv{border-radius:12px;min-height:70px;display:flex;align-items:center;justify-content:center}
-.fpv textarea{width:100%;border:0;background:transparent;resize:none;font:inherit;font-size:16px;color:var(--text);outline:none;padding:8px;min-height:60px}
-.fpv.hb{padding:18px 8px;min-height:150px}
-.fpv.hb textarea{text-align:center;font-size:22px;font-weight:700;color:#fff;min-height:100px}
-.fpv.hb textarea::placeholder{color:rgba(255,255,255,.75)}
-.fsw{display:flex;gap:8px;margin:8px 0;overflow-x:auto}
-.fsw i{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--line);cursor:pointer}
-.fsw i.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
-.fact{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.fact span{color:var(--muted);font-size:12px}
-.fact button{background:var(--accent);color:var(--on-accent);border:0;border-radius:10px;padding:8px 18px;font-weight:700;font-family:inherit;font-size:14px}
-.fact button:disabled{opacity:.5}
-.fhead{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.fav{width:38px;height:38px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center;font-weight:700}
-.fhead b{display:block;font-size:15px}.fhead small{color:var(--muted);font-size:12px}
-.fhead .fdel{margin-left:auto;background:transparent;border:0;font-size:18px;color:var(--muted)}
-.fbody{white-space:pre-wrap;word-break:break-word;font-size:16px;line-height:1.5}
-.fcard{border-radius:12px;min-height:170px;display:flex;align-items:center;justify-content:center;text-align:center;padding:22px;color:#fff;font-size:22px;font-weight:700;line-height:1.4;white-space:pre-wrap;word-break:break-word}
-.fempty{text-align:center;color:var(--muted);padding:30px 10px}
+.fav{flex:none;width:40px;height:40px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px}
+.fcr{background:var(--panel);padding:10px 12px 4px;margin-bottom:8px;border-bottom:1px solid var(--line)}
+.fcr1{display:flex;gap:8px;align-items:center;padding-bottom:10px}
+#fPill{flex:1;text-align:left;border:1px solid var(--line);background:var(--bg);color:var(--muted);border-radius:22px;padding:10px 14px;font-size:15px;font-family:inherit}
+.fcr2{display:flex;border-top:1px solid var(--line)}
+.fcr2 button{flex:1;padding:10px 4px;background:transparent;border:0;color:var(--muted);font-weight:600;font-size:13.5px;font-family:inherit;border-radius:6px}
+.fcr2 button i{font-style:normal;font-size:19px;vertical-align:-2px}
+.fcr2 button:active{background:var(--bg)}
+.fpost{background:var(--panel);margin-bottom:8px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.fhead{display:flex;align-items:center;gap:9px;padding:10px 12px 6px}
+.fhead b{display:block;font-size:15px;color:var(--text)}.fhead small{color:var(--muted);font-size:12.5px}
+.fhead .fdel{margin-left:auto;background:transparent;border:0;font-size:20px;color:var(--muted);padding:4px 8px}
+.fbody{white-space:pre-wrap;word-break:break-word;font-size:16px;line-height:1.45;padding:2px 12px 10px;color:var(--text)}
+.fcard{min-height:230px;display:flex;align-items:center;justify-content:center;text-align:center;padding:26px;color:#fff;font-size:26px;font-weight:800;line-height:1.35;white-space:pre-wrap;word-break:break-word;margin-top:4px}
+.fmedia{display:block;width:100%;max-height:75vh;object-fit:cover;background:#000}
+video.fmedia{object-fit:contain}
+.fempty{text-align:center;color:var(--muted);padding:40px 14px;background:var(--panel)}
+#fCompose{position:absolute;inset:0;z-index:60;background:var(--panel);display:flex;flex-direction:column}
+#fCompose.hidden{display:none!important}
+.cph{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;padding-top:calc(10px + env(safe-area-inset-top));border-bottom:1px solid var(--line)}
+.cph b{font-size:17px}
+.cph button{border:0;background:transparent;font-size:20px;color:var(--text);font-family:inherit}
+#cGo{background:#1877f2;color:#fff;border-radius:7px;padding:7px 18px;font-size:15px;font-weight:700}
+#cGo:disabled{background:var(--line);color:var(--muted)}
+.cpb{flex:1;overflow-y:auto;padding:12px}
+.cpu{display:flex;gap:9px;align-items:center;margin-bottom:10px}
+.cpu b{display:block;font-size:15px}.cpu small{color:var(--muted);font-size:12.5px}
+.cpt{border-radius:10px;display:flex;align-items:center;justify-content:center}
+.cpt textarea{width:100%;border:0;background:transparent;resize:none;font:inherit;font-size:19px;color:var(--text);outline:none;min-height:110px;padding:4px 0}
+.cpt.hb{min-height:240px;padding:20px}
+.cpt.hb textarea{text-align:center;font-size:26px;font-weight:800;color:#fff;min-height:160px}
+.cpt.hb textarea::placeholder{color:rgba(255,255,255,.75)}
+.cpm{position:relative;margin-top:8px}
+.cpm img,.cpm video{width:100%;max-height:50vh;object-fit:contain;border-radius:8px;background:#000;display:block}
+.cpm .rm{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:15px}
+.fsw{display:flex;gap:8px;margin-top:12px;overflow-x:auto;padding:2px}
+.fsw i{flex:none;width:32px;height:32px;border-radius:8px;border:2px solid var(--line);cursor:pointer}
+.fsw i.on{border-color:#1877f2;box-shadow:0 0 0 2px #1877f2}
+.cpf{padding:8px 12px calc(8px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+.cpf button{width:100%;text-align:left;padding:12px;border:0;background:var(--bg);color:var(--text);border-radius:10px;font-size:15px;font-weight:600;font-family:inherit}
+#fLb{position:absolute;inset:0;z-index:70;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center}
+#fLb.hidden{display:none!important}
+#fLb img{max-width:100%;max-height:100%}
 </style>
 <script>
 (function(){
-  var BGS=['linear-gradient(135deg,#0f766e,#14b8a6)','linear-gradient(135deg,#7c3aed,#ec4899)','linear-gradient(135deg,#f97316,#ef4444)','linear-gradient(135deg,#2563eb,#06b6d4)','linear-gradient(135deg,#16a34a,#a3e635)','linear-gradient(135deg,#1f2937,#4b5563)'];
-  var curBg='', posts=[], started=false, ch=null;
+  var BGS=['linear-gradient(135deg,#1877f2,#42b72a)','linear-gradient(135deg,#7c3aed,#ec4899)','linear-gradient(135deg,#f97316,#ef4444)','linear-gradient(135deg,#0ea5e9,#06b6d4)','linear-gradient(135deg,#16a34a,#a3e635)','linear-gradient(135deg,#1f2937,#4b5563)','linear-gradient(135deg,#be185d,#f59e0b)'];
+  var AVC=['#1877f2','#e4405f','#f7b928','#42b72a','#8e44ad','#e67e22','#16a085'];
+  var curBg='', file=null, fileUrl='', posts=[], urls={}, started=false, ldT=null, busy=false;
   function g(i){return document.getElementById(i);}
   function nameOf(id){ if(me&&id===me.id) return (myProf&&myProf.name)||'আমি'; return (peer&&peer.name)||'অন্যজন'; }
-  function ago(iso){ var s=(Date.now()-new Date(iso))/1000; if(s<60) return 'এইমাত্র'; if(s<3600) return bn(Math.floor(s/60))+' মিনিট আগে'; if(s<86400) return bn(Math.floor(s/3600))+' ঘণ্টা আগে'; return fmtDay(iso)+', '+fmtTime(iso); }
+  function av(node,id){ var n=nameOf(id); node.textContent=Array.from(n)[0]||'?'; node.style.background=AVC[(n.charCodeAt(0)||0)%AVC.length]; }
+  function ago(iso){ var s=(Date.now()-new Date(iso))/1000; if(s<60) return 'এইমাত্র'; if(s<3600) return bn(Math.floor(s/60))+' মিনিট'; if(s<86400) return bn(Math.floor(s/3600))+' ঘণ্টা'; return fmtDay(iso)+' '+fmtTime(iso); }
   function setMode(m){
     g('app').classList.toggle('feedMode', m==='feed');
     g('feed').classList.remove('hidden');
-    if(m==='feed') startFeed();
+    if(m==='feed'){ startFeed(); av(g('fMeAv'),me&&me.id); g('fPill').textContent='মনে কী চলছে, '+nameOf(me&&me.id)+'?'; }
     else { try{ toBottom(); }catch(e){} }
   }
+  /* ---------- কম্পোজার ---------- */
   function buildSw(){
     var sw=g('fSw'); sw.textContent='';
     [''].concat(BGS).forEach(function(b){
-      var i=document.createElement('i'); i.style.background=b||'var(--panel)'; if(b===curBg) i.className='on';
-      i.onclick=function(){ curBg=b; buildSw(); g('fPv').className='fpv'+(b?' hb':''); g('fPv').style.background=b; };
+      var i=document.createElement('i'); i.style.background=b||'var(--bg)'; if(b===curBg) i.className='on';
+      i.onclick=function(){ curBg=b; buildSw(); applyBg(); };
       sw.appendChild(i);
     });
   }
+  function applyBg(){ var t=g('cT'); t.className='cpt'+(curBg?' hb':''); t.style.background=curBg; }
+  function chk(){ g('cGo').disabled = !(g('fTxt').value.trim() || file); }
+  function clearFile(){ if(fileUrl) URL.revokeObjectURL(fileUrl); file=null; fileUrl=''; g('cM').textContent=''; g('fSw').style.display=''; g('fFile').value=''; chk(); }
+  function pickFile(f){
+    if(!f) return;
+    var isI=/^image\//.test(f.type), isV=/^video\//.test(f.type);
+    if(!isI&&!isV){ toast('শুধু ছবি বা ভিডিও দিন'); return; }
+    if(isV && f.size>MAX_VIDEO_MB*1048576){ toast('ভিডিও '+bn(MAX_VIDEO_MB)+' MB-র বেশি, ছোট ভিডিও দিন'); return; }
+    clearFile(); file=f; fileUrl=URL.createObjectURL(f);
+    curBg=''; applyBg(); buildSw(); g('fSw').style.display='none';
+    var m=document.createElement(isI?'img':'video'); m.src=fileUrl; if(isV){ m.controls=true; m.playsInline=true; }
+    var x=el('button','rm','✕'); x.className='rm'; x.onclick=clearFile;
+    g('cM').textContent=''; g('cM').appendChild(m); g('cM').appendChild(x); chk();
+  }
+  function openCompose(a){
+    g('fCompose').classList.remove('hidden');
+    av(g('cAv'),me.id); g('cNm').textContent=nameOf(me.id);
+    buildSw(); applyBg(); chk();
+    if(a==='card'){ curBg=BGS[0]; buildSw(); applyBg(); g('fTxt').focus(); }
+    else if(a==='img'||a==='vid'){ g('fFile').accept=a==='img'?'image/*':'video/*'; g('fFile').click(); }
+    else g('fTxt').focus();
+  }
+  function closeCompose(){ g('fCompose').classList.add('hidden'); g('fTxt').value=''; curBg=''; clearFile(); applyBg(); }
+  async function doPost(){
+    if(busy) return; var t=g('fTxt').value.trim(); if(!t&&!file) return;
+    if(file && !navigator.onLine){ toast('ছবি বা ভিডিও দিতে নেট লাগবে'); return; }
+    busy=true; var b=g('cGo'); b.disabled=true; b.textContent='হচ্ছে…';
+    try{
+      var id=uuid(), row={id:id, body:t||null, bg:(curBg&&!file)?curBg:null}, path=null;
+      if(file){
+        var isI=/^image\//.test(file.type), blob=file, ext, ctype;
+        if(isI){ blob=await compressImage(file,1600,0.85); ext='jpg'; ctype='image/jpeg'; }
+        else { ext=(file.name.split('.').pop()||'mp4').toLowerCase().replace(/[^a-z0-9]/g,'')||'mp4'; ctype=file.type||'video/mp4'; }
+        path=me.id+'/post_'+id+'.'+ext;
+        var up=await sb.storage.from('media').upload(path,blob,{contentType:ctype.split(';')[0],upsert:false});
+        if(up.error) throw up.error;
+        row.media_path=path; row.media_type=isI?'image':'video';
+      }
+      var r=await sb.from('posts').insert(row);
+      if(r.error){ if(path) sb.storage.from('media').remove([path]).then(function(){},function(){}); throw r.error; }
+      closeCompose(); await load();
+    }catch(e){ toast('পোস্ট হয়নি: '+((e&&e.message)||'আবার চেষ্টা করুন')); }
+    busy=false; b.textContent='পোস্ট'; chk();
+  }
+  /* ---------- ফিড ---------- */
   function render(){
     var L=g('fList'); L.textContent='';
     if(!posts.length){ L.appendChild(el('div','fempty','এখনো কোনো পোস্ট নেই। প্রথম পোস্টটি আপনিই করুন!')); return; }
     posts.forEach(function(p){
-      var c=el('div','fpost'), h=el('div','fhead');
-      h.appendChild(el('div','fav',Array.from(nameOf(p.author))[0]));
-      var w=document.createElement('div'); w.appendChild(el('b',null,nameOf(p.author))); w.appendChild(el('small',null,ago(p.created_at))); h.appendChild(w);
+      var c=el('div','fpost'), h=el('div','fhead'), a=el('div','fav'); av(a,p.author); h.appendChild(a);
+      var w=document.createElement('div'); w.appendChild(el('b',null,nameOf(p.author))); w.appendChild(el('small',null,ago(p.created_at)+' · 👥')); h.appendChild(w);
       if(me&&p.author===me.id){ var d=el('button','fdel','🗑'); d.onclick=function(){ delPost(p); }; h.appendChild(d); }
       c.appendChild(h);
       if(p.body){
-        if(p.bg){ var k=el('div','fcard',p.body); k.style.background=p.bg; c.appendChild(k); }
+        if(p.bg&&!p.media_path){ var k=el('div','fcard',p.body); k.style.background=p.bg; c.appendChild(k); }
         else c.appendChild(el('div','fbody',p.body));
+      }
+      if(p.media_path){
+        var u=urls[p.media_path];
+        if(u){
+          if(p.media_type==='video'){ var v=document.createElement('video'); v.className='fmedia'; v.src=u; v.controls=true; v.playsInline=true; v.preload='metadata'; c.appendChild(v); }
+          else { var im=document.createElement('img'); im.className='fmedia'; im.src=u; im.loading='lazy'; im.onclick=function(){ g('fLb').firstElementChild.src=u; g('fLb').classList.remove('hidden'); }; c.appendChild(im); }
+        }
       }
       L.appendChild(c);
     });
@@ -9415,30 +9503,34 @@ apply();
   async function load(){
     var r=await sb.from('posts').select('*').order('created_at',{ascending:false}).limit(50);
     if(r.error){ g('fList').textContent=''; g('fList').appendChild(el('div','fempty','ফিড চালু করতে Supabase-এ feed.sql চালাতে হবে।')); return; }
-    posts=r.data||[]; render();
+    posts=r.data||[];
+    var need=posts.filter(function(p){return p.media_path&&!urls[p.media_path];}).map(function(p){return p.media_path;});
+    if(need.length){ try{ var sg=await sb.storage.from('media').createSignedUrls(need,3600); (sg.data||[]).forEach(function(x){ if(x.signedUrl) urls[x.path]=x.signedUrl; }); }catch(e){} }
+    render();
   }
   async function delPost(p){
     if(!confirm('এই পোস্ট মুছে ফেলবেন?')) return;
     var r=await sb.from('posts').delete().eq('id',p.id);
     if(r.error){ toast('মোছা যায়নি'); return; }
+    if(p.media_path) sb.storage.from('media').remove([p.media_path]).then(function(){},function(){});
     posts=posts.filter(function(x){return x.id!==p.id;}); render();
   }
-  async function doPost(){
-    var t=g('fTxt').value.trim(); if(!t){ toast('কিছু লিখুন'); return; }
-    var b=g('fPost'); b.disabled=true;
-    var r=await sb.from('posts').insert({body:t,bg:curBg||null}).select().single();
-    b.disabled=false;
-    if(r.error){ toast('পোস্ট হয়নি: '+r.error.message); return; }
-    g('fTxt').value=''; curBg=''; buildSw(); g('fPv').className='fpv'; g('fPv').style.background='';
-    if(!posts.some(function(x){return x.id===r.data.id;})){ posts.unshift(r.data); render(); }
-  }
   function startFeed(){
-    if(started) return; started=true; buildSw(); g('fPost').onclick=doPost;
-    load();
-    ch=sb.channel('feed-posts').on('postgres_changes',{event:'*',schema:'public',table:'posts'},function(){ load(); }).subscribe();
+    if(started) return; started=true; load();
+    sb.channel('feed-posts').on('postgres_changes',{event:'*',schema:'public',table:'posts'},function(){ clearTimeout(ldT); ldT=setTimeout(load,400); }).subscribe();
   }
   g('fMsg').onclick=function(){ setMode('chat'); };
   g('btnFeedBack').onclick=function(){ setMode('feed'); };
+  g('fAdd').onclick=g('fPill').onclick=function(){ openCompose(); };
+  g('fFile').onchange=function(){ pickFile(this.files[0]); };
+  g('fFile').addEventListener('click',function(){});
+  g('fFile').oncancel=function(){};
+  g('cPh').onclick=function(){ g('fFile').accept='image/*,video/*'; g('fFile').click(); };
+  g('cX').onclick=function(){ if((g('fTxt').value.trim()||file)&&!confirm('পোস্টটি বাদ দেবেন?')) return; closeCompose(); };
+  g('cGo').onclick=doPost;
+  g('fTxt').oninput=chk;
+  g('fLb').onclick=function(){ g('fLb').classList.add('hidden'); };
+  document.querySelector('.fcr2').onclick=function(e){ var b=e.target.closest('button'); if(b) openCompose(b.dataset.a); };
   var _enter=window.enter;
   window.enter=async function(u){ var r=await _enter.apply(this,arguments); setMode('feed'); return r; };
 })();
