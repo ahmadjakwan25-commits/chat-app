@@ -1198,7 +1198,11 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <button class="ib" id="btnMenu" aria-label="সেটিংস">⋮</button>
   </div>
 
-  <div id="fHead"><div class="fbrand">যাকওয়ান <span>♥️</span> সাদিয়া</div><div class="fhb"><button type="button" id="fAdd" aria-label="নতুন পোস্ট">＋</button><button type="button" id="fMsg" aria-label="মেসেজ">💬<b id="fBadge" class="hidden"></b></button></div></div>
+  <div id="fHead"><div class="fbrand">যাকওয়ান <span>♥️</span> সাদিয়া</div><div class="fhb">
+    <button type="button" id="fAdd" aria-label="নতুন পোস্ট"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="4.5"/><path d="M12 8v8M8 12h8"/></svg></button>
+    <button type="button" id="fSch" aria-label="খুঁজুন"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
+    <button type="button" id="fMsg" aria-label="মেসেজ"><svg viewBox="0 0 24 24" width="30" height="30"><circle cx="12" cy="12" r="11" fill="currentColor"/><path d="M4.8 14.6L9.4 9.8l2.8 2.2 5.4-3-3.8 5.6-2.8-2z" fill="var(--panel)"/></svg></button></div></div>
+  <div id="fSrch" class="hidden"><input id="fQ" type="search" placeholder="পোস্টে খুঁজুন"></div>
   <div id="sqlBar" class="hidden">⚠️ নতুন ফিচার চালু করতে Supabase-এ migration.sql চালাতে হবে। এখানে ট্যাপ করে দেখুন</div>
   <div id="netBar" class="hidden">নেট নেই। মেসেজ লিখে রাখুন, নেট এলে নিজে থেকে যাবে।</div>
   <div id="pinBar" class="hidden"></div>
@@ -1207,16 +1211,20 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <div id="list"></div>
     <button id="toBottom" class="hidden" aria-label="নিচে যান">↓</button>
   </div>
-
   <div id="feed" class="hidden">
-    <div class="fcr">
-      <div class="fcr1"><div class="fav" id="fMeAv"></div><button type="button" id="fPill">মনে কী চলছে?</button></div>
-      <div class="fcr2"><button type="button" data-a="vid"><i style="color:#f3425f">🎥</i> ভিডিও</button><button type="button" data-a="img"><i style="color:#45bd62">🖼️</i> ছবি</button><button type="button" data-a="card"><i style="color:#1877f2">🅰️</i> কার্ড</button></div>
-    </div>
+    <div class="fcr"><div class="fcr1"><div class="fav" id="fMeAv"></div><button type="button" id="fPill">মনে কী চলছে?</button><button type="button" id="fPic" aria-label="ছবি"><svg viewBox="0 0 24 24" width="32" height="32"><rect x="2.5" y="2.5" width="19" height="19" rx="4" fill="#45bd62"/><circle cx="9" cy="9" r="2" fill="#fff"/><path d="M4 19l5-6 3 3 3-4 5 7z" fill="#fff"/></svg></button></div></div>
+    <div id="fStories"></div>
     <div id="fList"></div>
   </div>
+  <div id="fNav">
+    <button type="button" data-f="all" class="on" aria-label="হোম"><svg viewBox="0 0 24 24" width="29" height="29" fill="currentColor"><path d="M12 2.8l9.2 7.9a1 1 0 01-.65 1.76H19V20a1 1 0 01-1 1h-3.5v-6h-5v6H6a1 1 0 01-1-1v-7.54H3.45a1 1 0 01-.65-1.76z"/></svg></button>
+    <button type="button" data-f="video" aria-label="ভিডিও"><svg viewBox="0 0 24 24" width="27" height="27" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="4"/><path d="M10 9.5v5l4.5-2.5z"/></svg></button>
+    <button type="button" data-f="image" aria-label="ছবি"><svg viewBox="0 0 24 24" width="27" height="27" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="4"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 3 3 3-3 5 5"/></svg></button>
+    <button type="button" id="fNavMsg" aria-label="মেসেজ"><svg viewBox="0 0 24 24" width="27" height="27" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 5h16a1 1 0 011 1v10a1 1 0 01-1 1h-9l-5 4v-4H4a1 1 0 01-1-1V6a1 1 0 011-1z"/></svg></button>
+    <button type="button" data-f="mine" aria-label="আমার পোস্ট"><span class="fav" id="fNavAv"></span></button>
+  </div>
   <div id="fCompose" class="hidden">
-    <div class="cph"><button type="button" id="cX">✕</button><b>পোস্ট তৈরি করুন</b><button type="button" id="cGo" disabled>পোস্ট</button></div>
+    <div class="cph"><button type="button" id="cX">✕</button><b id="cTitle">পোস্ট তৈরি করুন</b><button type="button" id="cGo" disabled>পোস্ট</button></div>
     <div class="cpb">
       <div class="cpu"><div class="fav" id="cAv"></div><div><b id="cNm"></b><small>👥 শুধু আমরা দুজন</small></div></div>
       <div class="cpt" id="cT"><textarea id="fTxt" placeholder="মনে কী চলছে?"></textarea></div>
@@ -1224,6 +1232,33 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
       <div class="fsw" id="fSw"></div>
     </div>
     <div class="cpf"><button type="button" id="cPh">🖼️ ছবি/ভিডিও</button><input type="file" id="fFile" accept="image/*,video/*" class="hidden"></div>
+  </div>
+  <div id="fCm" class="hidden">
+    <div class="cmh"><button type="button" id="cmX">←</button><b>কমেন্ট</b></div>
+    <div class="cml" id="cmL"></div>
+    <div class="cmf"><textarea id="cmT" rows="1" placeholder="কমেন্ট লিখুন…"></textarea><button type="button" id="cmS" disabled>➤</button></div>
+  </div>
+  <div id="fPf" class="hidden">
+    <div class="cmh"><button type="button" id="pfX">←</button><b>প্রোফাইল</b></div>
+    <div class="pfb">
+      <div class="pfcv"></div>
+      <div class="pfavw"><div class="fav" id="pfAv"></div><button type="button" id="pfCam" aria-label="ছবি বদলান">📷</button></div>
+      <div class="pfnm" id="pfNm"></div>
+      <div class="pfrow"><input id="pfName" type="text" maxlength="30" placeholder="নাম"><button type="button" id="pfSave">সংরক্ষণ</button></div>
+      <button type="button" class="pfa" id="pfChange">🖼️ প্রোফাইল ছবি বদলান</button>
+      <button type="button" class="pfa" id="pfRemove">🗑 ছবি সরান</button>
+      <button type="button" class="pfa" id="pfMine">📰 আমার পোস্ট দেখুন</button>
+      <button type="button" class="pfa" id="pfSet">⚙️ সেটিংস</button>
+      <input type="file" id="pfFile" accept="image/*" class="hidden">
+    </div>
+  </div>
+  <div id="fSv" class="hidden">
+    <div class="svb"><i id="svP"></i></div>
+    <div class="svh"><div class="fav" id="svAv"></div><div class="svn"><b id="svN"></b><small id="svT"></small></div><button type="button" id="svD" class="hidden">🗑</button><button type="button" id="svX">✕</button></div>
+    <div class="svs" id="svS"></div>
+    <div class="svc" id="svC"></div>
+    <div class="svsn" id="svSn"></div>
+    <div class="svz l" id="svL"></div><div class="svz r" id="svR"></div>
   </div>
   <div id="fLb" class="hidden"><img alt=""></div>
   <div id="replyBar" class="hidden"></div>
@@ -1781,7 +1816,8 @@ async function loadProfiles(){
 function renderHeader(){
   var p = peer || lsGet('peer_' + (me && me.id), null);
   $('peerName').textContent = p ? p.name : 'অন্যজনের জন্য অপেক্ষা';
-  $('peerAv').textContent = p ? Array.from(p.name)[0] : '?';
+  if (p && p.avatar) { $('peerAv').textContent = ''; $('peerAv').style.backgroundImage = 'url(' + p.avatar + ')'; $('peerAv').style.backgroundSize = 'cover'; $('peerAv').style.backgroundPosition = 'center'; }
+  else { $('peerAv').style.backgroundImage = ''; $('peerAv').textContent = p ? Array.from(p.name)[0] : '?'; }
   var st = '';
   if (!p) st = 'অন্যজন এখনো অ্যাকাউন্ট খোলেননি';
   else if (peerOnline) st = peerTyping ? 'লিখছে…' : 'অনলাইন';
@@ -8855,6 +8891,16 @@ apply();
 #nbk .nbFab{position:absolute;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:50%;border:0;background:var(--nbAcc);color:var(--nbAccT);font-size:28px;box-shadow:0 6px 18px rgba(0,0,0,.3);cursor:pointer}
 #nbk .nbTrashBar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--nbPanel);border-bottom:1px solid var(--nbLine);font-size:13px;color:var(--nbM)}
 #nbk .nbTrashBar span{flex:1}
+#nbk .nbTabs{display:flex;background:var(--nbPanel);border-bottom:1px solid var(--nbLine)}
+#nbk .nbTabs.hidden{display:none!important}
+#nbk .nbTabs button{flex:1;padding:11px 6px;border:0;background:transparent;color:var(--nbM);font:inherit;font-size:14.5px;font-weight:700;border-bottom:3px solid transparent;cursor:pointer}
+#nbk .nbTabs button.on{color:var(--nbAcc);border-bottom-color:var(--nbAcc)}
+#nbk .nbTabs b{display:inline-block;min-width:18px;height:18px;line-height:18px;border-radius:9px;background:#ef4444;color:#fff;font-size:11px;padding:0 5px;margin-left:6px;vertical-align:1px}
+#nbk .nbTabs b.hidden{display:none}
+#nbk .nbTk{display:inline-flex;vertical-align:-1px;margin-left:4px;color:#8a8f98}
+#nbk .nbTk.t3{color:#34b7f1}
+#nbk .nbTk svg{display:block}
+
 #nbk .nbTrashBar button{border:0;border-radius:10px;padding:7px 12px;background:#dc2626;color:#fff;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
 #nbEd{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--nbBg)}
 #nbEd.hidden,#nbTh.hidden,#nbk .hidden{display:none!important}
@@ -8978,6 +9024,7 @@ apply();
 <div id="nbk" class="hidden">
   <div class="nbTop"><button id="nbBack" type="button">←</button><button id="nbHome" type="button">🏠</button><b id="nbHead">📒 নোট খাতা</b><button id="nbThBtn" type="button" aria-label="সেটিং" title="সেটিং">⚙️</button></div>
   <div class="nbSearch"><input id="nbQ" type="search" placeholder="নোট খুঁজুন…"></div>
+  <div class="nbTabs" id="nbTabs"><button type="button" data-t="mine" class="on">📒 আমার নোট</button><button type="button" data-t="peer">👥 সঙ্গীর নোট<b id="nbPeerBadge" class="hidden"></b></button></div>
   <div class="nbTrashBar hidden" id="nbTrashBar"><span>ডিলেট করা নোট এখানে থাকে। ফিরিয়ে আনতে বা চিরতরে মুছতে পারবেন।</span><button id="nbEmpty" type="button">সব মুছুন</button></div>
   <div id="nbList"></div>
   <button class="nbFab" id="nbNew" type="button">＋</button>
@@ -9037,7 +9084,7 @@ apply();
     DS.forEach(function(d){var b=document.createElement('button');b.type='button';b.className='tb'+(d[0]===cd?' on':'');b.textContent=d[1];
       b.onclick=function(){if(!cur)return;setDesign(cur,d[0]);G('nbB').dataset.ds=d[0];buildDs();};g.appendChild(b);});
   }
-  var notes=[], cur=null, timer=null, chan=null, loadedFor=null, trashView=false, editing=false;
+  var notes=[], cur=null, timer=null, chan=null, loadedFor=null, trashView=false, editing=false, tab='mine', nSeen={}, nChan=null, nT=null;
   function G(i){return document.getElementById(i);}
   var root=G('nbk'), list=G('nbList'), ed=G('nbEd');
   function cacheKey(){return 'nbk_'+(window.me&&me.id||'x');}
@@ -9074,18 +9121,87 @@ apply();
       b.style.background=t.tile||(t.v.bar);
       b.onclick=function(){if(!window.settings)window.settings={};settings.nbTheme=t.id;try{lsSet('settings',settings);}catch(e){}applyTheme();buildThemes();};g.appendChild(b);});
   }
+  /* ---------- টিক চিহ্ন (হোয়াটসঅ্যাপের মতো) ---------- */
+  function ts(x){return x?new Date(x).getTime():0;}
+  function peerId(){return window.peer&&peer.id;}
+  function tickState(n){
+    var r=nSeen[n.id+'|'+peerId()]; if(!r) return 1;
+    if(r.seen_ver&&ts(r.seen_ver)>=ts(n.updated_at)) return 3;
+    if(r.delivered_ver&&ts(r.delivered_ver)>=ts(n.updated_at)) return 2;
+    return 1;
+  }
+  var TK1='<svg viewBox="0 0 16 11" width="16" height="11"><path d="M1.5 5.8l3.4 3.4L11.2 1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var TK2='<svg viewBox="0 0 21 11" width="21" height="11"><path d="M1.5 5.8l3.4 3.4L11.2 1.5M6 5.8l3.4 3.4L15.7 1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function tickHtml(n){
+    var t=tickState(n), tt=['','শেয়ার হয়েছে','সঙ্গীর ফোনে পৌঁছেছে','সঙ্গী দেখেছেন'][t];
+    return '<span class="nbTk t'+t+'" title="'+tt+'">'+(t===1?TK1:TK2)+'</span>';
+  }
+  function isNewForMe(n){
+    if(!window.me||mine(n)||trashed(n)) return false;
+    var r=nSeen[n.id+'|'+me.id]; return !(r&&r.seen_ver&&ts(r.seen_ver)>=ts(n.updated_at));
+  }
+  function updTabs(){
+    var c=notes.filter(function(n){return !mine(n)&&!trashed(n)&&isNewForMe(n);}).length, b=G('nbPeerBadge');
+    [].forEach.call(G('nbTabs').children,function(x){x.classList.toggle('on',x.dataset.t===tab);});
+    b.textContent=c; b.classList.toggle('hidden',!c);
+  }
+  function edTitle(n){
+    if(!mine(n)) return 'সঙ্গীর নোট (শুধু দেখা)';
+    var saved=notes.some(function(x){return x.id===n.id;});
+    if(!(n.shared&&saved)) return 'নোট';
+    var r=nSeen[n.id+'|'+peerId()], st=tickState(n);
+    return 'নোট '+tickHtml(n)+(st===3&&r&&r.seen_at?' <small style="font-weight:400;opacity:.8;font-size:11px">দেখেছেন · '+new Date(r.seen_at).toLocaleTimeString('bn-BD',{hour:'numeric',minute:'2-digit'})+'</small>':'');
+  }
+  function updEdTitle(){ if(cur&&mine(cur)&&!ed.classList.contains('hidden')) G('nbEdTitle').innerHTML=edTitle(cur); }
+  function loadNSeen(cb){
+    if(!window.sb||!window.me){ if(cb)cb(); return; }
+    sb.from('note_seen').select('*').then(function(r){
+      if(!r.error){
+        var m={}; (r.data||[]).forEach(function(x){ m[x.note_id+'|'+x.user_id]=x; });
+        Object.keys(nSeen).forEach(function(k){ if(k.split('|')[1]===me.id&&!m[k]) m[k]=nSeen[k]; });
+        nSeen=m;
+      }
+      updTabs(); if(!root.classList.contains('hidden')&&ed.classList.contains('hidden')) render(); updEdTitle();
+      if(cb) cb();
+    },function(){ if(cb) cb(); });
+  }
+  function deliver(){
+    if(!window.me||!window.sb||!navigator.onLine) return;
+    var now=new Date().toISOString(), rows=[];
+    notes.forEach(function(n){
+      if(mine(n)||trashed(n)||!n.shared) return;
+      var k=n.id+'|'+me.id, r=nSeen[k];
+      if(r&&r.delivered_ver&&ts(r.delivered_ver)>=ts(n.updated_at)) return;
+      rows.push({note_id:n.id,user_id:me.id,delivered_ver:n.updated_at,delivered_at:now});
+      nSeen[k]=Object.assign({},r||{},{note_id:n.id,user_id:me.id,delivered_ver:n.updated_at,delivered_at:now});
+    });
+    if(rows.length) sb.from('note_seen').upsert(rows,{onConflict:'note_id,user_id'}).then(function(){},function(){});
+  }
+  function markNote(n){
+    if(!window.me||!window.sb||mine(n)) return;
+    var now=new Date().toISOString(), k=n.id+'|'+me.id;
+    nSeen[k]=Object.assign({},nSeen[k]||{},{note_id:n.id,user_id:me.id,delivered_ver:n.updated_at,seen_ver:n.updated_at,seen_at:now});
+    sb.from('note_seen').upsert({note_id:n.id,user_id:me.id,delivered_ver:n.updated_at,delivered_at:now,seen_ver:n.updated_at,seen_at:now},{onConflict:'note_id,user_id'}).then(function(){},function(){});
+    updTabs();
+  }
+  function subNSeen(){
+    if(nChan||!window.sb) return;
+    try{ nChan=sb.channel('nbk-seen').on('postgres_changes',{event:'*',schema:'public',table:'note_seen'},function(){ clearTimeout(nT); nT=setTimeout(function(){ loadNSeen(); },400); }).subscribe(); }catch(e){}
+  }
+  window.__nbLoad=function(){ try{ load(); }catch(e){} };
   function render(){
     var q=(G('nbQ').value||'').trim().toLowerCase();
     var a=notes.filter(function(n){return (trashView?trashed(n):!trashed(n))&&(!q||(n.title+' '+n.body).toLowerCase().indexOf(q)>-1);});
-    if(trashView)a=a.filter(mine);
+    if(trashView)a=a.filter(mine); else a=a.filter(function(n){return tab==='mine'?mine(n):!mine(n);});
     G('nbTrashBar').classList.toggle('hidden',!trashView||!a.length);
     G('nbHead').textContent=trashView?'🗑️ ডিলেট করা নোট':'📒 নোট খাতা';
-    G('nbNew').classList.toggle('hidden',trashView);
-    if(!a.length){list.innerHTML='<div class="nbEmpty">'+(q?'কিছু পাওয়া যায়নি':trashView?'ডিলেট করা কোনো নোট নেই':'কোনো নোট নেই। ＋ চাপুন।')+'</div>';return;}
+    G('nbNew').classList.toggle('hidden',trashView||tab==='peer');
+    G('nbTabs').classList.toggle('hidden',trashView); updTabs();
+    if(!a.length){list.innerHTML='<div class="nbEmpty">'+(q?'কিছু পাওয়া যায়নি':trashView?'ডিলেট করা কোনো নোট নেই':tab==='peer'?'সঙ্গী এখনো কোনো নোট শেয়ার করেননি':'কোনো নোট নেই। ＋ চাপুন।')+'</div>';return;}
     list.innerHTML=a.map(function(n){
       var d=new Date(trashed(n)?n.deleted_at:n.updated_at);
-      var tag=trashed(n)?'🗑️ ডিলেট: ':(mine(n)?(n.shared?'👥 শেয়ার করা · ':''):'👤 সঙ্গীর নোট · ');
-      return '<div class="nbCard" data-id="'+n.id+'" style="background:'+esc(n.color)+'">'+(n.pinned&&!trashView?'<span class="nbPin">📌</span>':'')+'<h4>'+esc(n.title||'শিরোনামহীন')+'</h4><p>'+esc(n.body)+'</p><small>'+tag+d.toLocaleDateString('bn-BD')+'</small>'+
+      var tag=trashed(n)?'🗑️ ডিলেট: ':(mine(n)?(n.shared?'👥 শেয়ার করা · ':''):(isNewForMe(n)?'🔵 নতুন · ':'👤 সঙ্গীর নোট · '));
+      return '<div class="nbCard" data-id="'+n.id+'" style="background:'+esc(n.color)+'">'+(n.pinned&&!trashView?'<span class="nbPin">📌</span>':'')+'<h4>'+esc(n.title||'শিরোনামহীন')+'</h4><p>'+esc(n.body)+'</p><small>'+tag+d.toLocaleDateString('bn-BD')+((!trashView&&mine(n)&&n.shared)?' '+tickHtml(n):'')+'</small>'+
         (trashView?'<div class="nbAct"><button data-a="restore">↩️ ফিরিয়ে আনুন</button><button data-a="purge">❌ চিরতরে মুছুন</button></div>':'<span class="nbDl"><button type="button" data-a="pdf" aria-label="PDF ডাউনলোড">📄 PDF</button><button type="button" data-a="jpg" aria-label="JPG ডাউনলোড">🖼 JPG</button></span>')+'</div>';
     }).join('');
   }
@@ -9096,6 +9212,7 @@ apply();
     sb.from('notebook').select('*').order('updated_at',{ascending:false}).then(function(r){
       if(r.error){T('নোট লোড হয়নি: '+r.error.message);return;}
       notes=r.data||[];sortNotes();saveCache();if(ed.classList.contains('hidden'))render();
+      subNSeen();loadNSeen(deliver);
     });
     if(!chan&&loadedFor!==me.id){
       loadedFor=me.id;
@@ -9105,6 +9222,7 @@ apply();
           if(cur&&cur.id===n.id&&mine(n))return;
           if(i>-1)notes[i]=n;else notes.push(n);}
         sortNotes();saveCache();if(!root.classList.contains('hidden')&&ed.classList.contains('hidden'))render();
+        updTabs();deliver();
       }).subscribe();}catch(e){}
     }
   }
@@ -9132,12 +9250,12 @@ apply();
     var lock=ro||!editing;G('nbT').readOnly=G('nbB').readOnly=lock;G('nbEdit').style.display=(!ro&&!editing)?'':'none';
     G('nbPin').classList.toggle('on',!!n.pinned);G('nbShare').classList.toggle('on',!!n.shared);
     G('nbPin').style.display=G('nbShare').style.display=G('nbDel').style.display=G('nbSw').style.display=ro?'none':'';G('nbSwL').style.display=ro?'none':'';
-    G('nbEdTitle').textContent=ro?'সঙ্গীর নোট (শুধু দেখা)':'নোট';
+    G('nbEdTitle').innerHTML=edTitle(n);
     [].forEach.call(G('nbSw').children,function(s){s.classList.toggle('on',s.dataset.c===n.color);});
     status('');
   }
   function dz(on){var b=G('nbDz');b.classList.toggle('hidden',!on);G('nbDzBtn').classList.toggle('on',!!on);}
-  function openNote(n){cur=n;editing=!notes.some(function(x){return x.id===n.id;});dz(false);ed.classList.remove('hidden');paint();}
+  function openNote(n){cur=n;editing=!notes.some(function(x){return x.id===n.id;});dz(false);ed.classList.remove('hidden');paint();if(!mine(n))markNote(n);}
   function closeEd(){flush();dz(false);ed.classList.add('hidden');cur=null;sortNotes();render();}
   G('nbSw').innerHTML=COLORS.map(function(c){return '<span class="sw" data-c="'+c+'" style="background:'+c+'"></span>';}).join('');
   G('nbEdit').onclick=function(){if(!cur||!mine(cur))return;editing=true;paint();var b=G('nbB');b.focus();try{b.setSelectionRange(b.value.length,b.value.length);}catch(e){}};
@@ -9159,6 +9277,7 @@ apply();
   };
   G('nbNew').onclick=function(){
     if(!window.me){T('আগে লগইন করুন');return;}
+    tab='mine';updTabs();
     var now=new Date().toISOString();
     var id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():(window.uuid?uuid():String(Date.now()));
     openNote({id:id,owner:me.id,title:'',body:'',color:COLORS[0],pinned:false,shared:false,deleted_at:null,created_at:now,updated_at:now});
@@ -9188,6 +9307,7 @@ apply();
   G('nbThX').onclick=function(){G('nbTh').classList.add('hidden');};
   G('nbSetTrash').onclick=function(){G('nbTh').classList.add('hidden');trashView=true;render();};
   G('nbTh').onclick=function(e){if(e.target===G('nbTh'))G('nbTh').classList.add('hidden');};
+  G('nbTabs').onclick=function(e){var b=e.target.closest('button');if(!b)return;tab=b.dataset.t;updTabs();render();};
   G('nbQ').oninput=render;
   G('nbEdBack').onclick=closeEd;
   function close(){flush();root.classList.add('hidden');ed.classList.add('hidden');G('nbTh').classList.add('hidden');cur=null;trashView=false;if(window.__spShow)window.__spShow();}
@@ -9407,21 +9527,130 @@ video.fmedia{object-fit:contain}
 .cpf button{width:100%;text-align:left;padding:12px;border:0;background:var(--bg);color:var(--text);border-radius:10px;font-size:15px;font-weight:600;font-family:inherit}
 #fLb{position:absolute;inset:0;z-index:70;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center}
 #fLb.hidden{display:none!important}
+.fseen{color:var(--muted);font-size:12.5px;padding:8px 0 0}
+.fseen.ok{color:#1877f2}
+.scard .sav.seen{border-color:#8a8d91}
+.svsn{flex:none;text-align:center;font-size:13px;opacity:.9;padding:0 12px calc(10px + env(safe-area-inset-bottom));position:relative;z-index:5;min-height:0}
+
+#fPf{position:absolute;inset:0;z-index:35;background:var(--bg);display:flex;flex-direction:column}
+#fPf.hidden{display:none!important}
+#fPf .cmh{background:var(--panel)}
+.pfb{flex:1;overflow-y:auto;background:var(--panel)}
+.pfcv{height:130px;background:linear-gradient(135deg,#1877f2,#42b72a)}
+.pfavw{position:relative;width:132px;height:132px;margin:-66px auto 0}
+.pfavw .fav{width:132px;height:132px;font-size:54px;border:4px solid var(--panel);background-size:cover;background-position:center}
+.pfavw button{position:absolute;right:2px;bottom:6px;width:36px;height:36px;border-radius:50%;border:0;background:var(--bg);font-size:18px;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.pfnm{text-align:center;font-size:22px;font-weight:800;margin:10px 0 12px}
+.pfrow{display:flex;gap:8px;padding:0 16px 12px}
+.pfrow input{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:10px 12px;font:inherit;font-size:15px;outline:none}
+.pfrow button{border:0;background:#1877f2;color:#fff;border-radius:10px;padding:0 16px;font-weight:700;font-family:inherit}
+.pfa{display:block;width:calc(100% - 32px);margin:0 16px 10px;text-align:left;padding:13px 14px;border:0;background:var(--bg);color:var(--text);border-radius:10px;font-size:15px;font-weight:600;font-family:inherit}
+
+#fStories{display:flex;gap:8px;overflow-x:auto;background:var(--panel);padding:10px 12px;margin-bottom:8px;-webkit-overflow-scrolling:touch}
+#fStories::-webkit-scrollbar{display:none}
+.scard{position:relative;flex:none;width:112px;height:195px;border-radius:12px;overflow:hidden;background:#222;cursor:pointer;border:1px solid var(--line)}
+.scard>img,.scard>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.scard::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.25),transparent 35%,transparent 55%,rgba(0,0,0,.6));pointer-events:none}
+.scard .sav{position:absolute;top:8px;left:8px;z-index:2;width:38px;height:38px;border-radius:50%;border:3px solid #1877f2;background:var(--panel);display:flex;align-items:center;justify-content:center}
+.scard .sav .fav{width:30px;height:30px;font-size:13px}
+.scard .snm{position:absolute;left:8px;right:8px;bottom:8px;z-index:2;color:#fff;font-weight:700;font-size:13px;line-height:1.25}
+.scard .stx{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:30px 8px 40px;color:#fff;font-weight:800;font-size:15px;line-height:1.3;overflow:hidden;word-break:break-word}
+.scard.scr{background:var(--panel)}
+.scard.scr::after{display:none}
+.scr .sct{height:72%;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+.scr .sct .fav{width:100%;height:100%;border-radius:0;font-size:44px}
+.scr .scb{position:absolute;left:0;right:0;bottom:0;height:28%;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;font-size:13px;font-weight:700;color:var(--text)}
+.scr .spl{position:absolute;left:50%;top:72%;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:50%;background:#1877f2;color:#fff;border:3px solid var(--panel);display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1}
+#fSv{position:absolute;inset:0;z-index:80;background:#000;display:flex;flex-direction:column;color:#fff}
+#fSv.hidden{display:none!important}
+.svb{height:3px;background:rgba(255,255,255,.35);margin:calc(8px + env(safe-area-inset-top)) 8px 0;border-radius:2px;overflow:hidden;flex:none}
+.svb i{display:block;height:100%;width:0;background:#fff}
+.svh{display:flex;align-items:center;gap:8px;padding:10px 10px;flex:none;position:relative;z-index:5}
+.svh .fav{width:36px;height:36px;font-size:15px}
+.svn{flex:1}.svn b{display:block;font-size:15px}.svn small{opacity:.75;font-size:12px}
+.svh button{background:transparent;border:0;color:#fff;font-size:20px;padding:4px 8px}
+.svs{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center}
+.svs img,.svs video{max-width:100%;max-height:100%;object-fit:contain}
+.svs .svt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:30px;font-size:28px;font-weight:800;line-height:1.35;white-space:pre-wrap;word-break:break-word}
+.svc{flex:none;padding:10px 16px calc(14px + env(safe-area-inset-bottom));text-align:center;font-size:16px;white-space:pre-wrap;word-break:break-word;min-height:20px;position:relative;z-index:5}
+.svz{position:absolute;top:90px;bottom:70px;z-index:4}
+.svz.l{left:0;width:35%}.svz.r{right:0;width:65%}
+
+.ffoot{padding:0 12px}
+.fst{display:flex;justify-content:space-between;align-items:center;padding:10px 0;color:var(--muted);font-size:14px}
+.fst .lk{display:flex;align-items:center;gap:6px}
+.fst .lk i{width:20px;height:20px;border-radius:50%;background:#1877f2;color:#fff;font-style:normal;font-size:11px;display:flex;align-items:center;justify-content:center}
+.fst .cc{cursor:pointer}
+.fac{display:flex;border-top:1px solid var(--line)}
+.fac button{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 4px;background:transparent;border:0;color:var(--muted);font-size:14.5px;font-weight:600;font-family:inherit}
+.fac button.on{color:#1877f2}
+#fCm{position:absolute;inset:0;z-index:65;background:var(--panel);display:flex;flex-direction:column}
+#fCm.hidden{display:none!important}
+.cmh{display:flex;align-items:center;gap:14px;padding:10px 12px;padding-top:calc(10px + env(safe-area-inset-top));border-bottom:1px solid var(--line)}
+.cmh b{font-size:17px}.cmh button{border:0;background:transparent;font-size:22px;color:var(--text)}
+.cml{flex:1;overflow-y:auto;padding:12px}
+.cmi{display:flex;gap:8px;margin-bottom:12px}
+.cmi .fav{width:34px;height:34px;font-size:15px}
+.cmb{background:var(--bg);border-radius:16px;padding:8px 12px;max-width:100%}
+.cmb b{display:block;font-size:13.5px}
+.cmb div{white-space:pre-wrap;word-break:break-word;font-size:15px;line-height:1.4}
+.cmm{color:var(--muted);font-size:12px;padding:3px 12px}
+.cmm button{background:transparent;border:0;color:var(--muted);font-weight:700;font-size:12px;margin-left:10px;font-family:inherit}
+.cmf{display:flex;gap:8px;align-items:flex-end;padding:8px 12px calc(8px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+.cmf textarea{flex:1;border:0;background:var(--bg);color:var(--text);border-radius:20px;padding:10px 14px;font:inherit;font-size:15px;resize:none;max-height:110px;outline:none}
+.cmf button{width:40px;height:40px;border-radius:50%;border:0;background:#1877f2;color:#fff;font-size:17px;flex:none}
+.cmf button:disabled{background:var(--line);color:var(--muted)}
+
+#fHead{padding:8px 14px;padding-top:calc(8px + env(safe-area-inset-top))}
+.fbrand{font-size:27px;font-weight:800}
+.fhb{gap:14px;align-items:center}
+.fhb button{width:auto;height:auto;border-radius:0;background:transparent;padding:0;display:flex}
+#fSrch{display:none;padding:0 12px 8px;background:var(--panel)}
+#app.feedMode #fSrch:not(.hidden){display:block}
+#fQ{width:100%;border:0;background:var(--bg);color:var(--text);border-radius:20px;padding:9px 14px;font-size:15px;font-family:inherit;outline:none}
+.fcr{padding:10px 12px;border-bottom:0;margin-bottom:8px}
+.fcr1{padding-bottom:0}
+#fPill{border-radius:24px;padding:11px 16px;font-size:16px;color:var(--text);opacity:.8}
+#fPic{background:transparent;border:0;display:flex;padding:0 2px}
+#fNav{display:none;background:var(--panel);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+#app.feedMode #fNav{display:flex}
+#fNav button{flex:1;display:flex;align-items:center;justify-content:center;height:42px;border:0;background:transparent;color:var(--muted)}
+#fNav button.on{color:#1877f2}
+#fNav .fav{width:30px;height:30px;font-size:14px;border:2px solid transparent}
+#fNav button.on .fav{border-color:#1877f2}
+.fpost{border-top:0;border-bottom:0}
+.fhead .fx{background:transparent;border:0;font-size:20px;color:var(--muted);padding:4px 8px}
+.fhead .fdel{margin-left:auto}
+.fhead .fx:last-child{margin-left:0}
+.fhead .fdel+.fx{margin-left:0}
+.fhead:not(:has(.fdel)) .fx{margin-left:auto}
+.fbody.cl{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.fmore{background:transparent;border:0;color:var(--muted);font-size:16px;padding:0 12px 10px;font-family:inherit}
+
 #fLb img{max-width:100%;max-height:100%}
 </style>
 <script>
 (function(){
   var BGS=['linear-gradient(135deg,#1877f2,#42b72a)','linear-gradient(135deg,#7c3aed,#ec4899)','linear-gradient(135deg,#f97316,#ef4444)','linear-gradient(135deg,#0ea5e9,#06b6d4)','linear-gradient(135deg,#16a34a,#a3e635)','linear-gradient(135deg,#1f2937,#4b5563)','linear-gradient(135deg,#be185d,#f59e0b)'];
   var AVC=['#1877f2','#e4405f','#f7b928','#42b72a','#8e44ad','#e67e22','#16a085'];
+  var filt='all', qs='', hid={}; try{ hid=JSON.parse(localStorage.getItem('feedHid')||'{}')||{}; }catch(e){}
+  var seenMap={}, seenObs=null;
+  var stories=[], compMode='post', svI=-1, svTm=null;
+  var likeMap={}, cmMap={}, footEls={}, cmPost=null, cmBusy=false;
   var curBg='', file=null, fileUrl='', posts=[], urls={}, started=false, ldT=null, busy=false;
   function g(i){return document.getElementById(i);}
   function nameOf(id){ if(me&&id===me.id) return (myProf&&myProf.name)||'আমি'; return (peer&&peer.name)||'অন্যজন'; }
-  function av(node,id){ var n=nameOf(id); node.textContent=Array.from(n)[0]||'?'; node.style.background=AVC[(n.charCodeAt(0)||0)%AVC.length]; }
+  function profOf(id){ return (me&&id===me.id)?myProf:peer; }
+  function av(node,id){
+    var n=nameOf(id), pr=profOf(id);
+    if(pr&&pr.avatar){ node.textContent=''; node.style.background='url('+pr.avatar+') center/cover no-repeat'; }
+    else { node.textContent=Array.from(n)[0]||'?'; node.style.background=AVC[(n.charCodeAt(0)||0)%AVC.length]; }
+  }
   function ago(iso){ var s=(Date.now()-new Date(iso))/1000; if(s<60) return 'এইমাত্র'; if(s<3600) return bn(Math.floor(s/60))+' মিনিট'; if(s<86400) return bn(Math.floor(s/3600))+' ঘণ্টা'; return fmtDay(iso)+' '+fmtTime(iso); }
   function setMode(m){
     g('app').classList.toggle('feedMode', m==='feed');
     g('feed').classList.remove('hidden');
-    if(m==='feed'){ startFeed(); av(g('fMeAv'),me&&me.id); g('fPill').textContent='মনে কী চলছে, '+nameOf(me&&me.id)+'?'; }
+    if(m==='feed'){ startFeed(); av(g('fMeAv'),me&&me.id); av(g('fNavAv'),me&&me.id); g('fPill').textContent='মনে কী চলছে, '+nameOf(me&&me.id)+'?'; }
     else { try{ toBottom(); }catch(e){} }
   }
   /* ---------- কম্পোজার ---------- */
@@ -9447,7 +9676,11 @@ video.fmedia{object-fit:contain}
     var x=el('button','rm','✕'); x.className='rm'; x.onclick=clearFile;
     g('cM').textContent=''; g('cM').appendChild(m); g('cM').appendChild(x); chk();
   }
-  function openCompose(a){
+  function openCompose(a,mode){
+    compMode=mode||'post';
+    g('cTitle').textContent=compMode==='story'?'স্টোরি তৈরি করুন':'পোস্ট তৈরি করুন';
+    g('cGo').textContent=compMode==='story'?'শেয়ার':'পোস্ট';
+    g('fTxt').placeholder=compMode==='story'?'স্টোরিতে কী লিখবেন?':'মনে কী চলছে?';
     g('fCompose').classList.remove('hidden');
     av(g('cAv'),me.id); g('cNm').textContent=nameOf(me.id);
     buildSw(); applyBg(); chk();
@@ -9455,40 +9688,54 @@ video.fmedia{object-fit:contain}
     else if(a==='img'||a==='vid'){ g('fFile').accept=a==='img'?'image/*':'video/*'; g('fFile').click(); }
     else g('fTxt').focus();
   }
-  function closeCompose(){ g('fCompose').classList.add('hidden'); g('fTxt').value=''; curBg=''; clearFile(); applyBg(); }
+  function closeCompose(){ compMode='post'; g('cGo').textContent='পোস্ট'; g('fCompose').classList.add('hidden'); g('fTxt').value=''; curBg=''; clearFile(); applyBg(); }
   async function doPost(){
     if(busy) return; var t=g('fTxt').value.trim(); if(!t&&!file) return;
     if(file && !navigator.onLine){ toast('ছবি বা ভিডিও দিতে নেট লাগবে'); return; }
-    busy=true; var b=g('cGo'); b.disabled=true; b.textContent='হচ্ছে…';
+    var isSt=compMode==='story'; busy=true; var b=g('cGo'); b.disabled=true; b.textContent='হচ্ছে…';
     try{
       var id=uuid(), row={id:id, body:t||null, bg:(curBg&&!file)?curBg:null}, path=null;
       if(file){
         var isI=/^image\//.test(file.type), blob=file, ext, ctype;
         if(isI){ blob=await compressImage(file,1600,0.85); ext='jpg'; ctype='image/jpeg'; }
         else { ext=(file.name.split('.').pop()||'mp4').toLowerCase().replace(/[^a-z0-9]/g,'')||'mp4'; ctype=file.type||'video/mp4'; }
-        path=me.id+'/post_'+id+'.'+ext;
+        path=me.id+(isSt?'/story_':'/post_')+id+'.'+ext;
         var up=await sb.storage.from('media').upload(path,blob,{contentType:ctype.split(';')[0],upsert:false});
         if(up.error) throw up.error;
         row.media_path=path; row.media_type=isI?'image':'video';
       }
-      var r=await sb.from('posts').insert(row);
+      var r=await sb.from(isSt?'stories':'posts').insert(row);
       if(r.error){ if(path) sb.storage.from('media').remove([path]).then(function(){},function(){}); throw r.error; }
-      closeCompose(); await load();
+      closeCompose(); if(isSt) await loadStories(); else await load();
     }catch(e){ toast('পোস্ট হয়নি: '+((e&&e.message)||'আবার চেষ্টা করুন')); }
-    busy=false; b.textContent='পোস্ট'; chk();
+    busy=false; b.textContent=compMode==='story'?'শেয়ার':'পোস্ট'; chk();
   }
   /* ---------- ফিড ---------- */
   function render(){
     var L=g('fList'); L.textContent='';
+    if(seenObs) seenObs.disconnect();
+    seenObs=('IntersectionObserver' in window)?new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ markSeen('post',e.target.dataset.pid); seenObs.unobserve(e.target); } }); },{root:g('feed'),threshold:0.4}):null;
     if(!posts.length){ L.appendChild(el('div','fempty','এখনো কোনো পোস্ট নেই। প্রথম পোস্টটি আপনিই করুন!')); return; }
-    posts.forEach(function(p){
+    var vis=posts.filter(function(p){
+      if(hid[p.id]) return false;
+      if(filt==='video'&&p.media_type!=='video') return false;
+      if(filt==='image'&&p.media_type!=='image') return false;
+      if(filt==='mine'&&!(me&&p.author===me.id)) return false;
+      if(qs&&(p.body||'').toLowerCase().indexOf(qs)<0) return false;
+      return true; });
+    if(!vis.length){ L.appendChild(el('div','fempty','এখানে দেখানোর মতো কিছু নেই।')); return; }
+    vis.forEach(function(p){
       var c=el('div','fpost'), h=el('div','fhead'), a=el('div','fav'); av(a,p.author); h.appendChild(a);
       var w=document.createElement('div'); w.appendChild(el('b',null,nameOf(p.author))); w.appendChild(el('small',null,ago(p.created_at)+' · 👥')); h.appendChild(w);
-      if(me&&p.author===me.id){ var d=el('button','fdel','🗑'); d.onclick=function(){ delPost(p); }; h.appendChild(d); }
+      if(me&&p.author===me.id){ var d=el('button','fdel','•••'); d.onclick=function(){ delPost(p); }; h.appendChild(d); }
+      var xb=el('button','fx','✕'); xb.onclick=function(){ hid[p.id]=1; try{localStorage.setItem('feedHid',JSON.stringify(hid));}catch(e){} render(); }; h.appendChild(xb);
       c.appendChild(h);
       if(p.body){
         if(p.bg&&!p.media_path){ var k=el('div','fcard',p.body); k.style.background=p.bg; c.appendChild(k); }
-        else c.appendChild(el('div','fbody',p.body));
+        else {
+          var long=p.body.length>140||p.body.split('\n').length>3, bd=el('div','fbody'+(long?' cl':''),p.body); c.appendChild(bd);
+          if(long){ var mb=el('button','fmore','…আরও'); mb.onclick=function(){ bd.classList.remove('cl'); mb.remove(); }; c.appendChild(mb); }
+        }
       }
       if(p.media_path){
         var u=urls[p.media_path];
@@ -9497,8 +9744,78 @@ video.fmedia{object-fit:contain}
           else { var im=document.createElement('img'); im.className='fmedia'; im.src=u; im.loading='lazy'; im.onclick=function(){ g('fLb').firstElementChild.src=u; g('fLb').classList.remove('hidden'); }; c.appendChild(im); }
         }
       }
+      var ft=el('div','ffoot'); footEls[p.id]=ft; fillFoot(p,ft); c.appendChild(ft);
+      c.dataset.pid=p.id; if(seenObs&&me&&p.author!==me.id&&!isSeen('post',p.id)) seenObs.observe(c);
       L.appendChild(c);
     });
+  }
+  var THUMB='<svg viewBox="0 0 24 24" width="22" height="22" fill="FILL" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M7 11v9H4v-9zM9 20v-9l4-8a2 2 0 012 2v4h4.6a1.5 1.5 0 011.47 1.8l-1.4 6.6A1.5 1.5 0 0118.2 20z"/></svg>';
+  var CMT='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 4h16a1 1 0 011 1v11a1 1 0 01-1 1h-9l-5 4v-4H4a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>';
+  function fillFoot(p,ft){
+    if(!ft) return; ft.textContent='';
+    var lk=likeMap[p.id]||[], cm=cmMap[p.id]||[], mine=!!(me&&lk.indexOf(me.id)>=0);
+    if(me&&p.author===me.id){ var sl=seenLine('post',p.id); ft.appendChild(el('div','fseen'+(sl.ok?' ok':''),sl.t)); }
+    if(lk.length||cm.length){
+      var st=el('div','fst'), l=el('div','lk');
+      if(lk.length){ l.appendChild(el('i',null,'👍')); l.appendChild(el('span',null,bn(lk.length))); }
+      st.appendChild(l);
+      if(cm.length){ var cc=el('span','cc',bn(cm.length)+' টি কমেন্ট'); cc.onclick=function(){ openCm(p); }; st.appendChild(cc); }
+      ft.appendChild(st);
+    }
+    var ac=el('div','fac'), b1=document.createElement('button'), b2=document.createElement('button');
+    b1.className=mine?'on':''; b1.innerHTML=THUMB.replace('FILL',mine?'currentColor':'none')+'<span>লাইক</span>'; b1.onclick=function(){ toggleLike(p); };
+    b2.innerHTML=CMT+'<span>কমেন্ট</span>'; b2.onclick=function(){ openCm(p); };
+    ac.appendChild(b1); ac.appendChild(b2); ft.appendChild(ac);
+  }
+  async function toggleLike(p){
+    if(!me) return;
+    var arr=likeMap[p.id]=likeMap[p.id]||[], i=arr.indexOf(me.id), had=i>=0;
+    if(had) arr.splice(i,1); else arr.push(me.id);
+    fillFoot(p,footEls[p.id]);
+    var r=had? await sb.from('post_likes').delete().eq('post_id',p.id).eq('user_id',me.id) : await sb.from('post_likes').insert({post_id:p.id,user_id:me.id});
+    if(r.error && !(r.error.code==='23505')){
+      var j=arr.indexOf(me.id); if(had){ if(j<0) arr.push(me.id); } else if(j>=0) arr.splice(j,1);
+      fillFoot(p,footEls[p.id]); toast('লাইক হয়নি');
+    }
+  }
+  async function loadSocial(refresh){
+    var ids=posts.map(function(p){return p.id;}); if(!ids.length) return;
+    try{
+      var a=await sb.from('post_likes').select('post_id,user_id').in('post_id',ids);
+      var b=await sb.from('post_comments').select('*').in('post_id',ids).order('created_at',{ascending:true});
+      if(!a.error){ likeMap={}; (a.data||[]).forEach(function(x){ (likeMap[x.post_id]=likeMap[x.post_id]||[]).push(x.user_id); }); }
+      if(!b.error){ cmMap={}; (b.data||[]).forEach(function(x){ (cmMap[x.post_id]=cmMap[x.post_id]||[]).push(x); }); }
+    }catch(e){}
+    if(refresh){ posts.forEach(function(p){ fillFoot(p,footEls[p.id]); }); if(cmPost) renderCm(); }
+  }
+  function renderCm(){
+    var L=g('cmL'), list=cmMap[cmPost.id]||[]; L.textContent='';
+    if(!list.length){ L.appendChild(el('div','fempty','এখনো কোনো কমেন্ট নেই। প্রথম কমেন্টটি করুন!')); return; }
+    list.forEach(function(c){
+      var row=el('div','cmi'), a=el('div','fav'); av(a,c.author); row.appendChild(a);
+      var w=document.createElement('div'), bb=el('div','cmb'); bb.appendChild(el('b',null,nameOf(c.author))); bb.appendChild(el('div',null,c.body)); w.appendChild(bb);
+      var m=el('div','cmm',ago(c.created_at));
+      if(me&&c.author===me.id){ var d=el('button',null,'মুছুন'); d.onclick=function(){ delCm(c); }; m.appendChild(d); }
+      w.appendChild(m); row.appendChild(w); L.appendChild(row);
+    });
+  }
+  function openCm(p){ cmPost=p; g('fCm').classList.remove('hidden'); renderCm(); var L=g('cmL'); L.scrollTop=L.scrollHeight; }
+  function closeCm(){ g('fCm').classList.add('hidden'); cmPost=null; g('cmT').value=''; g('cmS').disabled=true; }
+  async function sendCm(){
+    var t=g('cmT').value.trim(); if(!t||cmBusy||!cmPost) return; cmBusy=true; g('cmS').disabled=true;
+    var p=cmPost, r=await sb.from('post_comments').insert({post_id:p.id,body:t}).select().single();
+    cmBusy=false;
+    if(r.error){ toast('কমেন্ট হয়নি'); g('cmS').disabled=false; return; }
+    var arr=cmMap[p.id]=cmMap[p.id]||[]; if(!arr.some(function(x){return x.id===r.data.id;})) arr.push(r.data);
+    g('cmT').value=''; g('cmT').style.height=''; renderCm(); fillFoot(p,footEls[p.id]);
+    var L=g('cmL'); L.scrollTop=L.scrollHeight;
+  }
+  async function delCm(c){
+    if(!confirm('এই কমেন্ট মুছে ফেলবেন?')) return;
+    var r=await sb.from('post_comments').delete().eq('id',c.id);
+    if(r.error){ toast('মোছা যায়নি'); return; }
+    cmMap[c.post_id]=(cmMap[c.post_id]||[]).filter(function(x){return x.id!==c.id;});
+    renderCm(); fillFoot(cmPost,footEls[c.post_id]);
   }
   async function load(){
     var r=await sb.from('posts').select('*').order('created_at',{ascending:false}).limit(50);
@@ -9506,7 +9823,131 @@ video.fmedia{object-fit:contain}
     posts=r.data||[];
     var need=posts.filter(function(p){return p.media_path&&!urls[p.media_path];}).map(function(p){return p.media_path;});
     if(need.length){ try{ var sg=await sb.storage.from('media').createSignedUrls(need,3600); (sg.data||[]).forEach(function(x){ if(x.signedUrl) urls[x.path]=x.signedUrl; }); }catch(e){} }
+    await loadSocial(false); await loadSeen(false);
     render();
+  }
+  /* ---------- স্টোরি ---------- */
+  async function loadStories(){
+    var r=await sb.from('stories').select('*').order('created_at',{ascending:false}).limit(60);
+    if(r.error){ stories=[]; renderStories(); return; }
+    stories=r.data||[];
+    var need=stories.filter(function(p){return p.media_path&&!urls[p.media_path];}).map(function(p){return p.media_path;});
+    if(need.length){ try{ var sg=await sb.storage.from('media').createSignedUrls(need,3600); (sg.data||[]).forEach(function(x){ if(x.signedUrl) urls[x.path]=x.signedUrl; }); }catch(e){} }
+    await loadSeen(false);
+    renderStories();
+  }
+  function renderStories(){
+    var R=g('fStories'); R.textContent='';
+    var cr=el('div','scard scr'), ct=el('div','sct'), cf=el('div','fav'); av(cf,me&&me.id); ct.appendChild(cf); cr.appendChild(ct);
+    cr.appendChild(el('div','spl','＋')); cr.appendChild(el('div','scb','স্টোরি তৈরি'));
+    cr.onclick=function(){ openCompose(null,'story'); }; R.appendChild(cr);
+    stories.forEach(function(st,i){
+      var c=el('div','scard'), u=st.media_path?urls[st.media_path]:null;
+      if(st.media_path){
+        if(u){ if(st.media_type==='video'){ var v=document.createElement('video'); v.src=u+'#t=0.1'; v.muted=true; v.playsInline=true; v.preload='metadata'; c.appendChild(v); } else { var im=document.createElement('img'); im.src=u; im.loading='lazy'; c.appendChild(im); } }
+      } else { c.style.background=st.bg||BGS[0]; c.appendChild(el('div','stx',st.body||'')); }
+      var sv=el('div','sav'+((me&&st.author!==me.id&&isSeen('story',st.id))?' seen':'')), fv=el('div','fav'); av(fv,st.author); sv.appendChild(fv); c.appendChild(sv);
+      c.appendChild(el('div','snm',nameOf(st.author)));
+      c.onclick=function(){ showSv(i); }; R.appendChild(c);
+    });
+  }
+  function svStop(){ clearTimeout(svTm); svTm=null; var s=g('svS'); var v=s.querySelector('video'); if(v){ v.onended=null; v.ontimeupdate=null; v.pause(); } }
+  function closeSv(){ svStop(); svI=-1; g('svSn').textContent=''; g('svS').textContent=''; g('fSv').classList.add('hidden'); }
+  function showSv(i){
+    svStop();
+    if(i<0) i=0; if(i>=stories.length){ closeSv(); return; }
+    svI=i; var st=stories[i], S=g('svS'), P=g('svP'); S.textContent='';
+    g('fSv').classList.remove('hidden');
+    av(g('svAv'),st.author); g('svN').textContent=nameOf(st.author); g('svT').textContent=ago(st.created_at);
+    g('svD').classList.toggle('hidden',!(me&&st.author===me.id));
+    g('svC').textContent=st.media_path?(st.body||''):'';
+    if(me&&st.author!==me.id) markSeen('story',st.id);
+    updSn();
+    P.style.transition='none'; P.style.width='0';
+    var u=st.media_path?urls[st.media_path]:null;
+    if(st.media_path&&st.media_type==='video'&&u){
+      var v=document.createElement('video'); v.src=u; v.autoplay=true; v.playsInline=true; v.onended=function(){ showSv(i+1); };
+      v.ontimeupdate=function(){ if(v.duration) P.style.width=(v.currentTime/v.duration*100)+'%'; };
+      S.appendChild(v); var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){ v.muted=true; v.play().catch(function(){}); });
+    } else {
+      if(st.media_path&&u){ var im=document.createElement('img'); im.src=u; S.appendChild(im); }
+      else { S.style.background=st.bg||BGS[0]; var t=el('div','svt',st.body||''); S.appendChild(t); }
+      if(!st.media_path) {} else S.style.background='';
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ P.style.transition='width 5s linear'; P.style.width='100%'; }); });
+      svTm=setTimeout(function(){ showSv(i+1); },5000);
+    }
+    if(st.media_path) S.style.background='';
+  }
+  async function delSv(){
+    var st=stories[svI]; if(!st||!confirm('এই স্টোরি মুছে ফেলবেন?')) return;
+    var r=await sb.from('stories').delete().eq('id',st.id);
+    if(r.error){ toast('মোছা যায়নি'); return; }
+    if(st.media_path) sb.storage.from('media').remove([st.media_path]).then(function(){},function(){});
+    closeSv(); await loadStories();
+  }
+  /* ---------- প্রোফাইল ---------- */
+  function cropAvatar(file){
+    return new Promise(function(res,rej){
+      var url=URL.createObjectURL(file), im=new Image();
+      im.onload=function(){
+        var S=320, m=Math.min(im.naturalWidth,im.naturalHeight), sx=(im.naturalWidth-m)/2, sy=(im.naturalHeight-m)/2;
+        var c=document.createElement('canvas'); c.width=c.height=S; c.getContext('2d').drawImage(im,sx,sy,m,m,0,0,S,S);
+        URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg',0.82));
+      };
+      im.onerror=function(){ URL.revokeObjectURL(url); rej(new Error('image')); };
+      im.src=url;
+    });
+  }
+  function fillPf(){
+    av(g('pfAv'),me.id); g('pfNm').textContent=nameOf(me.id); g('pfName').value=nameOf(me.id);
+    g('pfRemove').style.display=(myProf&&myProf.avatar)?'':'none';
+  }
+  function refreshAv(){
+    if(!started) return;
+    av(g('fMeAv'),me&&me.id); av(g('fNavAv'),me&&me.id);
+    render(); renderStories();
+    if(!g('fPf').classList.contains('hidden')) fillPf();
+  }
+  async function setAvatar(val){
+    var r=await sb.from('profiles').update({avatar:val}).eq('id',me.id);
+    if(r.error){ toast('সংরক্ষণ হয়নি — আগে profile.sql চালান'); return false; }
+    myProf.avatar=val; refreshAv(); return true;
+  }
+  async function pickAvatar(file){
+    if(!file) return; if(!/^image\//.test(file.type)){ toast('শুধু ছবি দিন'); return; }
+    if(!navigator.onLine){ toast('ছবি দিতে নেট লাগবে'); return; }
+    try{ var d=await cropAvatar(file); if(await setAvatar(d)) toast('প্রোফাইল ছবি বদলেছে'); }catch(e){ toast('ছবি পড়া যায়নি'); }
+  }
+  /* ---------- দেখেছে কি না ---------- */
+  function isSeen(kind,id){ var m=seenMap[kind+id]; return !!(m&&me&&m[me.id]); }
+  function peerName(){ return (peer&&peer.name)||'অন্যজন'; }
+  function seenLine(kind,id){
+    var m=seenMap[kind+id], t=(peer&&m)?m[peer.id]:null;
+    if(t) return {ok:true,t:'👁 '+peerName()+' দেখেছেন · '+ago(t)};
+    return {ok:false,t:'👁 এখনো দেখেননি'};
+  }
+  function markSeen(kind,id){
+    if(!me||!id||isSeen(kind,id)) return;
+    (seenMap[kind+id]=seenMap[kind+id]||{})[me.id]=new Date().toISOString();
+    sb.from('seen').insert({kind:kind,item_id:id}).then(function(){},function(){});
+  }
+  function updSn(){
+    var st=stories[svI], el2=g('svSn'); if(!st||g('fSv').classList.contains('hidden')){ el2.textContent=''; return; }
+    if(me&&st.author===me.id){ var sl=seenLine('story',st.id); el2.textContent=sl.ok?sl.t:'👁 এখনো কেউ দেখেনি'; } else el2.textContent='';
+  }
+  async function loadSeen(refresh){
+    var ids=posts.map(function(p){return p.id;}).concat(stories.map(function(x){return x.id;}));
+    if(!ids.length) return;
+    try{
+      var r=await sb.from('seen').select('kind,item_id,user_id,created_at').in('item_id',ids);
+      if(!r.error){ var mine={}; Object.keys(seenMap).forEach(function(k){ if(seenMap[k][me.id]) mine[k]=seenMap[k][me.id]; });
+        seenMap={}; (r.data||[]).forEach(function(x){ (seenMap[x.kind+x.item_id]=seenMap[x.kind+x.item_id]||{})[x.user_id]=x.created_at; });
+        Object.keys(mine).forEach(function(k){ (seenMap[k]=seenMap[k]||{})[me.id]=seenMap[k][me.id]||mine[k]; }); }
+    }catch(e){}
+    if(refresh){ posts.forEach(function(p){ if(me&&p.author===me.id) fillFoot(p,footEls[p.id]); }); renderStories(); updSn(); }
+  }
+  function subSeen(){
+    var t=null; sb.channel('feed-seen').on('postgres_changes',{event:'INSERT',schema:'public',table:'seen'},function(){ clearTimeout(t); t=setTimeout(function(){ loadSeen(true); },500); }).subscribe();
   }
   async function delPost(p){
     if(!confirm('এই পোস্ট মুছে ফেলবেন?')) return;
@@ -9516,9 +9957,36 @@ video.fmedia{object-fit:contain}
     posts=posts.filter(function(x){return x.id!==p.id;}); render();
   }
   function startFeed(){
-    if(started) return; started=true; load();
+    if(started) return; started=true; load(); loadStories(); subSoc(); subSeen();
+    var stT=null; sb.channel('feed-stories').on('postgres_changes',{event:'*',schema:'public',table:'stories'},function(){ clearTimeout(stT); stT=setTimeout(loadStories,400); }).subscribe();
     sb.channel('feed-posts').on('postgres_changes',{event:'*',schema:'public',table:'posts'},function(){ clearTimeout(ldT); ldT=setTimeout(load,400); }).subscribe();
   }
+  var sT=null; function soc(){ clearTimeout(sT); sT=setTimeout(function(){ loadSocial(true); },400); }
+  function subSoc(){ sb.channel('feed-social').on('postgres_changes',{event:'*',schema:'public',table:'post_likes'},soc).on('postgres_changes',{event:'*',schema:'public',table:'post_comments'},soc).subscribe(); }
+  g('pfX').onclick=function(){ g('fPf').classList.add('hidden'); };
+  g('pfCam').onclick=g('pfChange').onclick=function(){ g('pfFile').click(); };
+  g('pfFile').onchange=function(){ var f=this.files[0]; this.value=''; pickAvatar(f); };
+  g('pfRemove').onclick=async function(){ if(confirm('প্রোফাইল ছবি সরাবেন?')) await setAvatar(null); };
+  g('pfSave').onclick=async function(){
+    var n=g('pfName').value.trim(); if(!n){ toast('নাম লিখুন'); return; }
+    var r=await sb.from('profiles').update({name:n}).eq('id',me.id);
+    if(r.error){ toast('সংরক্ষণ হয়নি'); return; }
+    myProf.name=n; toast('নাম সংরক্ষণ হয়েছে'); refreshAv(); try{ renderHeader(); }catch(e){}
+  };
+  g('pfMine').onclick=function(){
+    g('fPf').classList.add('hidden'); filt='mine';
+    [].forEach.call(g('fNav').querySelectorAll('button[data-f]'),function(x){ x.classList.toggle('on',x.dataset.f==='mine'); });
+    g('fStories').style.display='none'; render(); g('feed').scrollTop=0;
+  };
+  g('pfSet').onclick=function(){ try{ openSettings(); }catch(e){} };
+  g('fMeAv').onclick=function(){ g('fPf').classList.remove('hidden'); fillPf(); };
+  var _rh=window.renderHeader;
+  window.renderHeader=function(){ var r=_rh.apply(this,arguments); try{ refreshAv(); }catch(e){} return r; };
+  g('svX').onclick=closeSv; g('svD').onclick=delSv;
+  g('svL').onclick=function(){ showSv(svI-1); }; g('svR').onclick=function(){ showSv(svI+1); };
+  g('cmX').onclick=closeCm;
+  g('cmS').onclick=sendCm;
+  g('cmT').oninput=function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,110)+'px'; g('cmS').disabled=!this.value.trim(); };
   g('fMsg').onclick=function(){ setMode('chat'); };
   g('btnFeedBack').onclick=function(){ setMode('feed'); };
   g('fAdd').onclick=g('fPill').onclick=function(){ openCompose(); };
@@ -9530,9 +9998,121 @@ video.fmedia{object-fit:contain}
   g('cGo').onclick=doPost;
   g('fTxt').oninput=chk;
   g('fLb').onclick=function(){ g('fLb').classList.add('hidden'); };
-  document.querySelector('.fcr2').onclick=function(e){ var b=e.target.closest('button'); if(b) openCompose(b.dataset.a); };
+  g('fPic').onclick=function(){ openCompose('img'); };
+  g('fNavMsg').onclick=function(){ setMode('chat'); };
+  g('fSch').onclick=function(){ var b=g('fSrch'); b.classList.toggle('hidden'); if(!b.classList.contains('hidden')) g('fQ').focus(); else { g('fQ').value=''; qs=''; render(); } };
+  g('fQ').oninput=function(){ qs=this.value.trim().toLowerCase(); render(); };
+  g('fNav').onclick=function(e){ var b=e.target.closest('button[data-f]'); if(!b) return;
+    if(b.dataset.f==='mine'){ g('fPf').classList.remove('hidden'); fillPf(); return; }
+    filt=b.dataset.f;
+    [].forEach.call(g('fNav').querySelectorAll('button[data-f]'),function(x){ x.classList.toggle('on',x===b); });
+    g('fStories').style.display=(filt==='all'&&!qs)?'':'none';
+    render(); g('feed').scrollTop=0; };
   var _enter=window.enter;
-  window.enter=async function(u){ var r=await _enter.apply(this,arguments); setMode('feed'); return r; };
+  window.enter=async function(u){ var r=await _enter.apply(this,arguments); setMode('feed'); try{ if(window.__nbLoad) window.__nbLoad(); }catch(e){} return r; };
+})();
+</script>
+<script>
+/* ===== মোবাইলের ব্যাক বাটন: সব ফিচারে এক ধাপ করে পেছনে আসবে ===== */
+(function(){
+  function $(i){ return document.getElementById(i); }
+  function rendered(el){ return !!el && el.getClientRects().length>0; }
+  function open_(id){ var e=$(id); return !!e && !e.classList.contains('hidden') && rendered(e); }
+  function btn(id){ return function(){ var b=$(id); if(b) b.click(); }; }
+  function hide(id){ return function(){ var e=$(id); if(e) e.classList.add('hidden'); }; }
+  function selfClick(id){ return function(){ var e=$(id); if(e) e.dispatchEvent(new MouseEvent('click',{bubbles:true})); }; }
+  var NOP=function(){};
+  /* [id, বন্ধ করার কাজ, না বন্ধ হলে জোর করে লুকাবে কিনা] — ওপরের স্তর আগে বন্ধ হবে */
+  var LAYERS=[
+    ['fLb',hide('fLb')],
+    ['fSv',btn('svX')],
+    ['fCm',btn('cmX')],
+    ['fCompose',btn('cX')],
+    ['viewer',function(){ try{ closeViewer(); }catch(e){ $('viewer').classList.add('hidden'); } },true],
+    ['gxInv',btn('gxInvN'),true],
+    ['gInv',btn('gInvN'),true],
+    ['npChoose',btn('npNo'),true],
+    ['hmSheet',btn('hsX'),true],
+    ['sheet2',selfClick('sheet2'),true],
+    ['settings',btn('closeSet'),true],
+    ['panel',btn('panelBack'),true],
+    ['replyBar',function(){ try{ if(typeof editing!=='undefined'&&editing&&typeof cancelEdit==='function') cancelEdit(); else clearReply(); }catch(e){} },true],
+    ['emojiPanel',hide('emojiPanel')],
+    ['nbTh',btn('nbThX')],
+    ['nbEd',btn('nbEdBack')],
+    ['dzTx',btn('dzTxNo'),true],
+    ['dzSh',hide('dzSh')],
+    ['dzBusy',NOP],
+    ['rsSet',btn('sNo'),true],
+    ['a4Pal',hide('a4Pal')],
+    ['a4Dl2',hide('a4Dl2')],
+    ['a4Imr',hide('a4Imr')],
+    ['a4Tb3',hide('a4Tb3')],
+    ['hmCf',hide('hmCf')],
+    ['fPf',btn('pfX')],
+    ['fSrch',btn('fSch')],
+    ['rec',NOP],
+    ['game',btn('gBack')],
+    ['rs',btn('rsBack')],
+    ['a4',btn('a4Back')],
+    ['dz',btn('dzBack')],
+    ['nbk',btn('nbBack')]
+  ];
+  /* কোডে তৈরি হওয়া "নিশ্চিত করুন" ধরনের ডায়ালগ (খেলা, রেজাল্ট ইত্যাদি) */
+  function dynDialog(){
+    var list=document.querySelectorAll('div[style*="position:fixed"][style*="inset:0"]'), top=null, tz=-1;
+    for(var i=0;i<list.length;i++){
+      var e=list[i]; if(!rendered(e)) continue;
+      var z=parseInt(getComputedStyle(e).zIndex,10)||0;
+      if(z>=tz){ tz=z; top=e; }
+    }
+    if(!top) return false;
+    var bs=top.querySelectorAll('button'), no=top.querySelector('.gn,.n,.no'), pick=no;
+    if(!pick){ for(var j=0;j<bs.length;j++){ if(/না|বাতিল|পরে|বন্ধ|ঠিক আছে/.test(bs[j].textContent)){ pick=bs[j]; break; } } }
+    if(pick) pick.click(); else top.remove();
+    if(document.body.contains(top)&&rendered(top)) top.remove();
+    return true;
+  }
+  function splashOpen(){ var sp=$('splash'); return !!sp && !sp.classList.contains('away') && !sp.classList.contains('out') && rendered(sp); }
+  /* true ফিরলে ব্যাক এখানেই সামলানো হয়ে গেছে */
+  function goBack(){
+    if(open_('call')||open_('incoming')) return true;
+    if(dynDialog()) return true;
+    for(var i=0;i<LAYERS.length;i++){
+      var L=LAYERS[i];
+      if(open_(L[0])){
+        try{ L[1](); }catch(e){}
+        if(L[2] && open_(L[0])) $(L[0]).classList.add('hidden');
+        return true;
+      }
+    }
+    if(open_('auth')||open_('lock')||open_('nameBox')) return false;
+    if(splashOpen()) return false;
+    var app=$('app');
+    if(app && !app.classList.contains('feedMode')){
+      var fb=$('btnFeedBack'); if(fb && rendered(fb)){ fb.click(); return true; }
+    }
+    var on=document.querySelector('#fNav button.on');
+    if(on && on.dataset.f!=='all'){
+      var h=document.querySelector('#fNav button[data-f="all"]'); if(h){ h.click(); return true; }
+    }
+    if(typeof window.__spShow==='function'){ window.__spShow(); return true; }
+    return false;
+  }
+  var lastRoot=0;
+  try{ history.replaceState({nb:0},''); history.pushState({nb:1},''); }catch(e){}
+  window.addEventListener('popstate',function(){
+    var st=history.state;
+    if(!st || st.nb!==0) return;
+    var yt=$('yt'); if(yt && !yt.classList.contains('hidden')){ try{ history.pushState({nb:1},''); }catch(e){} return; }
+    var handled=false; try{ handled=goBack(); }catch(e){}
+    if(handled){ lastRoot=0; try{ history.pushState({nb:1},''); }catch(e){} return; }
+    var now=Date.now();
+    if(now-lastRoot<2200){ lastRoot=0; try{ history.back(); }catch(e){} return; }
+    lastRoot=now;
+    try{ history.pushState({nb:1},''); }catch(e){}
+    try{ toast('আবার ব্যাক চাপলে অ্যাপ থেকে বের হবে'); }catch(e){}
+  });
 })();
 </script>
 </body>
