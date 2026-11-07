@@ -9528,6 +9528,24 @@ video.fmedia{object-fit:contain}
 .cpf button{width:100%;text-align:left;padding:12px;border:0;background:var(--bg);color:var(--text);border-radius:10px;font-size:15px;font-weight:600;font-family:inherit}
 #fLb{position:absolute;inset:0;z-index:70;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center}
 #fLb.hidden{display:none!important}
+.flk{position:relative}
+.flph{display:flex;flex-direction:column;align-items:center;gap:6px;padding:22px 14px;background:var(--bg);text-align:center}
+.flph small{color:var(--muted);font-size:12.5px}
+.flf{width:44px;height:44px;border-radius:50%;background:#1877f2;color:#fff;font-weight:900;font-size:28px;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif}
+.flbtn{background:#1877f2;color:#fff;border:0;border-radius:8px;padding:9px 26px;font-weight:700;font-family:inherit;font-size:15px;margin-top:4px}
+.flk iframe{display:block;width:100%;border:0;background:#000}
+.flk iframe.flv{aspect-ratio:16/9}
+.flk iframe.flp{height:560px;max-width:500px;margin:0 auto;background:#fff}
+.flo{display:block;padding:8px 12px;font-size:13px;color:#1877f2;text-decoration:none}
+.flc{display:block;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg);text-decoration:none;color:var(--text);overflow:hidden}
+.flc img{display:block;width:100%;aspect-ratio:1.91/1;object-fit:cover}
+.flcb{padding:10px 12px}
+.flcb small{display:block;color:var(--muted);font-size:12px;letter-spacing:.3px}
+.flcb b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:15.5px;margin:2px 0}
+.flcb p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--muted);font-size:13.5px;margin:2px 0 0}
+.cpm .flc img{max-height:none;object-fit:cover;background:transparent;border-radius:0}
+.cpm .flk iframe{display:none}
+
 #fMenu{position:absolute;inset:0;z-index:62;background:rgba(0,0,0,.45);display:flex;align-items:flex-end}
 #fMenu.hidden{display:none!important}
 .fmw{width:100%;background:var(--panel);border-radius:16px 16px 0 0;padding:8px 12px calc(12px + env(safe-area-inset-bottom))}
@@ -9652,7 +9670,7 @@ video.fmedia{object-fit:contain}
   var BGS=['linear-gradient(135deg,#1877f2,#42b72a)','linear-gradient(135deg,#7c3aed,#ec4899)','linear-gradient(135deg,#f97316,#ef4444)','linear-gradient(135deg,#0ea5e9,#06b6d4)','linear-gradient(135deg,#16a34a,#a3e635)','linear-gradient(135deg,#1f2937,#4b5563)','linear-gradient(135deg,#be185d,#f59e0b)'];
   var AVC=['#1877f2','#e4405f','#f7b928','#42b72a','#8e44ad','#e67e22','#16a085'];
   var filt='all', qs='', hid={}; try{ hid=JSON.parse(localStorage.getItem('feedHid')||'{}')||{}; }catch(e){}
-  var seenMap={}, seenObs=null, ytId=null, ytUrl='', editP=null, menuP=null, ytAct=null, ytTm=null;
+  var seenMap={}, seenObs=null, ytId=null, ytUrl='', editP=null, menuP=null, ytAct=null, ytTm=null, lk=null, lkDis='', lkT=null;
   var stories=[], compMode='post', svI=-1, svTm=null;
   var likeMap={}, cmMap={}, footEls={}, cmPost=null, cmBusy=false;
   var curBg='', file=null, fileUrl='', posts=[], urls={}, started=false, ldT=null, busy=false;
@@ -9682,14 +9700,14 @@ video.fmedia{object-fit:contain}
     });
   }
   function applyBg(){ var t=g('cT'); t.className='cpt'+(curBg?' hb':''); t.style.background=curBg; }
-  function chk(){ g('cGo').disabled = !(g('fTxt').value.trim() || file || ytId || (editP&&editP.media_path)); }
+  function chk(){ g('cGo').disabled = !(g('fTxt').value.trim() || file || ytId || lk || (editP&&editP.media_path)); }
   function clearFile(){ if(fileUrl) URL.revokeObjectURL(fileUrl); file=null; fileUrl=''; g('cM').textContent=''; g('fSw').style.display=''; g('fFile').value=''; chk(); }
   function pickFile(f){
     if(!f) return;
     var isI=/^image\//.test(f.type), isV=/^video\//.test(f.type);
     if(!isI&&!isV){ toast('শুধু ছবি বা ভিডিও দিন'); return; }
     if(isV && f.size>MAX_VIDEO_MB*1048576){ toast('ভিডিও '+bn(MAX_VIDEO_MB)+' MB-র বেশি, ছোট ভিডিও দিন'); return; }
-    clearFile(); ytId=null; ytUrl=''; file=f; fileUrl=URL.createObjectURL(f);
+    clearFile(); ytId=null; ytUrl=''; lk=null; file=f; fileUrl=URL.createObjectURL(f);
     curBg=''; applyBg(); buildSw(); g('fSw').style.display='none';
     var m=document.createElement(isI?'img':'video'); m.src=fileUrl; if(isV){ m.controls=true; m.playsInline=true; }
     var x=el('button','rm','✕'); x.className='rm'; x.onclick=clearFile;
@@ -9707,14 +9725,14 @@ video.fmedia{object-fit:contain}
   function ytThumb(id){ return 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg'; }
   function detectYt(){
     if(file||compMode==='story') return;
-    var y=ytParse(g('fTxt').value); if(!y) return;
-    if(y.id!==ytId){ ytId=y.id; ytUrl=y.url; showYtPrev(); } else ytUrl=y.url;
+    var y=ytParse(g('fTxt').value); if(!y||y.url===lkDis) return;
+    if(y.id!==ytId){ lk=null; ytId=y.id; ytUrl=y.url; showYtPrev(); } else ytUrl=y.url;
   }
   function showYtPrev(){
     var m=g('cM'); m.textContent=''; curBg=''; applyBg(); g('fSw').style.display='none';
     var box=el('div','fyt'), im=document.createElement('img'); im.src=ytThumb(ytId); box.appendChild(im); box.appendChild(el('div','fytp','▶'));
     var x=el('button','rm','✕'); x.className='rm';
-    x.onclick=function(){ ytId=null; ytUrl=''; m.textContent=''; if(!file&&!(editP&&editP.media_path)) g('fSw').style.display=''; chk(); };
+    x.onclick=function(){ lkDis=ytUrl; ytId=null; ytUrl=''; m.textContent=''; if(!file&&!(editP&&editP.media_path)) g('fSw').style.display=''; chk(); };
     box.appendChild(x); m.appendChild(box); chk();
   }
   function ytStop(){ if(ytAct&&ytAct._reset) ytAct._reset(); ytAct=null; if(ytTm){ clearInterval(ytTm); ytTm=null; } }
@@ -9768,11 +9786,114 @@ video.fmedia{object-fit:contain}
     else if(st===0) ytAct._cover(true);
     else if(st===1){ var c=ytAct.querySelector('.fytc'); if(c) c.remove(); }
   });
+  /* ---------- অন্য লিংক: ফেইসবুক, সরাসরি ভিডিও/ছবি, ওয়েবসাইট ---------- */
+  function hostOf(u){ try{ return new URL(u).hostname.replace(/^www\./,''); }catch(e){ return u; } }
+  function firstUrl(t){
+    var us=(t||'').match(/https?:\/\/[^\s]+/g)||[];
+    for(var i=0;i<us.length;i++){ var u=us[i].replace(/[.,;:!?)\]}।]+$/,''); if(u.length>10) return u; }
+    return null;
+  }
+  function linkType(u){
+    var h; try{ h=new URL(u); }catch(e){ return null; }
+    if(!/^https?:$/.test(h.protocol)) return null;
+    var host=h.hostname.replace(/^(www|m|mbasic|web|mobile)\./,''), path=h.pathname;
+    if(/(^|\.)(facebook\.com|fb\.watch|fb\.com)$/.test(host)){
+      var vid=host==='fb.watch'||/\/(videos?|watch|reels?)\b/.test(path)||/\/share\/[vr]\//.test(path)||/[?&]v=\d+/.test(h.search);
+      return {t:'fb',k:vid?'v':'p'};
+    }
+    if(h.protocol==='https:'){
+      if(/\.(mp4|webm|mov|m4v|ogv)$/i.test(path)) return {t:'vid'};
+      if(/\.(jpe?g|png|gif|webp|avif|bmp)$/i.test(path)) return {t:'img'};
+    }
+    return {t:'web'};
+  }
+  function cleanLk(l){ return {u:l.u,t:l.t,k:l.k||null,title:l.title||'',desc:l.desc||'',img:l.img||'',site:l.site||''}; }
+  async function fetchMeta(l){
+    try{
+      var ctl=new AbortController(), to=setTimeout(function(){ ctl.abort(); },7000);
+      var r=await fetch('https://api.microlink.io/?url='+encodeURIComponent(l.u),{signal:ctl.signal}); clearTimeout(to);
+      var j=await r.json();
+      if(j&&j.status==='success'&&j.data){
+        var d=j.data; l.title=String(d.title||'').slice(0,160); l.desc=String(d.description||'').slice(0,220);
+        var im=(d.image&&d.image.url)||(d.logo&&d.logo.url)||''; l.img=/^https:\/\//.test(im)?im:''; l.site=String(d.publisher||'').slice(0,60);
+      }
+    }catch(e){}
+    l.done=true; if(lk===l) showLkPrev();
+  }
+  function detectLink(){
+    if(file||compMode==='story') return;
+    var t=g('fTxt').value; if(ytParse(t)) return;
+    var u=firstUrl(t); if(!u||u===lkDis) return;
+    if(lk&&lk.u===u) return;
+    if(!/^https?:\/\/[^\s\/]+\.[^\s\/]{2,}/.test(u)) return;
+    var ty=linkType(u); if(!ty) return;
+    ytId=null; ytUrl=''; lk={u:u,t:ty.t,k:ty.k}; showLkPrev();
+    if(lk.t==='web') fetchMeta(lk);
+  }
+  function webCard(l,prev){
+    var c=document.createElement(prev?'div':'a'); c.className='flc';
+    if(!prev){ c.href=l.u; c.target='_blank'; c.rel='noopener noreferrer'; }
+    if(l.img){ var im=document.createElement('img'); im.src=l.img; im.loading='lazy'; im.referrerPolicy='no-referrer'; im.onerror=function(){ im.remove(); }; c.appendChild(im); }
+    var b=el('div','flcb'); b.appendChild(el('small',null,(l.site||hostOf(l.u))));
+    b.appendChild(el('b',null,l.title||(prev&&!l.done?'লোড হচ্ছে…':hostOf(l.u))));
+    if(l.desc) b.appendChild(el('p',null,l.desc));
+    c.appendChild(b); return c;
+  }
+  function fbCard(l,onPlay){
+    var c=el('div','flph'); c.appendChild(el('div','flf','f'));
+    c.appendChild(el('b',null,l.k==='v'?'ফেইসবুক ভিডিও':'ফেইসবুক পোস্ট')); c.appendChild(el('small',null,hostOf(l.u)));
+    if(onPlay){ var b=el('button','flbtn','দেখুন'); b.type='button'; b.onclick=onPlay; c.appendChild(b); }
+    return c;
+  }
+  function openLnk(u){ var a=el('a','flo','🔗 মূল লিংকে খুলুন'); a.href=u; a.target='_blank'; a.rel='noopener noreferrer'; return a; }
+  function showLkPrev(){
+    var m=g('cM'); m.textContent=''; curBg=''; applyBg(); g('fSw').style.display='none';
+    var l=lk, box=document.createElement('div');
+    if(l.t==='vid'){ var v=document.createElement('video'); v.src=l.u; v.controls=true; v.playsInline=true; v.preload='metadata'; box.appendChild(v); }
+    else if(l.t==='img'){ var im=document.createElement('img'); im.src=l.u; box.appendChild(im); }
+    else if(l.t==='fb') box.appendChild(fbCard(l,null));
+    else box.appendChild(webCard(l,true));
+    var x=el('button','rm','✕'); x.className='rm';
+    x.onclick=function(){ lkDis=l.u; lk=null; m.textContent=''; if(!file&&!(editP&&editP.media_path)) g('fSw').style.display=''; chk(); };
+    m.appendChild(box); m.appendChild(x); chk();
+  }
+  function lkBox(l){
+    if(!l||!/^https?:\/\//.test(l.u||'')) return document.createElement('div');
+    if(l.t==='vid'){
+      var v=document.createElement('video'); v.className='fmedia'; v.src=l.u; v.controls=true; v.playsInline=true; v.preload='metadata';
+      var w=document.createElement('div'); w.appendChild(v);
+      v.onerror=function(){ w.textContent=''; w.appendChild(webCard(l,false)); };
+      return w;
+    }
+    if(l.t==='img'){
+      var im=document.createElement('img'); im.className='fmedia'; im.src=l.u; im.loading='lazy'; im.referrerPolicy='no-referrer';
+      var w2=document.createElement('div'); w2.appendChild(im);
+      im.onclick=function(){ g('fLb').firstElementChild.src=l.u; g('fLb').classList.remove('hidden'); };
+      im.onerror=function(){ w2.textContent=''; w2.appendChild(webCard(l,false)); };
+      return w2;
+    }
+    if(l.t==='fb'){
+      var box=el('div','flk');
+      function ph(){ box.textContent=''; box.appendChild(fbCard(l,play)); box.appendChild(openLnk(l.u)); }
+      function play(){
+        if(ytAct&&ytAct!==box&&ytAct._reset) ytAct._reset();
+        ytAct=box; box._reset=ph; box.textContent='';
+        var fr=document.createElement('iframe'), en=encodeURIComponent(l.u);
+        fr.className=l.k==='v'?'flv':'flp';
+        fr.src=l.k==='v'?'https://www.facebook.com/plugins/video.php?href='+en+'&show_text=false&autoplay=true&width=500':'https://www.facebook.com/plugins/post.php?href='+en+'&show_text=true&width=500';
+        fr.allow='autoplay; clipboard-write; encrypted-media; picture-in-picture'; fr.setAttribute('allowfullscreen','true');
+        box.appendChild(fr); box.appendChild(openLnk(l.u));
+        if(!ytTm) ytTm=setInterval(ytCheck,1500);
+      }
+      ph(); return box;
+    }
+    return webCard(l,false);
+  }
   /* ---------- পোস্ট সম্পাদনা ---------- */
   function postMenu(p){ menuP=p; g('fMenu').classList.remove('hidden'); }
   function openEdit(p){
     if(!me||p.author!==me.id) return;
-    editP=p; compMode='edit'; ytId=p.yt||null; ytUrl=''; curBg=p.bg||'';
+    editP=p; compMode='edit'; ytId=p.yt||null; ytUrl=''; curBg=p.bg||''; lk=p.link?JSON.parse(JSON.stringify(p.link)):null; lkDis='';
     g('cTitle').textContent='পোস্ট সম্পাদনা'; g('cGo').textContent='সংরক্ষণ'; g('fTxt').placeholder='মনে কী চলছে?'; g('fTxt').value=p.body||'';
     g('fCompose').classList.remove('hidden'); av(g('cAv'),me.id); g('cNm').textContent=nameOf(me.id);
     var cf=document.querySelector('#fCompose .cpf'); if(cf) cf.style.display='none';
@@ -9781,21 +9902,22 @@ video.fmedia{object-fit:contain}
       g('fSw').style.display='none'; curBg=''; applyBg();
       var u=urls[p.media_path];
       if(u){ var m=document.createElement(p.media_type==='video'?'video':'img'); m.src=u; if(p.media_type==='video'){ m.controls=true; m.playsInline=true; } g('cM').appendChild(m); }
-    } else if(ytId){ showYtPrev(); }
+    } else if(ytId){ showYtPrev(); } else if(lk){ lk.done=true; showLkPrev(); }
     chk(); g('fTxt').focus();
   }
   async function doEdit(){
     if(busy||!editP) return;
-    var t=g('fTxt').value.trim(); if(ytId&&ytUrl) t=t.split(ytUrl).join('').trim();
-    if(!t&&!ytId&&!editP.media_path) return;
+    var t=g('fTxt').value.trim(); if(ytId&&ytUrl) t=t.split(ytUrl).join('').trim(); if(lk&&lk.u) t=t.split(lk.u).join('').trim();
+    if(!t&&!ytId&&!lk&&!editP.media_path) return;
     busy=true; var b=g('cGo'); b.disabled=true; b.textContent='হচ্ছে…';
     try{
-      var upd={body:t||null, yt:ytId||null, edited_at:new Date().toISOString(), bg:(!editP.media_path&&!ytId&&curBg)?curBg:null};
+      var upd={body:t||null, yt:ytId||null, edited_at:new Date().toISOString(), bg:(!editP.media_path&&!ytId&&!lk&&curBg)?curBg:null};
+      if(lk||editP.link) upd.link=lk?cleanLk(lk):null;
       var r=await sb.from('posts').update(upd).eq('id',editP.id).select().single();
       if(r.error) throw r.error;
       for(var i=0;i<posts.length;i++) if(posts[i].id===r.data.id) posts[i]=r.data;
       closeCompose(); render(); toast('পোস্ট সম্পাদনা হয়েছে');
-    }catch(e){ toast('সংরক্ষণ হয়নি — আগে নতুন SQL (posts_edit.sql) চালান'); }
+    }catch(e){ toast('সংরক্ষণ হয়নি — আগে নতুন SQL চালান'); }
     busy=false; b.textContent=compMode==='edit'?'সংরক্ষণ':'পোস্ট'; chk();
   }
   function openCompose(a,mode){
@@ -9810,14 +9932,14 @@ video.fmedia{object-fit:contain}
     else if(a==='img'||a==='vid'){ g('fFile').accept=a==='img'?'image/*':'video/*'; g('fFile').click(); }
     else g('fTxt').focus();
   }
-  function closeCompose(){ compMode='post'; editP=null; ytId=null; ytUrl=''; var cf0=document.querySelector('#fCompose .cpf'); if(cf0) cf0.style.display=''; g('cGo').textContent='পোস্ট'; g('fCompose').classList.add('hidden'); g('fTxt').value=''; curBg=''; clearFile(); applyBg(); }
+  function closeCompose(){ compMode='post'; editP=null; ytId=null; ytUrl=''; lk=null; lkDis=''; var cf0=document.querySelector('#fCompose .cpf'); if(cf0) cf0.style.display=''; g('cGo').textContent='পোস্ট'; g('fCompose').classList.add('hidden'); g('fTxt').value=''; curBg=''; clearFile(); applyBg(); }
   async function doPost(){
     if(compMode==='edit') return doEdit();
-    if(busy) return; var t=g('fTxt').value.trim(); if(compMode==='story') ytId=null; if(ytId&&ytUrl) t=t.split(ytUrl).join('').trim(); if(!t&&!file&&!ytId) return;
+    if(busy) return; var t=g('fTxt').value.trim(); if(compMode==='story'){ ytId=null; lk=null; } if(ytId&&ytUrl) t=t.split(ytUrl).join('').trim(); if(lk&&lk.u) t=t.split(lk.u).join('').trim(); if(!t&&!file&&!ytId&&!lk) return;
     if(file && !navigator.onLine){ toast('ছবি বা ভিডিও দিতে নেট লাগবে'); return; }
     var isSt=compMode==='story'; busy=true; var b=g('cGo'); b.disabled=true; b.textContent='হচ্ছে…';
     try{
-      var id=uuid(), row={id:id, body:t||null, bg:(curBg&&!file&&!ytId)?curBg:null}, path=null; if(ytId&&!isSt) row.yt=ytId;
+      var id=uuid(), row={id:id, body:t||null, bg:(curBg&&!file&&!ytId&&!lk)?curBg:null}, path=null; if(ytId&&!isSt) row.yt=ytId; if(lk&&!isSt) row.link=cleanLk(lk);
       if(file){
         var isI=/^image\//.test(file.type), blob=file, ext, ctype;
         if(isI){ blob=await compressImage(file,1600,0.85); ext='jpg'; ctype='image/jpeg'; }
@@ -9868,6 +9990,7 @@ video.fmedia{object-fit:contain}
         }
       }
       if(p.yt) c.appendChild(ytBox(p.yt));
+      if(p.link&&p.link.u) c.appendChild(lkBox(p.link));
       var ft=el('div','ffoot'); footEls[p.id]=ft; fillFoot(p,ft); c.appendChild(ft);
       c.dataset.pid=p.id; if(seenObs&&me&&p.author!==me.id&&!isSeen('post',p.id)) seenObs.observe(c);
       L.appendChild(c);
@@ -10125,7 +10248,7 @@ video.fmedia{object-fit:contain}
   g('cPh').onclick=function(){ g('fFile').accept='image/*,video/*'; g('fFile').click(); };
   g('cX').onclick=function(){ if((g('fTxt').value.trim()||file)&&!confirm('পোস্টটি বাদ দেবেন?')) return; closeCompose(); };
   g('cGo').onclick=doPost;
-  g('fTxt').oninput=function(){ detectYt(); chk(); };
+  g('fTxt').oninput=function(){ detectYt(); clearTimeout(lkT); lkT=setTimeout(detectLink,500); chk(); };
   g('fLb').onclick=function(){ g('fLb').classList.add('hidden'); };
   g('fPic').onclick=function(){ openCompose('img'); };
   g('fNavMsg').onclick=function(){ setMode('chat'); };
