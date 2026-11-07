@@ -1260,6 +1260,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <div class="svsn" id="svSn"></div>
     <div class="svz l" id="svL"></div><div class="svz r" id="svR"></div>
   </div>
+  <div id="fMenu" class="hidden"><div class="fmw"><button type="button" data-a="edit">✏️ পোস্ট সম্পাদনা</button><button type="button" data-a="del">🗑 পোস্ট মুছুন</button><button type="button" data-a="x">বাতিল</button></div></div>
   <div id="fLb" class="hidden"><img alt=""></div>
   <div id="replyBar" class="hidden"></div>
   <div id="emojiPanel" class="hidden"></div>
@@ -9527,6 +9528,23 @@ video.fmedia{object-fit:contain}
 .cpf button{width:100%;text-align:left;padding:12px;border:0;background:var(--bg);color:var(--text);border-radius:10px;font-size:15px;font-weight:600;font-family:inherit}
 #fLb{position:absolute;inset:0;z-index:70;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center}
 #fLb.hidden{display:none!important}
+#fMenu{position:absolute;inset:0;z-index:62;background:rgba(0,0,0,.45);display:flex;align-items:flex-end}
+#fMenu.hidden{display:none!important}
+.fmw{width:100%;background:var(--panel);border-radius:16px 16px 0 0;padding:8px 12px calc(12px + env(safe-area-inset-bottom))}
+.fmw button{display:block;width:100%;text-align:left;padding:14px 10px;border:0;background:transparent;color:var(--text);font-size:16px;font-weight:600;font-family:inherit;border-radius:8px}
+.fmw button:active{background:var(--bg)}
+.fmw button[data-a=del]{color:#f02849}
+.fyt{position:relative;width:100%;aspect-ratio:16/9;background:#000;overflow:hidden}
+.fyt>img{width:100%;height:100%;object-fit:cover!important;max-height:none!important;display:block;border-radius:0!important}
+.fyt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.fytp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:44px;border-radius:12px;border:0;background:#f00;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:4;font-family:inherit}
+.fytb{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;padding:2px 7px;border-radius:5px}
+.fytk{position:absolute;left:0;right:0;top:0;height:54px;z-index:2}
+.fytc{position:absolute;inset:0;z-index:3;background-size:cover;background-position:center;cursor:pointer}
+.fytc::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.35)}
+.fytf{position:absolute;right:8px;top:8px;z-index:6;width:34px;height:34px;border-radius:8px;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:17px}
+.cpm .fyt .rm{z-index:7}
+
 .fseen{color:var(--muted);font-size:12.5px;padding:8px 0 0}
 .fseen.ok{color:#1877f2}
 .scard .sav.seen{border-color:#8a8d91}
@@ -9634,7 +9652,7 @@ video.fmedia{object-fit:contain}
   var BGS=['linear-gradient(135deg,#1877f2,#42b72a)','linear-gradient(135deg,#7c3aed,#ec4899)','linear-gradient(135deg,#f97316,#ef4444)','linear-gradient(135deg,#0ea5e9,#06b6d4)','linear-gradient(135deg,#16a34a,#a3e635)','linear-gradient(135deg,#1f2937,#4b5563)','linear-gradient(135deg,#be185d,#f59e0b)'];
   var AVC=['#1877f2','#e4405f','#f7b928','#42b72a','#8e44ad','#e67e22','#16a085'];
   var filt='all', qs='', hid={}; try{ hid=JSON.parse(localStorage.getItem('feedHid')||'{}')||{}; }catch(e){}
-  var seenMap={}, seenObs=null;
+  var seenMap={}, seenObs=null, ytId=null, ytUrl='', editP=null, menuP=null, ytAct=null, ytTm=null;
   var stories=[], compMode='post', svI=-1, svTm=null;
   var likeMap={}, cmMap={}, footEls={}, cmPost=null, cmBusy=false;
   var curBg='', file=null, fileUrl='', posts=[], urls={}, started=false, ldT=null, busy=false;
@@ -9650,6 +9668,7 @@ video.fmedia{object-fit:contain}
   function setMode(m){
     g('app').classList.toggle('feedMode', m==='feed');
     g('feed').classList.remove('hidden');
+    if(m!=='feed') ytStop();
     if(m==='feed'){ startFeed(); av(g('fMeAv'),me&&me.id); av(g('fNavAv'),me&&me.id); g('fPill').textContent='মনে কী চলছে, '+nameOf(me&&me.id)+'?'; }
     else { try{ toBottom(); }catch(e){} }
   }
@@ -9663,18 +9682,121 @@ video.fmedia{object-fit:contain}
     });
   }
   function applyBg(){ var t=g('cT'); t.className='cpt'+(curBg?' hb':''); t.style.background=curBg; }
-  function chk(){ g('cGo').disabled = !(g('fTxt').value.trim() || file); }
+  function chk(){ g('cGo').disabled = !(g('fTxt').value.trim() || file || ytId || (editP&&editP.media_path)); }
   function clearFile(){ if(fileUrl) URL.revokeObjectURL(fileUrl); file=null; fileUrl=''; g('cM').textContent=''; g('fSw').style.display=''; g('fFile').value=''; chk(); }
   function pickFile(f){
     if(!f) return;
     var isI=/^image\//.test(f.type), isV=/^video\//.test(f.type);
     if(!isI&&!isV){ toast('শুধু ছবি বা ভিডিও দিন'); return; }
     if(isV && f.size>MAX_VIDEO_MB*1048576){ toast('ভিডিও '+bn(MAX_VIDEO_MB)+' MB-র বেশি, ছোট ভিডিও দিন'); return; }
-    clearFile(); file=f; fileUrl=URL.createObjectURL(f);
+    clearFile(); ytId=null; ytUrl=''; file=f; fileUrl=URL.createObjectURL(f);
     curBg=''; applyBg(); buildSw(); g('fSw').style.display='none';
     var m=document.createElement(isI?'img':'video'); m.src=fileUrl; if(isV){ m.controls=true; m.playsInline=true; }
     var x=el('button','rm','✕'); x.className='rm'; x.onclick=clearFile;
     g('cM').textContent=''; g('cM').appendChild(m); g('cM').appendChild(x); chk();
+  }
+  /* ---------- ইউটিউব লিংক ---------- */
+  function ytParse(t){
+    var us=(t||'').match(/https?:\/\/[^\s]+/g)||[];
+    for(var i=0;i<us.length;i++){
+      var m=us[i].match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:[^\s]*?&)?v=|embed\/|shorts\/|live\/|v\/))([A-Za-z0-9_-]{11})/);
+      if(m) return {id:m[1],url:us[i]};
+    }
+    return null;
+  }
+  function ytThumb(id){ return 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg'; }
+  function detectYt(){
+    if(file||compMode==='story') return;
+    var y=ytParse(g('fTxt').value); if(!y) return;
+    if(y.id!==ytId){ ytId=y.id; ytUrl=y.url; showYtPrev(); } else ytUrl=y.url;
+  }
+  function showYtPrev(){
+    var m=g('cM'); m.textContent=''; curBg=''; applyBg(); g('fSw').style.display='none';
+    var box=el('div','fyt'), im=document.createElement('img'); im.src=ytThumb(ytId); box.appendChild(im); box.appendChild(el('div','fytp','▶'));
+    var x=el('button','rm','✕'); x.className='rm';
+    x.onclick=function(){ ytId=null; ytUrl=''; m.textContent=''; if(!file&&!(editP&&editP.media_path)) g('fSw').style.display=''; chk(); };
+    box.appendChild(x); m.appendChild(box); chk();
+  }
+  function ytStop(){ if(ytAct&&ytAct._reset) ytAct._reset(); ytAct=null; if(ytTm){ clearInterval(ytTm); ytTm=null; } }
+  function ytCheck(){
+    if(!ytAct){ clearInterval(ytTm); ytTm=null; return; }
+    var sp=document.getElementById('splash'), spOpen=!!sp&&!sp.classList.contains('away')&&!sp.classList.contains('out')&&sp.getClientRects().length>0;
+    if(g('feed').getClientRects().length===0||spOpen||document.hidden) ytStop();
+  }
+  function ytBox(id){
+    var box=el('div','fyt');
+    function thumb(){
+      box.textContent=''; var im=document.createElement('img'); im.src=ytThumb(id); im.loading='lazy'; box.appendChild(im);
+      var pl=el('button','fytp','▶'); pl.type='button'; pl.onclick=play; box.appendChild(pl); box.appendChild(el('span','fytb','YouTube'));
+    }
+    function cmd(func,args){ try{ box._f.contentWindow.postMessage(JSON.stringify({event:'command',func:func,args:args||[],id:1,channel:'widget'}),'*'); }catch(e){} }
+    function play(){
+      if(ytAct&&ytAct!==box&&ytAct._reset) ytAct._reset();
+      ytAct=box; box._reset=thumb; box.textContent='';
+      var f=document.createElement('iframe'); box._f=f;
+      f.allow='autoplay; encrypted-media; picture-in-picture'; f.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+      var og=/^https?:/.test(location.origin)?'&origin='+encodeURIComponent(location.origin):'';
+      f.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+'?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&iv_load_policy=3&disablekb=1&fs=0'+og;
+      f.onload=function(){ try{
+        f.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*');
+        f.contentWindow.postMessage(JSON.stringify({event:'command',func:'addEventListener',args:['onStateChange'],id:1,channel:'widget'}),'*');
+      }catch(e){} };
+      box.appendChild(f); box.appendChild(el('div','fytk'));
+      var fb=el('button','fytf','⛶'); fb.type='button';
+      fb.onclick=function(){ try{ if(document.fullscreenElement) document.exitFullscreen(); else (box.requestFullscreen||box.webkitRequestFullscreen).call(box); }catch(e){} };
+      box.appendChild(fb);
+      if(!ytTm) ytTm=setInterval(ytCheck,1500);
+    }
+    box._cover=function(ended){
+      if(box.querySelector('.fytc')) return;
+      var cv=el('div','fytc'); cv.style.backgroundImage='url('+ytThumb(id)+')';
+      var b=el('div','fytp',ended?'↻':'▶'); cv.appendChild(b);
+      cv.onclick=function(){ box._lp=Date.now(); cv.remove(); if(ended) cmd('seekTo',[0,true]); cmd('playVideo'); };
+      box.appendChild(cv);
+    };
+    thumb(); return box;
+  }
+  window.addEventListener('message',function(e){
+    if(!ytAct||!ytAct._f||e.source!==ytAct._f.contentWindow) return;
+    var d=e.data; try{ if(typeof d==='string') d=JSON.parse(d); }catch(x){ return; } if(!d) return;
+    var st=null;
+    if(d.event==='onStateChange') st=d.info;
+    else if(d.event==='infoDelivery'&&d.info&&typeof d.info.playerState==='number') st=d.info.playerState;
+    else if(d.event==='onError'){ toast('এই ভিডিও এখানে চালানো যায় না'); ytAct._reset(); return; }
+    if(st===null) return;
+    if(st===2){ if(Date.now()-(ytAct._lp||0)<1500) return; ytAct._cover(false); }
+    else if(st===0) ytAct._cover(true);
+    else if(st===1){ var c=ytAct.querySelector('.fytc'); if(c) c.remove(); }
+  });
+  /* ---------- পোস্ট সম্পাদনা ---------- */
+  function postMenu(p){ menuP=p; g('fMenu').classList.remove('hidden'); }
+  function openEdit(p){
+    if(!me||p.author!==me.id) return;
+    editP=p; compMode='edit'; ytId=p.yt||null; ytUrl=''; curBg=p.bg||'';
+    g('cTitle').textContent='পোস্ট সম্পাদনা'; g('cGo').textContent='সংরক্ষণ'; g('fTxt').placeholder='মনে কী চলছে?'; g('fTxt').value=p.body||'';
+    g('fCompose').classList.remove('hidden'); av(g('cAv'),me.id); g('cNm').textContent=nameOf(me.id);
+    var cf=document.querySelector('#fCompose .cpf'); if(cf) cf.style.display='none';
+    g('cM').textContent=''; buildSw(); applyBg(); g('fSw').style.display='';
+    if(p.media_path){
+      g('fSw').style.display='none'; curBg=''; applyBg();
+      var u=urls[p.media_path];
+      if(u){ var m=document.createElement(p.media_type==='video'?'video':'img'); m.src=u; if(p.media_type==='video'){ m.controls=true; m.playsInline=true; } g('cM').appendChild(m); }
+    } else if(ytId){ showYtPrev(); }
+    chk(); g('fTxt').focus();
+  }
+  async function doEdit(){
+    if(busy||!editP) return;
+    var t=g('fTxt').value.trim(); if(ytId&&ytUrl) t=t.split(ytUrl).join('').trim();
+    if(!t&&!ytId&&!editP.media_path) return;
+    busy=true; var b=g('cGo'); b.disabled=true; b.textContent='হচ্ছে…';
+    try{
+      var upd={body:t||null, yt:ytId||null, edited_at:new Date().toISOString(), bg:(!editP.media_path&&!ytId&&curBg)?curBg:null};
+      var r=await sb.from('posts').update(upd).eq('id',editP.id).select().single();
+      if(r.error) throw r.error;
+      for(var i=0;i<posts.length;i++) if(posts[i].id===r.data.id) posts[i]=r.data;
+      closeCompose(); render(); toast('পোস্ট সম্পাদনা হয়েছে');
+    }catch(e){ toast('সংরক্ষণ হয়নি — আগে নতুন SQL (posts_edit.sql) চালান'); }
+    busy=false; b.textContent=compMode==='edit'?'সংরক্ষণ':'পোস্ট'; chk();
   }
   function openCompose(a,mode){
     compMode=mode||'post';
@@ -9688,13 +9810,14 @@ video.fmedia{object-fit:contain}
     else if(a==='img'||a==='vid'){ g('fFile').accept=a==='img'?'image/*':'video/*'; g('fFile').click(); }
     else g('fTxt').focus();
   }
-  function closeCompose(){ compMode='post'; g('cGo').textContent='পোস্ট'; g('fCompose').classList.add('hidden'); g('fTxt').value=''; curBg=''; clearFile(); applyBg(); }
+  function closeCompose(){ compMode='post'; editP=null; ytId=null; ytUrl=''; var cf0=document.querySelector('#fCompose .cpf'); if(cf0) cf0.style.display=''; g('cGo').textContent='পোস্ট'; g('fCompose').classList.add('hidden'); g('fTxt').value=''; curBg=''; clearFile(); applyBg(); }
   async function doPost(){
-    if(busy) return; var t=g('fTxt').value.trim(); if(!t&&!file) return;
+    if(compMode==='edit') return doEdit();
+    if(busy) return; var t=g('fTxt').value.trim(); if(compMode==='story') ytId=null; if(ytId&&ytUrl) t=t.split(ytUrl).join('').trim(); if(!t&&!file&&!ytId) return;
     if(file && !navigator.onLine){ toast('ছবি বা ভিডিও দিতে নেট লাগবে'); return; }
     var isSt=compMode==='story'; busy=true; var b=g('cGo'); b.disabled=true; b.textContent='হচ্ছে…';
     try{
-      var id=uuid(), row={id:id, body:t||null, bg:(curBg&&!file)?curBg:null}, path=null;
+      var id=uuid(), row={id:id, body:t||null, bg:(curBg&&!file&&!ytId)?curBg:null}, path=null; if(ytId&&!isSt) row.yt=ytId;
       if(file){
         var isI=/^image\//.test(file.type), blob=file, ext, ctype;
         if(isI){ blob=await compressImage(file,1600,0.85); ext='jpg'; ctype='image/jpeg'; }
@@ -9726,8 +9849,8 @@ video.fmedia{object-fit:contain}
     if(!vis.length){ L.appendChild(el('div','fempty','এখানে দেখানোর মতো কিছু নেই।')); return; }
     vis.forEach(function(p){
       var c=el('div','fpost'), h=el('div','fhead'), a=el('div','fav'); av(a,p.author); h.appendChild(a);
-      var w=document.createElement('div'); w.appendChild(el('b',null,nameOf(p.author))); w.appendChild(el('small',null,ago(p.created_at)+' · 👥')); h.appendChild(w);
-      if(me&&p.author===me.id){ var d=el('button','fdel','•••'); d.onclick=function(){ delPost(p); }; h.appendChild(d); }
+      var w=document.createElement('div'); w.appendChild(el('b',null,nameOf(p.author))); w.appendChild(el('small',null,ago(p.created_at)+(p.edited_at?' · সম্পাদিত':'')+' · 👥')); h.appendChild(w);
+      if(me&&p.author===me.id){ var d=el('button','fdel','•••'); d.onclick=function(){ postMenu(p); }; h.appendChild(d); }
       var xb=el('button','fx','✕'); xb.onclick=function(){ hid[p.id]=1; try{localStorage.setItem('feedHid',JSON.stringify(hid));}catch(e){} render(); }; h.appendChild(xb);
       c.appendChild(h);
       if(p.body){
@@ -9744,6 +9867,7 @@ video.fmedia{object-fit:contain}
           else { var im=document.createElement('img'); im.className='fmedia'; im.src=u; im.loading='lazy'; im.onclick=function(){ g('fLb').firstElementChild.src=u; g('fLb').classList.remove('hidden'); }; c.appendChild(im); }
         }
       }
+      if(p.yt) c.appendChild(ytBox(p.yt));
       var ft=el('div','ffoot'); footEls[p.id]=ft; fillFoot(p,ft); c.appendChild(ft);
       c.dataset.pid=p.id; if(seenObs&&me&&p.author!==me.id&&!isSeen('post',p.id)) seenObs.observe(c);
       L.appendChild(c);
@@ -9982,6 +10106,11 @@ video.fmedia{object-fit:contain}
   g('fMeAv').onclick=function(){ g('fPf').classList.remove('hidden'); fillPf(); };
   var _rh=window.renderHeader;
   window.renderHeader=function(){ var r=_rh.apply(this,arguments); try{ refreshAv(); }catch(e){} return r; };
+  g('fMenu').onclick=function(e){
+    if(e.target===this){ this.classList.add('hidden'); return; }
+    var b=e.target.closest('button'); if(!b) return; var p=menuP; this.classList.add('hidden');
+    if(!p) return; if(b.dataset.a==='edit') openEdit(p); else if(b.dataset.a==='del') delPost(p);
+  };
   g('svX').onclick=closeSv; g('svD').onclick=delSv;
   g('svL').onclick=function(){ showSv(svI-1); }; g('svR').onclick=function(){ showSv(svI+1); };
   g('cmX').onclick=closeCm;
@@ -9996,7 +10125,7 @@ video.fmedia{object-fit:contain}
   g('cPh').onclick=function(){ g('fFile').accept='image/*,video/*'; g('fFile').click(); };
   g('cX').onclick=function(){ if((g('fTxt').value.trim()||file)&&!confirm('পোস্টটি বাদ দেবেন?')) return; closeCompose(); };
   g('cGo').onclick=doPost;
-  g('fTxt').oninput=chk;
+  g('fTxt').oninput=function(){ detectYt(); chk(); };
   g('fLb').onclick=function(){ g('fLb').classList.add('hidden'); };
   g('fPic').onclick=function(){ openCompose('img'); };
   g('fNavMsg').onclick=function(){ setMode('chat'); };
@@ -10025,6 +10154,7 @@ video.fmedia{object-fit:contain}
   /* [id, বন্ধ করার কাজ, না বন্ধ হলে জোর করে লুকাবে কিনা] — ওপরের স্তর আগে বন্ধ হবে */
   var LAYERS=[
     ['fLb',hide('fLb')],
+    ['fMenu',hide('fMenu')],
     ['fSv',btn('svX')],
     ['fCm',btn('cmX')],
     ['fCompose',btn('cX')],
