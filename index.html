@@ -1485,7 +1485,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   </div></div>
 </div>
 <div id="vl" class="hidden">
-  <div class="vlh"><button id="vlX" type="button" aria-label="ফিরে যান">←</button><b>🎬 ভিডিও লাইব্রেরি</b><button id="vlPlus" type="button" aria-label="লিংক যোগ করুন">＋</button></div>
+  <div class="vlh"><button id="vlX" type="button" aria-label="ফিরে যান">←</button><b>🔗 আমাদের ভিডিও লিংক</b><button id="vlPlus" type="button" aria-label="লিংক যোগ করুন">＋</button></div>
   <div class="vlb"><div id="vlList"></div><div class="vlhint" id="vlHint"></div></div>
   <div id="vlA" class="hidden"><div class="vla">
     <div class="vlah"><b>ইউটিউব লিংক যোগ করুন</b><button id="vlAX" type="button" aria-label="বন্ধ">✕</button></div>
@@ -7644,6 +7644,7 @@ pdBtns();
     <button id="ytHome" type="button" aria-label="স্বাগত পাতা">🏠</button>
     <div class="t">▶️ ইসলামিক ভিডিও<small id="ytQt" style="display:block;font-size:11px;font-weight:500;opacity:.92"></small></div>
     <button id="ytDlB" type="button" aria-label="ডাউনলোড তালিকা">📥</button>
+    <button id="ytLnkB" type="button" aria-label="আমাদের ভিডিও লিংক">🔗</button>
     <button id="ytFavB" type="button" aria-label="সংরক্ষিত ভিডিও">❤️</button>
     <button id="ytSet" type="button" aria-label="সেটিংস">⚙️</button>
   </div>
@@ -7685,16 +7686,7 @@ function getKey(){var k=KEY_CONST;try{k=localStorage.getItem('ytKey')||k;}catch(
 /* ভরসাযোগ্য চ্যানেল: এদের ভিডিও “তালিকা” থেকে আসে (৫০টি = ১ ইউনিট), সার্চের মতো ১০০ ইউনিট লাগে না */
 /* ========== বিষয়ভিত্তিক চ্যানেল তালিকা ==========
    '@হ্যান্ডেল' = চ্যানেল (সস্তা: ১ ইউনিট) · {q:'নাম'} = নাম ধরে চ্যানেল খুঁজে নেয় (একবারই ১০০ ইউনিট) · {topic:'বিষয়'} = সার্চ বাটন */
-var CATS=[
- {k:'gojol',t:'🎵 হামদ ও নাত',ch:['@shafinahmadofficial','@holytunebdofficial','@annafee_official','@arafahrecord','@alaminislamicmedia','@mujahidbulbul','@truthofummah','@atnbanglaislamic','@paradisetv77']},
- {k:'quran',t:'📖 কুরআন তিলাওয়াত',ch:['@iqraqurantvbd','@prioqurantv','@quraneralotv','@MisharyRashidAlafasy',{q:'Abdul Rahman Al Sudais Official',n:'সুদাইস'},{q:'Maher Al Muaiqly Quran',n:'মাহের আল-মুয়াইকিলি'},{q:'Yasser Al Dosari Quran',n:'ইয়াসির আদ-দোসারি'},{q:'Saad Al Ghamdi Quran',n:'সাদ আল-গামিদি'}]},
- {k:'waz',t:'🎙 ওয়াজ মাহফিল',ch:['@islamicwazbograofficial','@kuakatatv','@thebanglawazhd','@islamictvwaz','@olipurimedia5094','@saidiwaz','@mbanglawaz','@NewBanglawazlive','@WazJeddahWazBangla','@BWSVC','@SotterMoshal','@yakubtv90']},
- {k:'alem',t:'🕌 আলেমদের বয়ান',ch:['@sheikhahmadullahofficial','@abutawhaamuhammadadnan','@ShaikhMotiurRahmanOfficial','@AbuBakarMdZakaria','@naseelshahrukh','@abdulhamid62','@abdulbdhamid','@abuafnan','@abdurraquibbokhari','@DrMohammadMonzurEIlahi','@MustafizRahmani','@MahMudQuaSim','@ustadhahmadullahsaidpury6980','@TareqBinAbdulMalik']},
- {k:'dawah',t:'🏫 দাওয়াহ ও তাফসীর',ch:['@TafseerulQuranTablig','@ICDLectures','@addawahinstitute9696','@AhlehadeethAndolonBangladesh','@SalafiDawahSylhet','@alitisamtv','@annaseehadawahcenter','@AsSalafi1','@AsSalafiFoundation','@AtTahreekTV','@HadithbdTube','@call2tawheedbangla648','@IslamHouseBn','@IIECChannel','@ImamBukhariTrustOfficial','@deeneralo','@paiib','@tawhidmediabd']},
- {k:'eng',t:'🌍 ইংরেজি / উর্দু লেকচার',ch:['@muftimenk','@yaqeeninstituteofficial','@bayyinah','@TariqJamilOfficial','@IslamChannel','@OneIslamProductions','@MercifulServant','@TheProphetsPath','@FreeQuranEducation','@TheDailyReminder']},
- {k:'kids',t:'🧒 শিশুদের ইসলামিক',ch:['@muslimkidstv-11',{q:'One4Kids Official',n:'One4Kids'},{q:'Zaky Islamic Cartoon',n:'Zaky'},{topic:'Muslim Kids Islamic Education',n:'Muslim Kids শিক্ষা'},{topic:'Arabic Alphabet for Kids Islamic',n:'আরবি বর্ণমালা (শিশু)'}]}
-];
-var CHS={},CATBY={};
+var CATS=[]; var CHS={},CATBY={};
 CATS.forEach(function(c){
   CATBY[c.k]=c;c.chs=[];c.hasQ=false;
   c.ch.forEach(function(e){
@@ -8155,7 +8147,7 @@ function showCat(cat){
     renderMore(me);
   });
 }
-function defaultCat(){var ok=CATS.filter(function(c){return !c.hasQ;});showCat(ok[Math.floor(Math.random()*ok.length)]);}
+function defaultCat(){var ok=CATS.filter(function(c){return !c.hasQ;});if(!ok.length){showHint();return;}showCat(ok[Math.floor(Math.random()*ok.length)]);}
 /* একটি চ্যানেল */
 function showChannel(ch,more){
   MODE='';var me;
@@ -10977,7 +10969,7 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
       c.onclick=function(){ openPlayer(i); };
       L.appendChild(c);
     });
-    $('vlHint').textContent=vids.length?'ভিডিও চালালে অন্য কোনো সাজেশন বা সার্চ আসবে না':'';
+    $('vlHint').textContent=vids.length?'এই ভিডিওগুলো সার্চে আসে না, আর চালালে কোনো সাজেশন বা সার্চ আসে না':'';
   }
   async function load(){
     try{ var d=JSON.parse(localStorage.getItem(ckey())||'null'); if(Array.isArray(d)){ vids=d; render(); } }catch(e){}
@@ -11062,13 +11054,15 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
   $('vpPrev').onclick=function(){ openPlayer(cur-1); };
   $('vpNext').onclick=function(){ openPlayer(cur+1); };
   $('vpFs').onclick=function(){ var b=$('vpBox'); try{ if(document.fullscreenElement) document.exitFullscreen(); else (b.requestFullscreen||b.webkitRequestFullscreen).call(b); }catch(e){} };
-  $('vlX').onclick=function(){ closePlayer(); $('vl').classList.add('hidden'); $('vlA').classList.add('hidden'); };
+  $('vlX').onclick=function(){ closePlayer(); $('vl').classList.add('hidden'); $('vlA').classList.add('hidden'); reopenYt(); };
   $('vlPlus').onclick=function(){ $('vlA').classList.remove('hidden'); setTimeout(function(){ try{ $('vlAL').focus(); }catch(e){} },80); };
   $('vlAX').onclick=function(){ $('vlA').classList.add('hidden'); };
   $('vlA').onclick=function(e){ if(e.target===this) this.classList.add('hidden'); };
-  /* পুরনো ইউটিউব ট্যাইল এখন এই লাইব্রেরি খুলবে */
-  var hy=$('hmYt');
-  if(hy){ hy.onclick=openLib; hy.onkeydown=function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLib(); } }; }
+  /* ইউটিউব (সার্চসহ) পাতার 🔗 বাটন: লিংক লাইব্রেরি খোলে, বন্ধ করলে আবার ইউটিউব পাতায় ফেরে */
+  var fromYt=false;
+  function reopenYt(){ if(!fromYt) return; fromYt=false; setTimeout(function(){ var hy=$('hmYt'); if(hy&&hy.onclick) hy.onclick(); },150); }
+  var lb=$('ytLnkB');
+  if(lb) lb.onclick=function(){ var h=$('ytHome'); fromYt=true; if(h) h.click(); setTimeout(openLib,220); };
 })();
 </script>
 </body>
