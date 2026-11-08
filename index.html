@@ -1450,9 +1450,15 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   <div class="slh"><button id="slrX" type="button" aria-label="ফিরে যান">←</button><b>বেতনের হিসাব</b><button id="slrCfg" type="button" aria-label="মাসিক বেতন ঠিক করুন">⚙️</button></div>
   <div class="slb">
     <div class="sly"><button id="slPrev" type="button">‹</button><b id="slYear"></b><button id="slNext" type="button">›</button></div>
+    <div class="slsec2" id="slYT"></div>
     <div class="slsum" id="slSum"></div>
     <div class="slbar"><i id="slBar"></i></div>
     <div id="slList"></div>
+    <div class="slsec2" id="slAllT"></div>
+    <div class="slsum" id="slAll"></div>
+    <div class="slbar"><i id="slAllBar"></i></div>
+    <div class="slsec2">বছরভিত্তিক হিসাব</div>
+    <div id="slYears"></div>
     <div class="slhint" id="slHint"></div>
   </div>
   <div id="slrE" class="hidden"><div class="sle">
@@ -1467,6 +1473,9 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <div class="sleh"><b>মাসিক বেতন</b><button id="slCX" type="button" aria-label="বন্ধ">✕</button></div>
     <label>শুরু থেকে প্রতি মাসের বেতন (৳)<input id="slCA" type="number" inputmode="decimal" min="0" step="any"></label>
     <label>মাদরাসার নাম (ঐচ্ছিক)<input id="slCP" type="text" maxlength="60"></label>
+    <div class="slsec">📅 নিয়োগের মাস</div>
+    <div class="slad"><select id="slCSM" aria-label="নিয়োগের মাস"></select><input id="slCSY" type="number" inputmode="numeric" placeholder="বছর, যেমন 2023" aria-label="নিয়োগের বছর"></div>
+    <small>এই মাসের আগের মাসগুলো "বাকি" ধরা হবে না।</small>
     <div class="slsec">📈 বেতন বাড়লে</div>
     <small>কোন মাস থেকে নতুন বেতন, সেটা যোগ করুন। আগের মাসগুলোর হিসাব বদলাবে না।</small>
     <div id="slCL" class="slcl"></div>
@@ -1474,6 +1483,23 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <div class="slad"><input id="slCN" type="number" inputmode="decimal" min="0" step="any" placeholder="নতুন বেতন (৳)"><button id="slCAdd" type="button">যোগ করুন</button></div>
     <div class="sleq"><button id="slCS" type="button" class="pri">সংরক্ষণ</button></div>
   </div></div>
+</div>
+<div id="vl" class="hidden">
+  <div class="vlh"><button id="vlX" type="button" aria-label="ফিরে যান">←</button><b>🎬 ভিডিও লাইব্রেরি</b><button id="vlPlus" type="button" aria-label="লিংক যোগ করুন">＋</button></div>
+  <div class="vlb"><div id="vlList"></div><div class="vlhint" id="vlHint"></div></div>
+  <div id="vlA" class="hidden"><div class="vla">
+    <div class="vlah"><b>ইউটিউব লিংক যোগ করুন</b><button id="vlAX" type="button" aria-label="বন্ধ">✕</button></div>
+    <textarea id="vlAL" rows="4" placeholder="এক বা একাধিক ইউটিউব লিংক বসান (প্রতি লাইনে একটা)"></textarea>
+    <input id="vlAT" type="text" maxlength="150" placeholder="নাম (ঐচ্ছিক, একটা লিংক দিলে)">
+    <button id="vlAdd" type="button" class="pri">যোগ করুন</button>
+    <small>শুধু আপনারা দুজন এই তালিকা দেখতে পাবেন।</small>
+  </div></div>
+</div>
+<div id="vp" class="hidden">
+  <div class="vph"><button id="vpX" type="button" aria-label="বন্ধ">←</button><b id="vpT"></b><button id="vpFs" type="button" aria-label="ফুলস্ক্রিন">⛶</button></div>
+  <div class="vpb"><div id="vpBox" class="vpbox"></div></div>
+  <div class="vpi"><small id="vpW"></small></div>
+  <div class="vpc"><button id="vpPrev" type="button">⏮ আগেরটা</button><button id="vpNext" type="button">পরেরটা ⏭</button></div>
 </div>
 <div id="npChoose" class="hidden">
   <div class="npc">
@@ -10558,7 +10584,56 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
 .slad{display:flex;gap:6px}
 .slad select,.slad input{flex:1;min-width:0;border:1px solid var(--line,#dfe5e2);background:var(--bg,#f3f5f4);color:var(--text,#16211e);border-radius:10px;padding:10px 10px;font:inherit;font-size:15px;outline:none}
 .slad button{border:0;border-radius:10px;padding:0 14px;background:#0a5f44;color:#fff;font-weight:700;font-family:inherit;font-size:14px;flex:none}
+.slsec2{font-weight:800;font-size:15px;margin:8px 2px 8px}
+.slrow.before{opacity:.45;cursor:default}
+.slrow.before .c{color:#94a3b8}
+.slyr{display:grid;grid-template-columns:.8fr 1.2fr 1.2fr 1.2fr;gap:6px;align-items:center;background:var(--panel,#fff);border:1px solid var(--line,#dfe5e2);border-radius:10px;padding:9px 10px;margin-bottom:6px;font-size:12.5px;cursor:pointer}
+.slyr.hd{background:transparent;border:0;color:var(--muted,#667570);font-weight:700;cursor:default;padding-bottom:2px}
+.slyr b{font-size:14px}
+.slyr .g{color:#16a34a;font-weight:700}.slyr .r{color:#dc2626;font-weight:700}
+.slyr.cur{box-shadow:0 0 0 2px #0a5f44 inset}
 
+
+</style>
+<style>
+#vl{position:fixed;inset:0;z-index:710;background:var(--bg,#f3f5f4);color:var(--text,#16211e);display:flex;flex-direction:column}
+#vl.hidden,#vp.hidden,#vlA.hidden{display:none!important}
+.vlh{display:flex;align-items:center;gap:12px;padding:10px 12px;padding-top:calc(10px + env(safe-area-inset-top));background:#0a5f44;color:#fff;flex:none}
+.vlh b{flex:1;font-size:18px}
+.vlh button{background:transparent;border:0;color:#fff;font-size:24px;padding:2px 8px;font-family:inherit;line-height:1}
+.vlb{flex:1;overflow-y:auto;padding:12px 10px calc(20px + env(safe-area-inset-bottom))}
+#vlList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.vlc{position:relative;background:var(--panel,#fff);border:1px solid var(--line,#dfe5e2);border-radius:12px;overflow:hidden;cursor:pointer}
+.vlc img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#222}
+.vlc .t{padding:8px 9px 2px;font-weight:700;font-size:13.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
+.vlc .w{padding:0 9px 8px;font-size:11.5px;color:var(--muted,#667570)}
+.vlc .d{position:absolute;right:6px;top:6px;width:30px;height:30px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:14px}
+.vlc .p{position:absolute;left:50%;top:30%;transform:translate(-50%,-50%);width:44px;height:30px;border-radius:9px;background:rgba(255,0,0,.9);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px}
+.vlmsg{grid-column:1/-1;text-align:center;color:var(--muted,#667570);padding:40px 16px;line-height:1.7;font-size:15px}
+.vlhint{text-align:center;color:var(--muted,#667570);font-size:12px;padding:10px}
+#vlA{position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.45);display:flex;align-items:flex-end}
+.vla{width:100%;background:var(--panel,#fff);border-radius:18px 18px 0 0;padding:14px 16px calc(16px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px}
+.vlah{display:flex;justify-content:space-between;align-items:center}
+.vlah b{font-size:17px}.vlah button{background:transparent;border:0;font-size:20px;color:inherit}
+.vla textarea,.vla input{border:1px solid var(--line,#dfe5e2);background:var(--bg,#f3f5f4);color:var(--text,#16211e);border-radius:10px;padding:11px 12px;font:inherit;font-size:15px;outline:none;resize:none}
+.vla .pri{border:0;border-radius:10px;padding:12px;background:#0a5f44;color:#fff;font-weight:700;font-family:inherit;font-size:15px}
+.vla .pri:disabled{opacity:.6}
+.vla small{color:var(--muted,#667570);font-size:12px}
+#vp{position:fixed;inset:0;z-index:730;background:#000;color:#fff;display:flex;flex-direction:column}
+.vph{display:flex;align-items:center;gap:10px;padding:10px 12px;padding-top:calc(10px + env(safe-area-inset-top));flex:none}
+.vph b{flex:1;font-size:15px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vph button{background:transparent;border:0;color:#fff;font-size:22px;padding:2px 8px;font-family:inherit;line-height:1}
+.vpb{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.vpbox{position:relative;width:100%;aspect-ratio:16/9;max-height:100%;background:#000;overflow:hidden}
+.vpbox iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vpk{position:absolute;left:0;right:0;top:0;height:54px;z-index:2}
+.vpcv{position:absolute;inset:0;z-index:3;background-size:cover;background-position:center;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.vpcv::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.vpcv span{position:relative;width:64px;height:44px;border-radius:12px;background:#f00;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center}
+.vpi{padding:6px 14px;text-align:center;color:#aaa;flex:none}
+.vpc{display:flex;gap:10px;padding:8px 14px calc(14px + env(safe-area-inset-bottom));flex:none}
+.vpc button{flex:1;border:0;border-radius:10px;padding:12px 6px;background:#1f2937;color:#fff;font-weight:700;font-family:inherit;font-size:14.5px}
+.vpc button:disabled{opacity:.35}
 </style>
 <script>
 /* ===== মোবাইলের ব্যাক বাটন: সব ফিচারে এক ধাপ করে পেছনে আসবে ===== */
@@ -10601,6 +10676,9 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
     ['fPf',btn('pfX')],
     ['fSrch',btn('fSch')],
     ['rec',NOP],
+    ['vlA',btn('vlAX')],
+    ['vp',btn('vpX')],
+    ['vl',btn('vlX')],
     ['slrC',btn('slCX')],
     ['slrE',btn('slEX')],
     ['slr',btn('slrX')],
@@ -10691,7 +10769,7 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
   function $(i){ return document.getElementById(i); }
   function mk(tag,cls,txt){ var e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; }
   var now=new Date(), CY=now.getFullYear(), CM=now.getMonth()+1;
-  var sy=CY, rows={}, cfg={amount:0,place:'',steps:[]}, editYm=null, busy=false, draft=[];
+  var sy=CY, rows={}, cfg={amount:0,place:'',steps:[],start:''}, editYm=null, busy=false, draft=[];
   function ckey(){ return 'sal_'+(window.me&&me.id); }
   function cacheSave(){ try{ localStorage.setItem(ckey(),JSON.stringify({rows:rows,cfg:cfg})); }catch(e){} }
   function cacheLoad(){ try{ var d=JSON.parse(localStorage.getItem(ckey())||'null'); if(d){ rows=d.rows||{}; cfg=d.cfg||cfg; if(!Array.isArray(cfg.steps)) cfg.steps=[]; } }catch(e){} }
@@ -10707,25 +10785,43 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
     return a;
   }
   function info(y,m){
-    var k=ym(y,m), r=rows[k], future=(y>CY)||(y===CY&&m>CM);
-    var amount=r?(+r.amount||0):stepAmt(k), paid=r?(+r.paid||0):0;
-    var st;
-    if(future&&!r) st='future';
+    var k=ym(y,m), r=rows[k], future=(y>CY)||(y===CY&&m>CM), before=!!cfg.start&&k<cfg.start&&!r;
+    var amount=r?(+r.amount||0):stepAmt(k), paid=r?(+r.paid||0):0, st;
+    if(before) st='before';
+    else if(future&&!r) st='future';
     else if(amount<=0&&paid<=0) st='none';
     else if(amount>0&&paid>=amount) st='paid';
     else if(paid>0) st='part';
     else st='due';
-    return {k:k,r:r,amount:amount,paid:paid,st:st,counts:st!=='future'&&st!=='none'};
+    return {k:k,r:r,amount:amount,paid:paid,st:st,counts:st!=='future'&&st!=='none'&&st!=='before'};
+  }
+  function yearTot(y){
+    var t=0,g=0,d=0;
+    for(var m=1;m<=12;m++){ var i=info(y,m); if(i.counts){ t+=i.amount; g+=i.paid; d+=Math.max(i.amount-i.paid,0); } }
+    return {t:t,g:g,d:d};
+  }
+  function yearRange(){
+    var y0=CY, y1=CY, ks=Object.keys(rows);
+    if(cfg.start) y0=+cfg.start.slice(0,4);
+    else if(ks.length) y0=Math.min.apply(null,ks.map(function(k){ return +k.slice(0,4); }));
+    ks.forEach(function(k){ var y=+k.slice(0,4); if(y>y1) y1=y; if(y<y0) y0=y; });
+    return [y0,y1];
+  }
+  function cards(box,t,g,d){
+    box.textContent='';
+    [['মোট বেতন',t,''],['পেয়েছি',g,'g'],['পাইনি (বাকি)',d,'r']].forEach(function(x){
+      var c=mk('div',x[2]); c.appendChild(mk('small',null,x[0])); c.appendChild(mk('b',null,money(x[1]))); box.appendChild(c);
+    });
   }
   function render(){
     $('slYear').textContent=bn(sy);
-    var tot=0,got=0,due=0, L=$('slList'); L.textContent='';
+    $('slYT').textContent=bn(sy)+' সালের মোট';
+    var L=$('slList'); L.textContent='';
     for(var m=1;m<=12;m++){
       var i=info(sy,m);
-      if(i.counts){ tot+=i.amount; got+=i.paid; due+=Math.max(i.amount-i.paid,0); }
       var row=mk('div','slrow '+i.st+((sy===CY&&m===CM)?' cur':''));
       var l=mk('div','m'); l.appendChild(mk('b',null,MN[m-1]));
-      var sub=(i.st==='none'?'বেতন ঠিক করা নেই':'বেতন '+money(i.amount))+((i.r&&i.r.note)?' · '+i.r.note:'')+((cfg.steps||[]).some(function(x){ return x.from===i.k; })?' · 📈 বেতন বেড়েছে':'');
+      var sub=(i.st==='before'?'নিয়োগের আগে':(i.st==='none'?'বেতন ঠিক করা নেই':'বেতন '+money(i.amount)))+((i.r&&i.r.note)?' · '+i.r.note:'')+((cfg.steps||[]).some(function(x){ return x.from===i.k; })?' · 📈 বেতন বেড়েছে':'')+((cfg.start===i.k)?' · 🎉 নিয়োগ':'');
       l.appendChild(mk('small',null,sub)); row.appendChild(l);
       var c=mk('div','c');
       if(i.st==='paid') c.textContent='✅ পেয়েছি';
@@ -10734,15 +10830,24 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
       else if(i.st==='future') c.textContent='⏳ আসছে';
       else c.textContent='— ';
       row.appendChild(c);
-      (function(mm){ row.onclick=function(){ openEdit(mm); }; })(m);
+      (function(mm,st){ row.onclick=function(){ if(st==='before'){ try{ toast('এটা নিয়োগের আগের মাস'); }catch(e){} return; } openEdit(mm); }; })(m,i.st);
       L.appendChild(row);
     }
-    var S=$('slSum'); S.textContent='';
-    [['মোট বেতন',tot,''],['পেয়েছি',got,'g'],['পাইনি (বাকি)',due,'r']].forEach(function(x){
-      var d=mk('div',x[2]); d.appendChild(mk('small',null,x[0])); d.appendChild(mk('b',null,money(x[1]))); S.appendChild(d);
-    });
-    $('slBar').style.width=(tot>0?Math.min(100,Math.round(got/tot*100)):0)+'%';
-    $('slHint').textContent=(+cfg.amount>0||Object.keys(rows).length)?'যেকোনো মাসে ট্যাপ করে বেতন বা পাওয়ার হিসাব বদলান':'আগে ওপরের ⚙️ চেপে প্রতি মাসের বেতন ঠিক করুন';
+    var yt=yearTot(sy); cards($('slSum'),yt.t,yt.g,yt.d);
+    $('slBar').style.width=(yt.t>0?Math.min(100,Math.round(yt.g/yt.t*100)):0)+'%';
+    // শুরু থেকে এ পর্যন্ত
+    var rg=yearRange(), at=0, ag=0, ad=0, Y=$('slYears'); Y.textContent='';
+    var hd=mk('div','slyr hd'); ['বছর','বেতন','পেয়েছি','বাকি'].forEach(function(x){ hd.appendChild(mk('span',null,x)); }); Y.appendChild(hd);
+    for(var y=rg[0];y<=rg[1];y++){
+      var x=yearTot(y); at+=x.t; ag+=x.g; ad+=x.d;
+      var yr=mk('div','slyr'+(y===sy?' cur':'')); yr.appendChild(mk('b',null,bn(y))); yr.appendChild(mk('span',null,money(x.t))); yr.appendChild(mk('span','g',money(x.g))); yr.appendChild(mk('span','r',money(x.d)));
+      (function(yy){ yr.onclick=function(){ sy=yy; render(); var b=document.querySelector('#slr .slb'); if(b) b.scrollTop=0; }; })(y);
+      Y.appendChild(yr);
+    }
+    cards($('slAll'),at,ag,ad);
+    $('slAllBar').style.width=(at>0?Math.min(100,Math.round(ag/at*100)):0)+'%';
+    $('slAllT').textContent='শুরু থেকে এ পর্যন্ত মোট'+(cfg.start?' ('+MN[+cfg.start.slice(5)-1]+' '+bn(cfg.start.slice(0,4))+' থেকে)':'');
+    $('slHint').textContent=!cfg.start?'নিয়োগের মাস ঠিক করতে ⚙️ চাপুন — না হলে আগের সব মাস বাকি ধরা হবে':((+cfg.amount>0||Object.keys(rows).length)?'যেকোনো মাসে ট্যাপ করে বেতন বা পাওয়ার হিসাব বদলান':'প্রতি মাসের বেতন ঠিক করতে ⚙️ চাপুন');
   }
   async function load(){
     cacheLoad(); render();
@@ -10751,7 +10856,7 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
       var a=await sb.from('salary_months').select('*'), b=await sb.from('salary_cfg').select('*').limit(1);
       if(a.error||b.error){ $('slHint').textContent='ডেটা আনা যায়নি — Supabase-এ salary.sql চালানো হয়েছে কি?'; return; }
       rows={}; (a.data||[]).forEach(function(r){ rows[r.ym]=r; });
-      if(b.data&&b.data[0]) cfg={amount:+b.data[0].amount||0,place:b.data[0].place||'',steps:Array.isArray(b.data[0].steps)?b.data[0].steps:[]};
+      if(b.data&&b.data[0]) cfg={amount:+b.data[0].amount||0,place:b.data[0].place||'',steps:Array.isArray(b.data[0].steps)?b.data[0].steps:[],start:b.data[0].start_ym||''};
       cacheSave(); render();
     }catch(e){}
   }
@@ -10804,7 +10909,10 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
   $('slrCfg').onclick=function(){
     $('slCA').value=cfg.amount||''; $('slCP').value=cfg.place||'';
     draft=(cfg.steps||[]).map(function(x){ return {from:x.from,amount:x.amount}; });
-    var sel=$('slCM'); if(!sel.options.length){ MN.forEach(function(n,i){ var o=document.createElement('option'); o.value=i+1; o.textContent=n; sel.appendChild(o); }); }
+    var sel=$('slCM'), sel2=$('slCSM');
+    if(!sel.options.length){ MN.forEach(function(n,i){ var o=document.createElement('option'); o.value=i+1; o.textContent=n; sel.appendChild(o); }); }
+    if(!sel2.options.length){ var o0=document.createElement('option'); o0.value=''; o0.textContent='মাস'; sel2.appendChild(o0); MN.forEach(function(n,i){ var o=document.createElement('option'); o.value=i+1; o.textContent=n; sel2.appendChild(o); }); }
+    sel2.value=cfg.start?String(+cfg.start.slice(5)):''; $('slCSY').value=cfg.start?cfg.start.slice(0,4):'';
     sel.value=CM; $('slCY').value=CY; $('slCN').value='';
     renderSteps(); $('slrC').classList.remove('hidden');
   };
@@ -10820,13 +10928,16 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
   $('slCS').onclick=async function(){
     if(!navigator.onLine){ try{ toast('নেট ছাড়া সংরক্ষণ হবে না'); }catch(e){} return; }
     var a=num($('slCA').value), p=$('slCP').value.trim();
+    var sm=parseInt($('slCSM').value,10), sY=parseInt($('slCSY').value,10), start='';
+    if(sm||sY){ if(!(sm>=1&&sm<=12)||!(sY>=2000&&sY<=2100)){ try{ toast('নিয়োগের মাস ও বছর দুটোই ঠিকভাবে দিন'); }catch(e){} return; } start=ym(sY,sm); }
     var o={user_id:me.id,amount:a,place:p||null};
     if(draft.length||(cfg.steps&&cfg.steps.length)) o.steps=draft;
+    if(start||cfg.start) o.start_ym=start||null;
     var r=await sb.from('salary_cfg').upsert(o,{onConflict:'user_id'});
-    if(r.error){ try{ toast('সংরক্ষণ হয়নি — আগে salary2.sql চালান'); }catch(e){} return; }
-    cfg={amount:a,place:p,steps:draft.slice()}; cacheSave(); render(); $('slrC').classList.add('hidden');
+    if(r.error){ try{ toast('সংরক্ষণ হয়নি — আগে নতুন SQL (salary2/salary3) চালান'); }catch(e){} return; }
+    cfg={amount:a,place:p,steps:draft.slice(),start:start}; cacheSave(); render(); $('slrC').classList.add('hidden');
   };
-  $('slPrev').onclick=function(){ sy--; render(); };
+  $('slPrev').onclick=function(){ if(cfg.start&&sy<=+cfg.start.slice(0,4)) return; sy--; render(); };
   $('slNext').onclick=function(){ sy++; render(); };
   $('slrX').onclick=function(){ $('slr').classList.add('hidden'); $('slrE').classList.add('hidden'); $('slrC').classList.add('hidden'); };
   /* ☪ চিহ্নে ৩ বার ট্যাপ */
@@ -10838,6 +10949,126 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
       if(taps.length>=3){ taps=[]; open_(); }
     });
   }
+})();
+</script>
+<script>
+/* ===== ভিডিও লাইব্রেরি: শুধু দুজনের, সার্চ ও সাজেশন ছাড়া ===== */
+(function(){
+  function $(i){ return document.getElementById(i); }
+  function mk(tag,cls,txt){ var e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; }
+  try{ if(!localStorage.getItem('ytCleared1')){ ['ytFav','ytFeed','ytChMap'].forEach(function(k){ localStorage.removeItem(k); }); localStorage.setItem('ytCleared1','1'); } }catch(e){}
+  var vids=[], cur=-1, fr=null, busy=false, subbed=false, lastLp=0;
+  function nm(id){ if(window.me&&id===me.id) return (window.myProf&&myProf.name)||'আমি'; return (window.peer&&peer.name)||'অন্যজন'; }
+  function parseAll(t){
+    var re=/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:watch\?(?:[^\s]*?&)?v=|embed\/|shorts\/|live\/|v\/))([A-Za-z0-9_-]{11})/g, out=[], m;
+    while((m=re.exec(t||''))){ if(out.indexOf(m[1])<0) out.push(m[1]); }
+    return out;
+  }
+  function thumb(id){ return 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg'; }
+  function ckey(){ return 'vlib_'+(window.me&&me.id); }
+  function say(m){ try{ toast(m); }catch(e){} }
+  function render(){
+    var L=$('vlList'); L.textContent='';
+    if(!vids.length){ L.appendChild(mk('div','vlmsg','এখনো কোনো ভিডিও নেই।\nওপরের ＋ চেপে ইউটিউবের লিংক যোগ করুন।')); L.firstChild.style.whiteSpace='pre-line'; }
+    vids.forEach(function(v,i){
+      var c=mk('div','vlc'), im=document.createElement('img'); im.src=thumb(v.yt); im.loading='lazy'; c.appendChild(im);
+      c.appendChild(mk('div','p','▶')); c.appendChild(mk('div','t',v.title||'ইউটিউব ভিডিও')); c.appendChild(mk('div','w','যোগ করেছেন: '+nm(v.added_by)));
+      if(window.me&&v.added_by===me.id){ var d=mk('button','d','🗑'); d.type='button'; d.onclick=function(e){ e.stopPropagation(); del(v); }; c.appendChild(d); }
+      c.onclick=function(){ openPlayer(i); };
+      L.appendChild(c);
+    });
+    $('vlHint').textContent=vids.length?'ভিডিও চালালে অন্য কোনো সাজেশন বা সার্চ আসবে না':'';
+  }
+  async function load(){
+    try{ var d=JSON.parse(localStorage.getItem(ckey())||'null'); if(Array.isArray(d)){ vids=d; render(); } }catch(e){}
+    if(!window.sb||!window.me||!navigator.onLine) return;
+    var r=await sb.from('vlib').select('*').order('created_at',{ascending:false});
+    if(r.error){ $('vlHint').textContent='তালিকা আনা যায়নি — Supabase-এ vlib.sql চালানো হয়েছে কি?'; return; }
+    vids=r.data||[]; try{ localStorage.setItem(ckey(),JSON.stringify(vids)); }catch(e){} render();
+  }
+  function openLib(){
+    if(!window.me){ say('আগে লগইন করুন'); return; }
+    $('vl').classList.remove('hidden'); load();
+    if(!subbed&&window.sb){ subbed=true; try{ var t=null; sb.channel('vlib-rt').on('postgres_changes',{event:'*',schema:'public',table:'vlib'},function(){ clearTimeout(t); t=setTimeout(load,400); }).subscribe(); }catch(e){} }
+  }
+  async function getTitle(id){
+    var u='https://www.youtube.com/watch?v='+id;
+    var urls=['https://www.youtube.com/oembed?format=json&url='+encodeURIComponent(u),'https://noembed.com/embed?url='+encodeURIComponent(u)];
+    for(var i=0;i<urls.length;i++){
+      try{ var c=new AbortController(), t=setTimeout(function(){ c.abort(); },6000); var r=await fetch(urls[i],{signal:c.signal}); clearTimeout(t); var j=await r.json(); if(j&&j.title) return String(j.title).slice(0,150); }catch(e){}
+    }
+    return '';
+  }
+  async function del(v){
+    if(!confirm('এই ভিডিও তালিকা থেকে সরাবেন?')) return;
+    var r=await sb.from('vlib').delete().eq('id',v.id);
+    if(r.error){ say('সরানো যায়নি'); return; }
+    vids=vids.filter(function(x){ return x.id!==v.id; }); try{ localStorage.setItem(ckey(),JSON.stringify(vids)); }catch(e){} render();
+  }
+  $('vlAdd').onclick=async function(){
+    if(busy) return;
+    var ids=parseAll($('vlAL').value); if(!ids.length){ say('সঠিক ইউটিউব লিংক দিন'); return; }
+    if(!navigator.onLine){ say('নেট ছাড়া যোগ করা যাবে না'); return; }
+    var fresh=ids.filter(function(id){ return !vids.some(function(v){ return v.yt===id; }); });
+    if(!fresh.length){ say('এই ভিডিও আগেই যোগ করা আছে'); return; }
+    fresh=fresh.slice(0,30); busy=true; var b=$('vlAdd'); b.disabled=true; b.textContent='যোগ হচ্ছে…';
+    try{
+      var custom=$('vlAT').value.trim(), rows=[];
+      for(var i=0;i<fresh.length;i++){ var t=(fresh.length===1&&custom)?custom:await getTitle(fresh[i]); rows.push({yt:fresh[i],title:t||null}); }
+      var r=await sb.from('vlib').insert(rows).select();
+      if(r.error) throw r.error;
+      (r.data||[]).forEach(function(x){ if(!vids.some(function(v){ return v.id===x.id; })) vids.unshift(x); });
+      try{ localStorage.setItem(ckey(),JSON.stringify(vids)); }catch(e){}
+      render(); $('vlAL').value=''; $('vlAT').value=''; $('vlA').classList.add('hidden'); say(fresh.length+' টি ভিডিও যোগ হয়েছে');
+    }catch(e){ say(e&&e.code==='23505'?'কিছু ভিডিও আগেই যোগ করা ছিল':'যোগ হয়নি — আগে vlib.sql চালান'); }
+    busy=false; b.disabled=false; b.textContent='যোগ করুন';
+  };
+  /* ---- প্লেয়ার ---- */
+  function cmd(func,args){ try{ fr.contentWindow.postMessage(JSON.stringify({event:'command',func:func,args:args||[],id:1,channel:'widget'}),'*'); }catch(e){} }
+  function cover(ended){
+    var box=$('vpBox'); if(!fr||box.querySelector('.vpcv')) return;
+    var cv=mk('div','vpcv'); cv.style.backgroundImage='url('+thumb(vids[cur].yt)+')'; cv.appendChild(mk('span',null,ended?'↻':'▶'));
+    cv.onclick=function(){ lastLp=Date.now(); cv.remove(); if(ended) cmd('seekTo',[0,true]); cmd('playVideo'); };
+    box.appendChild(cv);
+  }
+  function openPlayer(i){
+    if(i<0||i>=vids.length) return; cur=i; var v=vids[i], box=$('vpBox');
+    $('vp').classList.remove('hidden'); $('vpT').textContent=v.title||'ইউটিউব ভিডিও'; $('vpW').textContent='যোগ করেছেন: '+nm(v.added_by);
+    $('vpPrev').disabled=i<=0; $('vpNext').disabled=i>=vids.length-1;
+    box.textContent=''; var f=document.createElement('iframe'); fr=f;
+    f.allow='autoplay; encrypted-media; picture-in-picture'; f.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
+    var og=/^https?:/.test(location.origin)?'&origin='+encodeURIComponent(location.origin):'';
+    f.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(v.yt)+'?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&iv_load_policy=3&disablekb=1&fs=0'+og;
+    f.onload=function(){ try{
+      f.contentWindow.postMessage(JSON.stringify({event:'listening',id:1,channel:'widget'}),'*');
+      f.contentWindow.postMessage(JSON.stringify({event:'command',func:'addEventListener',args:['onStateChange'],id:1,channel:'widget'}),'*');
+    }catch(e){} };
+    box.appendChild(f); box.appendChild(mk('div','vpk'));
+  }
+  function closePlayer(){ $('vp').classList.add('hidden'); $('vpBox').textContent=''; fr=null; cur=-1; }
+  window.addEventListener('message',function(e){
+    if(!fr||e.source!==fr.contentWindow) return;
+    var d=e.data; try{ if(typeof d==='string') d=JSON.parse(d); }catch(x){ return; } if(!d) return;
+    var st=null;
+    if(d.event==='onStateChange') st=d.info;
+    else if(d.event==='infoDelivery'&&d.info&&typeof d.info.playerState==='number') st=d.info.playerState;
+    else if(d.event==='onError'){ say('এই ভিডিও এখানে চালানো যায় না'); return; }
+    if(st===null) return;
+    if(st===2){ if(Date.now()-lastLp<1500) return; cover(false); }
+    else if(st===0) cover(true);
+    else if(st===1){ var c=$('vpBox').querySelector('.vpcv'); if(c) c.remove(); }
+  });
+  $('vpX').onclick=closePlayer;
+  $('vpPrev').onclick=function(){ openPlayer(cur-1); };
+  $('vpNext').onclick=function(){ openPlayer(cur+1); };
+  $('vpFs').onclick=function(){ var b=$('vpBox'); try{ if(document.fullscreenElement) document.exitFullscreen(); else (b.requestFullscreen||b.webkitRequestFullscreen).call(b); }catch(e){} };
+  $('vlX').onclick=function(){ closePlayer(); $('vl').classList.add('hidden'); $('vlA').classList.add('hidden'); };
+  $('vlPlus').onclick=function(){ $('vlA').classList.remove('hidden'); setTimeout(function(){ try{ $('vlAL').focus(); }catch(e){} },80); };
+  $('vlAX').onclick=function(){ $('vlA').classList.add('hidden'); };
+  $('vlA').onclick=function(e){ if(e.target===this) this.classList.add('hidden'); };
+  /* পুরনো ইউটিউব ট্যাইল এখন এই লাইব্রেরি খুলবে */
+  var hy=$('hmYt');
+  if(hy){ hy.onclick=openLib; hy.onkeydown=function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLib(); } }; }
 })();
 </script>
 </body>
