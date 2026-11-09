@@ -1501,6 +1501,17 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   <div class="vpi"><small id="vpW"></small></div>
   <div class="vpc"><button id="vpPrev" type="button">⏮ আগেরটা</button><button id="vpNext" type="button">পরেরটা ⏭</button></div>
 </div>
+<div id="ycS" class="hidden"><div class="ycb">
+  <div class="ych"><b>📺 আমার চ্যানেল</b><button id="ycX" type="button" aria-label="বন্ধ">✕</button></div>
+  <div class="ycf"><input id="ycIn" type="text" placeholder="চ্যানেলের লিংক বা @হ্যান্ডেল" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="ycAdd" type="button">যোগ</button></div>
+  <div class="ycf"><input id="ycNm" type="text" maxlength="40" placeholder="আপনার দেওয়া নাম (ঐচ্ছিক)" autocomplete="off"></div>
+  <small id="ycMsg">উদাহরণ: youtube.com/@নাম অথবা @নাম। এই চ্যানেলগুলোর ভিডিও দেখতে সার্চের সীমা খরচ হয় না। আপনারা দুজনেই এই তালিকা দেখবেন।</small>
+  <div id="ycList"></div>
+</div></div>
+<div id="ytTh" class="hidden"><div class="ycb">
+  <div class="ych"><b>🎨 ভিডিও পাতার থিম</b><button id="ythX" type="button" aria-label="বন্ধ">✕</button></div>
+  <div id="ythL"></div>
+</div></div>
 <div id="npChoose" class="hidden">
   <div class="npc">
     <h3>📝 নতুন পাতা</h3>
@@ -7644,8 +7655,8 @@ pdBtns();
     <button id="ytHome" type="button" aria-label="স্বাগত পাতা">🏠</button>
     <div class="t">▶️ ইসলামিক ভিডিও<small id="ytQt" style="display:block;font-size:11px;font-weight:500;opacity:.92"></small></div>
     <button id="ytDlB" type="button" aria-label="ডাউনলোড তালিকা">📥</button>
-    <button id="ytLnkB" type="button" aria-label="আমাদের ভিডিও লিংক">🔗</button>
     <button id="ytFavB" type="button" aria-label="সংরক্ষিত ভিডিও">❤️</button>
+    <button id="ytThB" type="button" aria-label="থিম">🎨</button>
     <button id="ytSet" type="button" aria-label="সেটিংস">⚙️</button>
   </div>
   <div id="ytPl" class="hidden">
@@ -7657,6 +7668,7 @@ pdBtns();
     <input id="ytQ" type="search" placeholder="ইসলামিক ভিডিও খুঁজুন…" enterkeyhint="search" autocomplete="off">
     <button type="submit" aria-label="খুঁজুন">🔍</button>
   </form>
+  <div class="ytmy" id="ytMy"></div>
   <div class="ytch" id="ytCh"></div>
   <div id="ytList"></div>
 </div>
@@ -7701,6 +7713,159 @@ CATS.forEach(function(c){
 function chOf(k){return CHS[k]||null;}
 function chMap(){try{return JSON.parse(localStorage.getItem('ytChMap')||'{}')||{};}catch(e){return {};}}
 function chName(c){var e=chMap()[c.k];return (e&&e.n)||c.n||c.h||c.q||'';}
+
+/* ---------- আমার চ্যানেল: নিজে যোগ করা (সার্চের সীমা খরচ হয় না) ---------- */
+var MYCAT={k:'my',t:'📺 আমার চ্যানেল',ch:[],chs:[],hasQ:false,my:true};CATBY['my']=MYCAT;
+var myRows=[],myOpen=false,myDirty=false,hintEl=null,myBusy=false,thOpen=false,myAct='',renId=null;
+function myApply(rows){
+  myRows=rows||[];MYCAT.chs=[];
+  Object.keys(CHS).forEach(function(k){if(k.indexOf('u_')===0)delete CHS[k];});
+  myRows.forEach(function(r){var o={k:'u_'+r.cid,cid:r.cid,n:r.n||r.h||r.cid,cat:'my',row:r};CHS[o.k]=o;MYCAT.chs.push(o);});
+  myBar();
+}
+function myCache(){try{localStorage.setItem('ytMy_'+window.me.id,JSON.stringify(myRows));}catch(e){}}
+function myLoad(){
+  if(!window.me)return;
+  try{var c=JSON.parse(localStorage.getItem('ytMy_'+window.me.id)||'null');if(Array.isArray(c))myApply(c);}catch(e){}
+  if(!window.sb||!navigator.onLine)return;
+  sb.from('ytchan').select('*').order('created_at',{ascending:true}).then(function(r){
+    if(r.error)return;
+    var changed=JSON.stringify(r.data||[])!==JSON.stringify(myRows);
+    myApply(r.data||[]);myCache();
+    if(myOpen)myList();
+    if(changed&&hintEl&&hintEl.parentNode===list&&MYCAT.chs.length)defaultCat();
+  },function(){});
+}
+function showMyHint(){
+  list.innerHTML='';
+  hintEl=msg('এখনো কোনো চ্যানেল যোগ করা নেই।\nওপরের “＋ চ্যানেল যোগ করুন” চেপে আপনার পছন্দের চ্যানেলের লিংক দিন।\nযোগ করা চ্যানেলের ভিডিও দেখতে সার্চের সীমা খরচ হয় না।\nসার্চ করতে ওপরের বক্স ব্যবহার করুন।');
+  hintEl.style.whiteSpace='pre-line';list.appendChild(hintEl);
+}
+function parseCh(t){
+  t=(t||'').trim();if(!t)return null;var m;
+  if((m=t.match(/youtube\.com\/channel\/(UC[A-Za-z0-9_-]{22})/i)))return {cid:m[1]};
+  if((m=t.match(/^(UC[A-Za-z0-9_-]{22})$/)))return {cid:m[1]};
+  if((m=t.match(/youtube\.com\/(@[^\/?#\s]+)/i))){var h;try{h=decodeURIComponent(m[1]);}catch(e){h=m[1];}return {h:h};}
+  if((m=t.match(/youtube\.com\/user\/([^\/?#\s]+)/i)))return {u:m[1]};
+  if((m=t.match(/youtube\.com\/c\/([^\/?#\s]+)/i))){var c2;try{c2=decodeURIComponent(m[1]);}catch(e){c2=m[1];}return {h:'@'+c2};}
+  if((m=t.match(/^@?([^\s\/?#@]{2,})$/)))return {h:'@'+m[1]};
+  return null;
+}
+function myResolve(p){
+  var key=getKey();if(!key)return Promise.reject(apiKeyErr());
+  var base='https://www.googleapis.com/youtube/v3/channels?part=snippet&key='+encodeURIComponent(key);
+  var url=p.cid?base+'&id='+encodeURIComponent(p.cid):(p.h?base+'&forHandle='+encodeURIComponent(p.h):base+'&forUsername='+encodeURIComponent(p.u));
+  qInc('l');
+  return fetch(url).then(function(r){return r.json();}).then(function(j){
+    if(j.error)throw new Error(errText(j));
+    var it=(j.items||[])[0];if(!it)throw new Error('এই চ্যানেলটি পাওয়া যায়নি। সঠিক লিংক বা @হ্যান্ডেল দিন।');
+    return {cid:it.id,n:dec((it.snippet&&it.snippet.title)||''),h:p.h||null};
+  });
+}
+function mySay(t,cls){var m=$('ycMsg');m.textContent=t;m.className=cls||'';}
+function myList(){
+  var L=$('ycList');L.textContent='';
+  if(!myRows.length){var e=document.createElement('div');e.className='ycs';e.textContent='এখনো কোনো চ্যানেল যোগ করা নেই';L.appendChild(e);return;}
+  myRows.forEach(function(r){
+    var d=document.createElement('div');d.className='ycr';
+    var mine=!!(window.me&&r.added_by===window.me.id);
+    if(renId===r.id){
+      var inp=document.createElement('input');inp.className='ren';inp.type='text';inp.maxLength=40;inp.value=r.n||r.h||'';d.appendChild(inp);
+      var ok=document.createElement('button');ok.type='button';ok.textContent='✔️';ok.onclick=function(){myRename(r,inp.value);};d.appendChild(ok);
+      var no=document.createElement('button');no.type='button';no.textContent='✕';no.onclick=function(){renId=null;myList();};d.appendChild(no);
+      L.appendChild(d);setTimeout(function(){try{inp.focus();}catch(e){}},50);return;
+    }
+    var n=document.createElement('div');n.className='n';var b=document.createElement('b');b.textContent=r.n||r.h||r.cid;var sm=document.createElement('small');sm.textContent=r.h||r.cid;n.appendChild(b);n.appendChild(sm);d.appendChild(n);
+    if(mine){
+      var ed=document.createElement('button');ed.type='button';ed.textContent='✏️';ed.setAttribute('aria-label','নাম বদলান');ed.onclick=function(){renId=r.id;myList();};d.appendChild(ed);
+      var x=document.createElement('button');x.type='button';x.textContent='🗑';x.setAttribute('aria-label','মুছুন');x.onclick=function(){myDel(r);};d.appendChild(x);
+    }
+    L.appendChild(d);
+  });
+}
+function myRename(r,val){
+  var nn=String(val||'').trim().slice(0,40);if(!nn){mySay('নাম খালি রাখা যাবে না','err');return;}
+  sb.from('ytchan').update({n:nn}).eq('id',r.id).select().single().then(function(x){
+    if(x.error){mySay('নাম বদলানো যায়নি — আগে ytchan2.sql চালান','err');return;}
+    renId=null;myApply(myRows.map(function(y){return y.id===r.id?x.data:y;}));myCache();myDirty=true;myList();mySay('নাম বদলেছে','ok');
+  });
+}
+function myDel(r){
+  if(!confirm('“'+(r.n||r.h||r.cid)+'” চ্যানেলটি তালিকা থেকে সরাবেন?'))return;
+  sb.from('ytchan').delete().eq('id',r.id).then(function(x){
+    if(x.error){mySay('সরানো যায়নি','err');return;}
+    myApply(myRows.filter(function(y){return y.id!==r.id;}));myCache();myDirty=true;myList();mySay('সরানো হয়েছে','ok');
+  });
+}
+function myAdd(){
+  if(myBusy)return;
+  var p=parseCh($('ycIn').value);
+  if(!p){mySay('সঠিক চ্যানেল লিংক বা @হ্যান্ডেল দিন','err');return;}
+  if(!window.me||!window.sb){mySay('আগে লগইন করুন','err');return;}
+  if(!navigator.onLine){mySay('নেট ছাড়া যোগ করা যাবে না','err');return;}
+  myBusy=true;var b=$('ycAdd');b.disabled=true;b.textContent='…';mySay('চ্যানেল খোঁজা হচ্ছে…');
+  myResolve(p).then(function(c){
+    if(myRows.some(function(r){return r.cid===c.cid;}))throw new Error('এই চ্যানেল আগেই যোগ করা আছে');
+    return sb.from('ytchan').insert({k:c.cid,cid:c.cid,h:c.h,n:($('ycNm').value.trim()||c.n||null)}).select().single().then(function(x){
+      if(x.error){if(x.error.code==='23505')throw new Error('এই চ্যানেল আগেই যোগ করা আছে');throw new Error('যোগ হয়নি — আগে ytchan.sql চালান');}
+      return {row:x.data,name:x.data.n||c.n};
+    });
+  }).then(function(o){
+    myApply(myRows.concat([o.row]));myCache();myDirty=true;myList();$('ycIn').value='';$('ycNm').value='';mySay('✅ “'+(o.name||'চ্যানেল')+'” যোগ হয়েছে','ok');
+  }).catch(function(e){mySay((e&&e.message&&e.message!=='Failed to fetch')?e.message:'ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন','err');}).then(function(){myBusy=false;b.disabled=false;b.textContent='যোগ';});
+}
+function openMy(){
+  if(!window.me){say('আগে লগইন করুন');return;}
+  myOpen=true;renId=null;$('ycS').classList.remove('hidden');myList();mySay('উদাহরণ: youtube.com/@নাম অথবা @নাম। এই চ্যানেলগুলোর ভিডিও দেখতে সার্চের সীমা খরচ হয় না। আপনারা দুজনেই এই তালিকা দেখবেন।');myLoad();
+}
+function closeMy(){
+  myOpen=false;$('ycS').classList.add('hidden');
+  if(myDirty){
+    myDirty=false;
+    var inMy=(CT&&CT.cat===MYCAT)||(CH&&CH.ch&&CH.ch.cat==='my')||(hintEl&&hintEl.parentNode===list);
+    if(inMy&&!playing)defaultCat();
+  }
+}
+function myBar(){
+  var b=$('ytMy');if(!b)return;b.textContent='';
+  if(MYCAT.chs.length){
+    var all=document.createElement('button');all.type='button';all.textContent='📋 সব';if(myAct==='all')all.className='on';
+    all.onclick=function(){myAct='all';myBar();showCat(MYCAT);};b.appendChild(all);
+    MYCAT.chs.forEach(function(c){
+      var x=document.createElement('button');x.type='button';x.textContent=chName(c);if(myAct===c.k)x.className='on';
+      x.onclick=function(){myAct=c.k;myBar();showChannel(c,false);};b.appendChild(x);
+    });
+  }
+  var ad=document.createElement('button');ad.type='button';ad.className='ad';ad.textContent=MYCAT.chs.length?'＋':'＋ চ্যানেল যোগ করুন';ad.setAttribute('aria-label','চ্যানেল যোগ বা পরিচালনা');ad.onclick=openMy;b.appendChild(ad);
+}
+var YTH=[['default','ডিফল্ট','#0a5f44','#ffffff','#f3f5f4'],['yt','ইউটিউব ক্লাসিক','#ff0000','#ffffff','#f9f9f9'],['dark','ডার্ক সিনেমা','#c4302b','#1c1c1c','#0f0f0f'],['emerald','সবুজ মসজিদ','#0a5f44','#16a34a','#f2faf6'],['ocean','নীল সমুদ্র','#1d4ed8','#06b6d4','#eef6ff'],['night','রাতের আকাশ','#6d28d9','#1e3a8a','#12102b'],['gold','সোনালি','#b8860b','#eab308','#fffaf0'],['rose','গোলাপি','#e11d48','#f472b6','#fff1f4']];
+function ythGet(){try{return localStorage.getItem('ytTheme')||'default';}catch(e){return 'default';}}
+function applyYth(){var t=ythGet(),y=$('yt');if(t==='default')y.removeAttribute('data-yth');else y.setAttribute('data-yth',t);}
+function thList(){
+  var L=$('ythL');L.textContent='';var cur=ythGet();
+  YTH.forEach(function(x){
+    var b=document.createElement('button');b.type='button';b.className='yth'+(x[0]===cur?' on':'');
+    var sw=document.createElement('span');sw.className='sw';sw.style.background='linear-gradient(90deg,'+x[2]+' 0 34%,'+x[3]+' 34% 67%,'+x[4]+' 67%)';b.appendChild(sw);
+    var t=document.createElement('b');t.textContent=x[1];b.appendChild(t);
+    b.onclick=function(){try{localStorage.setItem('ytTheme',x[0]);}catch(e){}applyYth();thList();};
+    L.appendChild(b);
+  });
+}
+function openTh(){thOpen=true;$('ytTh').classList.remove('hidden');thList();}
+function closeTh(){thOpen=false;$('ytTh').classList.add('hidden');}
+$('ytThB').onclick=openTh;$('ythX').onclick=closeTh;
+$('ytTh').addEventListener('click',function(e){if(e.target===this)closeTh();});
+$('ytForm').addEventListener('submit',function(){myAct='';myBar();});
+$('ytCh').addEventListener('click',function(e){if(e.target.closest&&e.target.closest('button')){myAct='';myBar();}});
+applyYth();
+$('ycAdd').onclick=myAdd;$('ycX').onclick=closeMy;
+$('ycIn').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();myAdd();}});
+$('ycS').addEventListener('click',function(e){if(e.target===this)closeMy();});
+window.addEventListener('popstate',function(e){
+  if(!myOpen&&!thOpen)return;
+  e.stopImmediatePropagation();if(thOpen)closeTh();else closeMy();
+  try{history.pushState({yt:1},'');}catch(x){}
+},true);
 
 /* ---------- ফিল্টার তালিকা ---------- */
 /* কখনোই অনুমতি নেই */
@@ -7755,7 +7920,7 @@ window.addEventListener('popstate',function(){
   depth=0;ytClose(true);
 });
 function ytOpen(){
-  checkPend();qShow();
+  checkPend();qShow();applyYth();myLoad();myBar();
   var sp=$('splash');if(sp)sp.classList.add('away');
   $('yt').classList.remove('hidden');
   if(depth===0){try{history.pushState({yt:1},'');depth=1;}catch(e){}}
@@ -8065,6 +8230,7 @@ function shuf(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i
 function apiKeyErr(){return new Error('⚙️ চেপে আগে API কী বসান।');}
 /* চ্যানেলের আপলোড-তালিকার আইডি (একবার বের করে ফোনে জমিয়ে রাখা হয়) */
 function chUp(ch){
+  if(ch.cid)return Promise.resolve('UU'+String(ch.cid).slice(2));
   var m=chMap(),e=m[ch.k];
   if(e&&e.bad)return Promise.reject(new Error('“'+chName(ch)+'” চ্যানেলটি পাওয়া যায়নি।'));
   if(e&&e.up)return Promise.resolve(e.up);
@@ -8112,12 +8278,14 @@ function chRel(me){return chPage(me.ch,me.next).then(function(o){return {add:shu
 var CH=null,CT=null;
 function subRow(cat,active){
   var d=document.createElement('div');d.className='subch';
-  var all=document.createElement('button');all.type='button';all.textContent='📋 সব';if(!active)all.className='on';all.onclick=function(){showCat(cat);};d.appendChild(all);
+  if(cat.my){d.style.display='none';return d;}
+  var all=document.createElement('button');all.type='button';all.textContent='📋 সব';if(!active)all.className='on';all.onclick=function(){showCat(cat);};if(cat.chs.length||!cat.my)d.appendChild(all);
   cat.chs.forEach(function(c){
     var b=document.createElement('button');b.type='button';b.textContent=(c.topic?'🔎 ':'')+(c.topic?c.n:chName(c));if(c.k===active)b.className='on';
     b.onclick=function(){if(c.topic){$('ytQ').value=c.topic;search(c.topic,false);}else showChannel(c,false);};
     d.appendChild(b);
   });
+  if(cat.my){var ad=document.createElement('button');ad.type='button';ad.textContent=cat.chs.length?'⚙️ চ্যানেল':'＋ চ্যানেল যোগ করুন';ad.onclick=function(){openMy();};d.appendChild(ad);}
   return d;
 }
 function interleave(lists){
@@ -8147,7 +8315,7 @@ function showCat(cat){
     renderMore(me);
   });
 }
-function defaultCat(){var ok=CATS.filter(function(c){return !c.hasQ;});if(!ok.length){showHint();return;}showCat(ok[Math.floor(Math.random()*ok.length)]);}
+function defaultCat(){if(MYCAT.chs.length){myAct='all';myBar();showCat(MYCAT);return;}var ok=CATS.filter(function(c){return !c.hasQ;});if(!ok.length){showMyHint();return;}showCat(ok[Math.floor(Math.random()*ok.length)]);}
 /* একটি চ্যানেল */
 function showChannel(ch,more){
   MODE='';var me;
@@ -10626,6 +10794,71 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
 .vpc{display:flex;gap:10px;padding:8px 14px calc(14px + env(safe-area-inset-bottom));flex:none}
 .vpc button{flex:1;border:0;border-radius:10px;padding:12px 6px;background:#1f2937;color:#fff;font-weight:700;font-family:inherit;font-size:14.5px}
 .vpc button:disabled{opacity:.35}
+</style>
+<style>
+#ycS{position:fixed;inset:0;z-index:760;background:rgba(0,0,0,.5);display:flex;align-items:flex-end}
+#ycS.hidden{display:none!important}
+.ycb{width:100%;max-height:85vh;overflow-y:auto;background:var(--panel,#fff);color:var(--text,#16211e);border-radius:18px 18px 0 0;padding:14px 16px calc(16px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px}
+.ych{display:flex;justify-content:space-between;align-items:center}
+.ych b{font-size:17px}.ych button{background:transparent;border:0;font-size:20px;color:inherit}
+.ycf{display:flex;gap:8px}
+.ycf input{flex:1;min-width:0;border:1px solid var(--line,#dfe5e2);background:var(--bg,#f3f5f4);color:var(--text,#16211e);border-radius:10px;padding:11px 12px;font:inherit;font-size:15px;outline:none}
+.ycf button{border:0;border-radius:10px;padding:0 18px;background:#0a5f44;color:#fff;font-weight:700;font-family:inherit;font-size:15px}
+.ycf button:disabled{opacity:.6}
+#ycMsg{color:var(--muted,#667570);font-size:12.5px;line-height:1.5}
+#ycMsg.err{color:#dc2626}#ycMsg.ok{color:#16a34a}
+.ycr{display:flex;align-items:center;gap:10px;background:var(--bg,#f3f5f4);border-radius:12px;padding:10px 12px;margin-bottom:6px}
+.ycr .n{flex:1;min-width:0}.ycr .n b{display:block;font-size:14.5px;word-break:break-word}
+.ycr .n small{color:var(--muted,#667570);font-size:12px;word-break:break-all}
+.ycr button{border:0;background:transparent;font-size:18px;padding:2px 6px}
+.ycs{color:var(--muted,#667570);font-size:13px;text-align:center;padding:14px 6px}
+</style>
+<style>
+#yt .ytsb input{color:var(--text)}
+#yt .ytmy{display:flex;gap:7px;overflow-x:auto;padding:8px 10px;background:var(--panel);border-bottom:1px solid var(--line);scrollbar-width:none}
+#yt .ytmy::-webkit-scrollbar{display:none}
+#yt .ytmy button{flex:none;height:34px;padding:0 14px;border-radius:17px;border:1px solid var(--line);background:var(--bg);font-size:14px;font-weight:700;white-space:nowrap;color:var(--text)}
+#yt .ytmy button.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+#yt .ytmy button.ad{border-style:dashed}
+#ytTh{position:fixed;inset:0;z-index:760;background:rgba(0,0,0,.5);display:flex;align-items:flex-end}
+#ytTh.hidden{display:none!important}
+#ythL{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.yth{display:flex;flex-direction:column;gap:7px;align-items:stretch;background:var(--bg,#f3f5f4);border:2px solid var(--line,#dfe5e2);border-radius:14px;padding:10px;color:var(--text,#16211e);font-family:inherit;text-align:left;cursor:pointer}
+.yth.on{border-color:#0a5f44;box-shadow:0 0 0 2px #0a5f44}
+.yth .sw{display:block;height:34px;border-radius:9px;border:1px solid rgba(0,0,0,.12)}
+.yth b{font-size:14px}
+.ycr .ren{flex:1;min-width:0;border:1px solid var(--line,#dfe5e2);background:var(--panel,#fff);color:var(--text,#16211e);border-radius:8px;padding:8px 10px;font:inherit;font-size:14.5px;outline:none}
+/* ---- থিম ---- */
+#yt[data-yth="yt"]{--bg:#f9f9f9;--panel:#fff;--text:#0f0f0f;--muted:#606060;--line:#e5e5e5;--accent:#ff0000;--on-accent:#fff}
+#yt[data-yth="yt"] #ytList .vc{background:var(--panel);border:0;border-left:0;box-shadow:none;border-radius:12px}
+#yt[data-yth="yt"] #ytList .vc img{border:0}
+#yt[data-yth="yt"] #ytList .vc small,#yt[data-yth="yt"] #ytList .vc small.dt{background:#f2f2f2;color:var(--muted)}
+#yt[data-yth="yt"] #ytList .more{background:var(--accent);box-shadow:none}
+#yt[data-yth="dark"]{--bg:#0f0f0f;--panel:#1c1c1c;--text:#f1f1f1;--muted:#aaa;--line:#303030;--accent:#2b2b2b;--on-accent:#fff}
+#yt[data-yth="dark"] .ytb{background:linear-gradient(135deg,#1f1f1f,#0a0a0a);border-bottom:2px solid #c4302b}
+#yt[data-yth="dark"] #ytList .vc{background:var(--panel);border:1px solid #2a2a2a;border-left:6px solid hsl(var(--h1,170),70%,50%);box-shadow:none}
+#yt[data-yth="dark"] #ytList .vc small,#yt[data-yth="dark"] #ytList .vc small.dt{background:#2a2a2a;color:#ddd}
+#yt[data-yth="dark"] #ytList .more{background:linear-gradient(120deg,#c4302b,#7f1d1d);box-shadow:none}
+#yt[data-yth="dark"] .ytmy button.on{background:#c4302b;border-color:#c4302b}
+#yt[data-yth="emerald"]{--bg:#f2faf6;--panel:#fff;--text:#10261d;--muted:#5b7a6c;--line:#cfe6da;--accent:#0a5f44;--on-accent:#fff}
+#yt[data-yth="emerald"] .ytb{background:linear-gradient(135deg,#0a5f44,#16a34a)}
+#yt[data-yth="emerald"] #ytList .more{background:linear-gradient(120deg,#0a5f44,#16a34a)}
+#yt[data-yth="ocean"]{--bg:#eef6ff;--panel:#fff;--text:#0b2540;--muted:#5a7592;--line:#cfe0f3;--accent:#1d4ed8;--on-accent:#fff}
+#yt[data-yth="ocean"] .ytb{background:linear-gradient(135deg,#1d4ed8,#06b6d4)}
+#yt[data-yth="ocean"] #ytList .more{background:linear-gradient(120deg,#1d4ed8,#06b6d4)}
+#yt[data-yth="night"]{--bg:#12102b;--panel:#1c1a3d;--text:#ece9ff;--muted:#a9a4d6;--line:#34306b;--accent:#6d28d9;--on-accent:#fff;background-image:radial-gradient(1.5px 1.5px at 20px 30px,rgba(255,255,255,.55),transparent),radial-gradient(1.5px 1.5px at 80px 70px,rgba(255,255,255,.4),transparent),radial-gradient(1px 1px at 140px 20px,rgba(255,255,255,.5),transparent);background-size:180px 120px}
+#yt[data-yth="night"] .ytb{background:linear-gradient(135deg,#4c1d95,#1e3a8a)}
+#yt[data-yth="night"] #ytList .vc{background:var(--panel);border:1px solid #34306b;border-left:6px solid hsl(var(--h1,170),70%,60%);box-shadow:0 0 14px rgba(167,139,250,.25)}
+#yt[data-yth="night"] #ytList .vc small,#yt[data-yth="night"] #ytList .vc small.dt{background:rgba(167,139,250,.2);color:#ece9ff}
+#yt[data-yth="night"] #ytList .more{background:linear-gradient(120deg,#6d28d9,#2563eb);box-shadow:0 0 14px rgba(109,40,217,.5)}
+#yt[data-yth="gold"]{--bg:#fffaf0;--panel:#fff;--text:#3b2a0a;--muted:#8a7243;--line:#f0e1b8;--accent:#b8860b;--on-accent:#fff}
+#yt[data-yth="gold"] .ytb{background:linear-gradient(135deg,#b8860b,#eab308)}
+#yt[data-yth="gold"] #ytList .vc{background:var(--panel);border:1px solid #f0e1b8;border-left:6px solid #d4a017;box-shadow:0 2px 8px rgba(184,134,11,.15)}
+#yt[data-yth="gold"] #ytList .vc small,#yt[data-yth="gold"] #ytList .vc small.dt{background:#fdf1cf;color:#6b4e0a}
+#yt[data-yth="gold"] #ytList .more{background:linear-gradient(120deg,#b8860b,#eab308);box-shadow:none}
+#yt[data-yth="rose"]{--bg:#fff1f4;--panel:#fff;--text:#3a0f1c;--muted:#9a5a6d;--line:#f6cfd9;--accent:#e11d48;--on-accent:#fff}
+#yt[data-yth="rose"] .ytb{background:linear-gradient(135deg,#e11d48,#f472b6)}
+#yt[data-yth="rose"] #ytList .more{background:linear-gradient(120deg,#e11d48,#f472b6);box-shadow:none}
 </style>
 <script>
 /* ===== মোবাইলের ব্যাক বাটন: সব ফিচারে এক ধাপ করে পেছনে আসবে ===== */
