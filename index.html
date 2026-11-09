@@ -1375,6 +1375,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
 <!-- কল -->
 <div id="call" class="hidden">
   <video id="remoteV" autoplay playsinline></video>
+  <div id="cFill" class="f0"></div>
   <video id="localV" autoplay playsinline muted></video>
   <div id="callCenter">
     <div class="avatar" id="callAv">?</div>
@@ -1383,10 +1384,20 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <div id="callData"></div>
     <div id="callDbg"></div>
   </div>
+  <div id="cLP" class="hidden">
+    <div class="clh"><b>💡 আলো ও স্পষ্টতা</b><button id="cLX" type="button" aria-label="বন্ধ">✕</button></div>
+    <div class="clr"><span>ছবি উজ্জ্বল করুন (অন্যজন এটাই দেখবে)</span><div class="cls" id="clEnh"><button type="button" data-v="0">বন্ধ</button><button type="button" data-v="1">হালকা</button><button type="button" data-v="2">বেশি</button><button type="button" data-v="3">অনেক বেশি</button></div></div>
+    <div class="clr"><span>ফিল লাইট (আপনার স্ক্রিনের আলো মুখে পড়বে)</span><div class="cls" id="clFill"><button type="button" data-v="0">বন্ধ</button><button type="button" data-v="1">কম</button><button type="button" data-v="2">বেশি</button><button type="button" data-v="3">সর্বোচ্চ</button></div></div>
+    <div class="clr"><span>আপনি যে ভিডিও দেখছেন তার উজ্জ্বলতা</span><input type="range" id="clRb" min="100" max="180" step="5"></div>
+    <div class="clr hidden" id="clExR"><span>ক্যামেরার এক্সপোজার (সরাসরি ক্যামেরায়)</span><input type="range" id="clEx" min="0" max="100" step="5"></div>
+    <div class="clr hidden" id="clTR"><button id="clTorch" type="button">🔦 টর্চ চালু করুন</button></div>
+    <small id="clNote">টিপস: আলো কম থাকলে ফিল লাইট বাড়ান এবং জানালা বা লাইটের দিকে মুখ করে বসুন।</small>
+  </div>
   <div id="callBtns">
     <button class="cb" id="cMute"><span>🎤</span><small>মাইক</small></button>
     <button class="cb" id="cVideo"><span>📷</span><small>ক্যামেরা</small></button>
     <button class="cb" id="cFlip"><span>🔄</span><small>ঘোরান</small></button>
+    <button class="cb" id="cLight"><span>💡</span><small>আলো</small></button>
     <button class="cb" id="cSaver"><span>📉</span><small>কম ডেটা</small></button>
     <button class="cb end" id="cEnd"><span>📵</span></button>
   </div>
@@ -2849,7 +2860,7 @@ function cleanSignals(){
 }
 async function getMedia(){
   var wantVideo = call.video;
-  var c = { audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 }, video: wantVideo ? { width: { ideal: 320 }, height: { ideal: 240 }, frameRate: { ideal: 15, max: 15 }, facingMode: call.facing || 'user' } : false };
+  var c = { audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 }, video: wantVideo ? callVideoC() : false };
   call.local = await navigator.mediaDevices.getUserMedia(c);
   $('localV').srcObject = call.local;
 }
@@ -2898,10 +2909,10 @@ function applyCaps(){
       var p = s.getParameters(); if (!p.encodings || !p.encodings.length) p.encodings = [{}];
       if (s.track.kind === 'audio') p.encodings[0].maxBitrate = call.saver ? 16000 : 28000;
       else {
-        p.encodings[0].maxBitrate = call.audioOnlyMode ? 8000 : (call.saver ? 55000 : 150000);
-        p.encodings[0].maxFramerate = call.saver ? 10 : 15;
-        if (call.saver) p.encodings[0].scaleResolutionDownBy = 1.5;
-        p.degradationPreference = 'maintain-framerate';
+        p.encodings[0].maxBitrate = call.audioOnlyMode ? 8000 : (call.saver ? 55000 : 1200000);
+        p.encodings[0].maxFramerate = call.saver ? 10 : 30;
+        p.encodings[0].scaleResolutionDownBy = call.saver ? 1.5 : 1;
+        p.degradationPreference = call.saver ? 'maintain-framerate' : 'balanced';
       }
       s.setParameters(p).catch(function(){});
     } catch(e){}
@@ -2910,6 +2921,7 @@ function applyCaps(){
 function onConnected(){
   if (call.state === 'connected') return;
   call.state = 'connected'; call.startedAt = Date.now();
+  try { if (window.callLight) setTimeout(callLight, 400); } catch(e){}
   clearTimeout(call.connT); $('callDbg').textContent = '';
   $('call').classList.add('connected');
   applyCaps();
@@ -3063,6 +3075,7 @@ $('cVideo').onclick = function(){
 $('cSaver').onclick = function(){
   if (!call) return;
   call.saver = !call.saver; $('cSaver').classList.toggle('on', call.saver); applyCaps();
+  try { callQuality(); } catch(e){}
   toast(call.saver ? 'কম ডেটা মোড চালু' : 'স্বাভাবিক মান');
 };
 $('cFlip').onclick = async function(){
@@ -3070,12 +3083,13 @@ $('cFlip').onclick = async function(){
   try {
     call.facing = call.facing === 'user' ? 'environment' : 'user';
     var old = call.local.getVideoTracks()[0]; if (old) old.stop();
-    var ns = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 320 }, height: { ideal: 240 }, frameRate: { ideal: 15, max: 15 }, facingMode: call.facing } });
+    var ns = await navigator.mediaDevices.getUserMedia({ video: callVideoC() });
     var nt = ns.getVideoTracks()[0];
     var sender = call.pc.getSenders().filter(function(s){ return s.track && s.track.kind === 'video' || (!s.track && false); })[0];
-    if (sender) await sender.replaceTrack(nt);
+    if (sender && !(window.callEnhOn && callEnhOn())) await sender.replaceTrack(nt);
     if (old) call.local.removeTrack(old);
     call.local.addTrack(nt); $('localV').srcObject = call.local;
+    try { if (window.callEnhRebind) callEnhRebind(); } catch(e){}
     $('localV').style.transform = call.facing === 'user' ? 'scaleX(-1)' : 'none';
     applyCaps();
   } catch(e){ toast('ক্যামেরা বদলানো যায়নি'); }
@@ -10904,6 +10918,27 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
 /* বেতন: চলমান মাস */
 .slrow.run{border-left-color:#3b82f6}.slrow.run .c{color:#3b82f6}
 </style>
+<style>
+#cFill{position:absolute;inset:0;pointer-events:none;border:0 solid #fffaf0;box-shadow:inset 0 0 0 rgba(255,250,240,0);transition:border-width .2s,box-shadow .2s}
+#cFill.f1{border-width:16px;box-shadow:inset 0 0 34px rgba(255,250,240,.85)}
+#cFill.f2{border-width:34px;box-shadow:inset 0 0 44px rgba(255,250,240,.9)}
+#cFill.f3{border-width:62px;box-shadow:inset 0 0 56px rgba(255,250,240,.95)}
+#call.audioOnly #cLight,#call.audioOnly #cFill,#call.audioOnly #cLP{display:none!important}
+#cLP{position:absolute;left:10px;right:10px;bottom:calc(132px + env(safe-area-inset-bottom));z-index:6;background:rgba(10,18,16,.9);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:12px 14px;color:#fff;max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:12px;max-height:56vh;overflow-y:auto}
+#cLP.hidden{display:none!important}
+#cLP .clh{display:flex;justify-content:space-between;align-items:center}
+#cLP .clh b{font-size:15px}
+#cLP .clh button{background:transparent;border:0;color:#fff;font-size:18px}
+#cLP .clr{display:flex;flex-direction:column;gap:6px;font-size:13px}
+#cLP .clr.hidden{display:none!important}
+#cLP .cls{display:flex;gap:6px}
+#cLP .cls button{flex:1;padding:8px 2px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font-size:13px;font-family:inherit}
+#cLP .cls button.on{background:#fff;color:#111;font-weight:700}
+#cLP input[type=range]{width:100%}
+#cLP #clTorch{padding:9px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font-family:inherit;font-size:14px}
+#cLP #clTorch.on{background:#fde68a;color:#111}
+#cLP small{opacity:.75;font-size:11.5px;line-height:1.5}
+</style>
 <script>
 /* ===== মোবাইলের ব্যাক বাটন: সব ফিচারে এক ধাপ করে পেছনে আসবে ===== */
 (function(){
@@ -10976,6 +11011,7 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
   function splashOpen(){ var sp=$('splash'); return !!sp && !sp.classList.contains('away') && !sp.classList.contains('out') && rendered(sp); }
   /* true ফিরলে ব্যাক এখানেই সামলানো হয়ে গেছে */
   function goBack(){
+    if(open_('cLP')){ $('cLP').classList.add('hidden'); return true; }
     if(open_('call')||open_('incoming')) return true;
     if(dynDialog()) return true;
     for(var i=0;i<LAYERS.length;i++){
@@ -11342,6 +11378,103 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
   function reopenYt(){ if(!fromYt) return; fromYt=false; setTimeout(function(){ var hy=$('hmYt'); if(hy&&hy.onclick) hy.onclick(); },150); }
   var lb=$('ytLnkB');
   if(lb) lb.onclick=function(){ var h=$('ytHome'); fromYt=true; if(h) h.click(); setTimeout(openLib,220); };
+})();
+</script>
+<script>
+/* ===== ভিডিও কল: HD, আলো ও স্পষ্টতা ===== */
+function callQ(){ return (typeof call!=='undefined'&&call&&call.saver)?{w:320,h:240,fps:15}:{w:1280,h:720,fps:30}; }
+function callVideoC(){ var q=callQ(); return { width:{ideal:q.w}, height:{ideal:q.h}, frameRate:{ideal:q.fps,max:q.fps}, facingMode:(typeof call!=='undefined'&&call&&call.facing)||'user' }; }
+async function callQuality(){
+  var t=call&&call.local&&call.local.getVideoTracks()[0]; if(!t) return;
+  var q=callQ();
+  try{ await t.applyConstraints({ width:{ideal:q.w}, height:{ideal:q.h}, frameRate:{ideal:q.fps,max:q.fps} }); }catch(e){}
+}
+(function(){
+  function $(i){ return document.getElementById(i); }
+  var LV=['','brightness(1.15) contrast(1.05) saturate(1.05)','brightness(1.35) contrast(1.1) saturate(1.1)','brightness(1.65) contrast(1.15) saturate(1.15)'];
+  var st={enh:2,fill:0,rb:110,ex:60};
+  try{ var sv=JSON.parse(localStorage.getItem('callLight')||'null'); if(sv) st=Object.assign(st,sv); }catch(e){}
+  function save(){ try{ localStorage.setItem('callLight',JSON.stringify(st)); }catch(e){} }
+  var canFilter=false; try{ var cx=document.createElement('canvas').getContext('2d'); canFilter=!!cx&&('filter' in cx); }catch(e){}
+  var E={on:false,v:null,c:null,x:null,out:null,sender:null,vf:0,torch:false};
+  function raw(){ return (typeof call!=='undefined'&&call&&call.local)?call.local.getVideoTracks()[0]:null; }
+  function videoSender(){ try{ return call.pc.getSenders().filter(function(s){ return s.track&&s.track.kind==='video'; })[0]||E.sender; }catch(e){ return E.sender; } }
+  function alive(){ return typeof call!=='undefined'&&call&&call.pc&&call.pc.connectionState!=='closed'&&call.local; }
+  function loop(){
+    if(!E.on) return;
+    if(!alive()){ stop(true); return; }
+    var v=E.v,c=E.c;
+    if(v.readyState>=2&&v.videoWidth){
+      if(c.width!==v.videoWidth||c.height!==v.videoHeight){ c.width=v.videoWidth; c.height=v.videoHeight; }
+      E.x.filter=LV[st.enh]||'none'; E.x.drawImage(v,0,0,c.width,c.height);
+    }
+    if(v.requestVideoFrameCallback) E.vf=v.requestVideoFrameCallback(loop); else E.vf=requestAnimationFrame(loop);
+  }
+  function start(){
+    var r=raw(); if(!r||!canFilter||E.on) return;
+    var v=E.v||(E.v=document.createElement('video')); v.muted=true; v.playsInline=true; v.autoplay=true;
+    v.srcObject=new MediaStream([r]); try{ v.play(); }catch(e){}
+    var c=E.c||(E.c=document.createElement('canvas')), s0=r.getSettings?r.getSettings():{};
+    c.width=s0.width||640; c.height=s0.height||480; E.x=c.getContext('2d',{alpha:false});
+    E.out=c.captureStream(30).getVideoTracks()[0];
+    var snd=videoSender(); if(!snd) return; E.sender=snd;
+    snd.replaceTrack(E.out).then(function(){ try{ applyCaps(); }catch(e){} }).catch(function(){});
+    E.on=true; loop();
+  }
+  function stop(ended){
+    if(!E.on&&!E.out) return;
+    E.on=false;
+    try{ if(E.v&&E.v.cancelVideoFrameCallback&&E.vf) E.v.cancelVideoFrameCallback(E.vf); }catch(e){}
+    var r=raw(), snd=E.sender;
+    if(!ended&&snd&&r){ try{ snd.replaceTrack(r).catch(function(){}); }catch(e){} }
+    try{ if(E.out) E.out.stop(); }catch(e){}
+    E.out=null; try{ if(E.v) E.v.srcObject=null; }catch(e){}
+  }
+  window.callEnhOn=function(){ return E.on; };
+  window.callEnhRebind=function(){
+    var r=raw(); if(!r) return;
+    if(E.on&&E.v){ E.v.srcObject=new MediaStream([r]); try{ E.v.play(); }catch(e){} }
+    E.torch=false; capsUI();
+  };
+  function viewApply(){
+    var rb=+st.rb||100, rv=$('remoteV'), lv=$('localV');
+    if(rv) rv.style.filter=rb>100?('brightness('+(rb/100)+') contrast('+(1+(rb-100)/900).toFixed(3)+')'):'';
+    if(lv) lv.style.filter=st.enh?LV[st.enh]:'';
+    $('cFill').className='f'+(+st.fill||0);
+  }
+  function enhApply(){
+    if(!alive()||!call.video||call.state!=='connected'){ return; }
+    if(st.enh>0&&canFilter&&!call.saver) start(); else stop(false);
+  }
+  function segMark(id,val){ [].forEach.call($(id).children,function(b){ b.classList.toggle('on',+b.dataset.v===+val); }); }
+  function capsUI(){
+    var r=raw(), c={}; try{ c=(r&&r.getCapabilities)?r.getCapabilities():{}; }catch(e){}
+    $('clExR').classList.toggle('hidden',!c.exposureCompensation);
+    $('clTR').classList.toggle('hidden',!c.torch);
+    $('clTorch').classList.toggle('on',E.torch);
+    $('clTorch').textContent=E.torch?'🔦 টর্চ বন্ধ করুন':'🔦 টর্চ চালু করুন';
+    if(c.exposureCompensation){ $('clEx').value=st.ex; exApply(); }
+    $('clNote').textContent=canFilter?'টিপস: আলো কম থাকলে ফিল লাইট বাড়ান এবং জানালা বা লাইটের দিকে মুখ করে বসুন।':'এই ব্রাউজারে ছবি উজ্জ্বল করার সুবিধা নেই। ফিল লাইট ব্যবহার করুন, আর Chrome ব্যবহার করলে বেশি ভালো কাজ করবে।';
+  }
+  function exApply(){
+    var r=raw(); if(!r||!r.getCapabilities) return;
+    try{ var c=r.getCapabilities().exposureCompensation; if(!c) return; var v=c.min+(c.max-c.min)*(+st.ex/100); r.applyConstraints({advanced:[{exposureCompensation:v}]}).catch(function(){}); }catch(e){}
+  }
+  window.callLight=function(){
+    if(!alive()) return;
+    viewApply(); segMark('clEnh',st.enh); segMark('clFill',st.fill); $('clRb').value=st.rb; capsUI(); enhApply();
+  };
+  $('cLight').onclick=function(){ var p=$('cLP'); p.classList.toggle('hidden'); if(!p.classList.contains('hidden')){ segMark('clEnh',st.enh); segMark('clFill',st.fill); $('clRb').value=st.rb; capsUI(); } };
+  $('cLX').onclick=function(){ $('cLP').classList.add('hidden'); };
+  $('clEnh').onclick=function(e){ var b=e.target.closest('button'); if(!b) return; st.enh=+b.dataset.v; save(); segMark('clEnh',st.enh); viewApply(); enhApply(); };
+  $('clFill').onclick=function(e){ var b=e.target.closest('button'); if(!b) return; st.fill=+b.dataset.v; save(); segMark('clFill',st.fill); viewApply(); };
+  $('clRb').oninput=function(){ st.rb=+this.value; save(); viewApply(); };
+  $('clEx').oninput=function(){ st.ex=+this.value; save(); exApply(); };
+  $('clTorch').onclick=function(){
+    var r=raw(); if(!r) return; E.torch=!E.torch;
+    try{ r.applyConstraints({advanced:[{torch:E.torch}]}).catch(function(){ E.torch=false; capsUI(); }); }catch(e){ E.torch=false; }
+    capsUI();
+  };
 })();
 </script>
 </body>
