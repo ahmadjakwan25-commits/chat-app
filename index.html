@@ -7608,7 +7608,7 @@ pdBtns();
 #ytPl.rot .inf div,#ytPl.fl .inf div{display:none}
 #ytPl.rot .inf button,#ytPl.fl .inf button{background:rgba(0,0,0,.55);color:#fff;border-color:rgba(255,255,255,.35)}
 @media (orientation:landscape){#ytPl.rot{transform:none;width:100vw;height:100vh}}
-@media (orientation:landscape) and (max-height:520px){#ytPl:not(.hidden){position:fixed;inset:0;z-index:100;transform:none;width:auto;height:auto}#ytPl .fr,#ytPl iframe{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto}#ytPl .inf{position:absolute;top:6px;right:6px;left:auto;z-index:3;padding:0;background:transparent;border:0;gap:6px}#ytPl .inf div{display:none}#ytPl .inf button{background:rgba(0,0,0,.55);color:#fff;border-color:rgba(255,255,255,.35)}}
+@media (orientation:landscape) and (max-height:520px) and (max-width:900px){#ytPl:not(.hidden){position:fixed;inset:0;z-index:100;transform:none;width:auto;height:auto}#ytPl .fr,#ytPl iframe{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto}#ytPl .inf{position:absolute;top:6px;right:6px;left:auto;z-index:3;padding:0;background:transparent;border:0;gap:6px}#ytPl .inf div{display:none}#ytPl .inf button{background:rgba(0,0,0,.55);color:#fff;border-color:rgba(255,255,255,.35)}}
 #ytList .vc .yo{display:inline-block;margin-top:8px;max-width:calc(100% - 44px);padding:6px 10px;border-radius:10px;border:1px solid hsl(var(--h1,170),70%,50%);background:var(--bg);font-size:12.5px;font-weight:600;text-align:left}
 #ytList .vc .dlx{position:absolute;right:6px;top:6px;width:30px;height:30px;border-radius:50%;background:var(--bg);border:1px solid var(--line);font-size:14px}
 #ytKey{position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center}
@@ -7653,11 +7653,10 @@ pdBtns();
   <div class="ytb">
     <button id="ytBack" type="button" aria-label="ফিরে যান">←</button>
     <button id="ytHome" type="button" aria-label="স্বাগত পাতা">🏠</button>
-    <div class="t">▶️ ইসলামিক ভিডিও<small id="ytQt" style="display:block;font-size:11px;font-weight:500;opacity:.92"></small></div>
+    <div class="t"><span class="ybd">☪</span><span class="ytx"><b>ইসলামিক ভিডিও</b><small id="ytQt" style="display:block;font-size:11px;font-weight:500;opacity:.92"></small></span></div>
     <button id="ytDlB" type="button" aria-label="ডাউনলোড তালিকা">📥</button>
     <button id="ytFavB" type="button" aria-label="সংরক্ষিত ভিডিও">❤️</button>
     <button id="ytThB" type="button" aria-label="থিম">🎨</button>
-    <button id="ytSet" type="button" aria-label="সেটিংস">⚙️</button>
   </div>
   <div id="ytPl" class="hidden">
     <div class="fr" id="ytFr"></div>
@@ -7694,7 +7693,7 @@ function say(m,ms){try{if(typeof window.toast==='function'){window.toast(m,ms);r
 
 /* এখানে চাইলে আপনার API কী সরাসরি বসাতে পারেন (কীতে HTTP referrer শর্ত দেওয়া থাকলে নিরাপদ) */
 var KEY_CONST='AIzaSyBU7On465jmt0LZA729u19l_pCLs6yzKIs';
-function getKey(){var k=KEY_CONST;try{k=localStorage.getItem('ytKey')||k;}catch(e){}return (k||'').trim();}
+function getKey(){try{localStorage.removeItem('ytKey');}catch(e){}return (KEY_CONST||'').trim();}
 /* ভরসাযোগ্য চ্যানেল: এদের ভিডিও “তালিকা” থেকে আসে (৫০টি = ১ ইউনিট), সার্চের মতো ১০০ ইউনিট লাগে না */
 /* ========== বিষয়ভিত্তিক চ্যানেল তালিকা ==========
    '@হ্যান্ডেল' = চ্যানেল (সস্তা: ১ ইউনিট) · {q:'নাম'} = নাম ধরে চ্যানেল খুঁজে নেয় (একবারই ১০০ ইউনিট) · {topic:'বিষয়'} = সার্চ বাটন */
@@ -8064,14 +8063,13 @@ function card(v){
 }
 function fmtDate(iso){try{return new Date(iso).toLocaleDateString('bn-BD',{year:'numeric',month:'short'});}catch(e){return '';}}
 function keyDialog(){qShow();$('ytKeyIn').value=getKey();$('ytKey').classList.remove('hidden');}
-$('ytSet').onclick=keyDialog;
 $('ytKeyNo').onclick=function(){$('ytKey').classList.add('hidden');};
 $('ytKeyOk').onclick=function(){var v=$('ytKeyIn').value.trim();if(!v)return;try{localStorage.setItem('ytKey',v);}catch(e){}$('ytKey').classList.add('hidden');say('API কী সেভ হয়েছে ✅');};
 $('ytKeyDel').onclick=function(){try{localStorage.removeItem('ytKey');}catch(e){}$('ytKeyIn').value='';say('কী মুছে গেছে');};
 function errText(j){
   var r=(j.error&&j.error.errors&&j.error.errors[0]&&j.error.errors[0].reason)||'',m=(j.error&&j.error.message)||'';
   if(r==='quotaExceeded'||/quota/i.test(m))return 'আজকের ফ্রি সীমা শেষ হয়ে গেছে। কাল আবার চেষ্টা করুন।';
-  if(r==='keyInvalid'||/API key not valid/i.test(m))return 'API কী ঠিক নেই। ⚙️ চেপে সঠিক কী বসান।';
+  if(r==='keyInvalid'||/API key not valid/i.test(m))return 'API কী ঠিক নেই (কোডে বসানো কী যাচাই করুন)।';
   if(r==='accessNotConfigured'||/has not been used|disabled/i.test(m))return 'গুগল ক্লাউডে “YouTube Data API v3” চালু করা হয়নি।';
   if(/referer/i.test(m)||r==='forbidden')return 'এই কীটি এই ওয়েবসাইটে চলবে না। কীর HTTP referrer শর্ত ঠিক করুন।';
   return 'ভিডিও আনা যায়নি ('+(m||r||'অজানা ত্রুটি')+')';
@@ -8140,7 +8138,7 @@ function feed(force){
   var q=CHIPS[Math.floor(Math.random()*CHIPS.length)];feedMode=true;search(q,false);
 }
 function vidFetch(q,token){
-  var key=getKey();if(!key)return Promise.reject(new Error('⚙️ চেপে আগে API কী বসান।'));
+  var key=getKey();if(!key)return Promise.reject(new Error('API কী পাওয়া যায়নি।'));
   var url='https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=25&safeSearch=strict&videoEmbeddable=true&regionCode=BD&q='+encodeURIComponent(q)+(token?'&pageToken='+encodeURIComponent(token):'')+'&key='+encodeURIComponent(key);
   var p=cache[url]?Promise.resolve(cache[url]):(qInc(),fetch(url).then(function(r){return r.json();}));
   return p.then(function(j){
@@ -8227,7 +8225,7 @@ function qShow(){
 
 /* ---------- ভরসাযোগ্য চ্যানেলের ভিডিও (সস্তা: ৫০টি ভিডিও = ১ ইউনিট) ---------- */
 function shuf(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=a[i];a[i]=a[j];a[j]=x;}return a;}
-function apiKeyErr(){return new Error('⚙️ চেপে আগে API কী বসান।');}
+function apiKeyErr(){return new Error('API কী পাওয়া যায়নি।');}
 /* চ্যানেলের আপলোড-তালিকার আইডি (একবার বের করে ফোনে জমিয়ে রাখা হয়) */
 function chUp(ch){
   if(ch.cid)return Promise.resolve('UU'+String(ch.cid).slice(2));
@@ -10860,6 +10858,52 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
 #yt[data-yth="rose"] .ytb{background:linear-gradient(135deg,#e11d48,#f472b6)}
 #yt[data-yth="rose"] #ytList .more{background:linear-gradient(120deg,#e11d48,#f472b6);box-shadow:none}
 </style>
+<style>
+/* ===== ইউটিউব পাতার হেডার ডিজাইন ===== */
+#yt .ytb{position:relative;overflow:hidden;gap:7px;padding:calc(8px + env(safe-area-inset-top)) 10px 11px;background-image:linear-gradient(135deg,rgba(255,255,255,.16),rgba(0,0,0,.16));border-bottom:3px solid;border-image:linear-gradient(90deg,transparent,#fde68a 20%,#f6c445 50%,#fde68a 80%,transparent) 1;box-shadow:0 5px 16px rgba(0,0,0,.2)}
+#yt .ytb::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;background-size:60px 60px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'><g fill='none' stroke='white' stroke-opacity='.3' stroke-width='1'><path d='M30 6l6 10 11-1-5 10 8 8-11 2-1 11-8-8-8 8-1-11-11-2 8-8-5-10 11 1z'/><circle cx='30' cy='30' r='2.5'/></g></svg>")}
+#yt .ytb::after{content:"";position:absolute;right:-30px;top:-34px;width:130px;height:130px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(253,230,138,.55),transparent 68%)}
+#yt .ytb>*{position:relative;z-index:1}
+#yt .ytb button{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.2);border-radius:12px;min-width:38px;height:38px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+#yt .ytb button:active{transform:scale(.94)}
+#yt .ytb .t{flex:1;min-width:0;display:flex;align-items:center;gap:9px}
+#yt .ytb .ybd{flex:none;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 32% 28%,#fffbe0,#f6c445 55%,#c98d0b);color:#5b3d00;font-size:23px;line-height:1;box-shadow:0 0 0 3px rgba(255,255,255,.4),0 5px 12px rgba(0,0,0,.35)}
+#yt .ytb .ytx{min-width:0}
+#yt .ytb .ytx b{display:block;font-size:19px;font-weight:800;letter-spacing:.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 2px 6px rgba(0,0,0,.4)}
+#yt .ytb .ytx b::after{content:"";display:block;width:50px;height:2px;margin-top:3px;border-radius:2px;background:linear-gradient(90deg,#fde68a,transparent)}
+#yt .ytb #ytQt{display:inline-block!important;margin-top:3px;padding:1px 9px;border-radius:10px;background:rgba(0,0,0,.25);font-size:11px;font-weight:600}
+#yt .ytb #ytQt:empty{display:none!important}
+@media (max-width:430px){#yt .ytb{gap:5px;padding-left:7px;padding-right:7px}#yt .ytb button{min-width:34px;height:34px;font-size:15px;border-radius:10px}#yt .ytb .ybd{width:34px;height:34px;font-size:18px}#yt .ytb .ytx b{font-size:16.5px}}
+/* ===== ভিডিও চালানোর সময় নিচের নামের অংশ ===== */
+#ytPl .inf{position:relative;gap:10px;align-items:center;padding:13px 12px 13px 18px;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:0 6px 14px rgba(0,0,0,.08)}
+#ytPl .inf::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:5px;border-radius:0 5px 5px 0;background:linear-gradient(180deg,var(--accent),#f6c445)}
+#ytPl .inf b{font-size:15.5px;font-weight:800;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#ytPl .inf small{display:inline-flex;align-items:center;gap:6px;max-width:100%;margin-top:6px;padding:3px 11px 3px 4px;border-radius:14px;background:var(--bg);border:1px solid var(--line);color:var(--muted);font-weight:600;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ytPl .inf small::before{content:"▶";flex:none;display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent);color:var(--on-accent);font-size:8.5px}
+#ytPl .inf small:empty{display:none}
+#ytPl .inf button{height:40px;border-radius:20px;border:1px solid var(--line);background:var(--bg);font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+#ytPl .inf button.ib,#ytPl .inf button.hb2{width:40px;padding:0;border-radius:50%;font-size:17px}
+#ytPl .inf button#ytPlX{padding:0 14px;background:var(--accent);color:var(--on-accent);border-color:transparent}
+/* ===== বড় পর্দা (ল্যাপটপ): বাঁয়ে প্লেয়ার, ডানে তালিকা ===== */
+@media (min-width:900px){
+  #ytList{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:10px;align-content:start}
+  #ytList>*{margin:0!important}
+  #ytList>:not(.vc){grid-column:1/-1}
+  #ytPl .fr{width:min(100%,calc((100vh - 210px) * 16 / 9));margin:0 auto}
+  @supports selector(:has(*)){
+    #yt{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto auto minmax(0,1fr)}
+    #yt:has(#ytPl:not(.hidden)){grid-template-columns:minmax(0,1fr) 410px}
+    #yt:has(#ytPl:not(.hidden)) .ytb{grid-column:1/-1}
+    #yt:has(#ytPl:not(.hidden)) #ytPl{grid-column:1;grid-row:2/6;align-self:start;max-height:100%;overflow-y:auto}
+    #yt:has(#ytPl:not(.hidden)) .ytsb{grid-column:2;grid-row:2}
+    #yt:has(#ytPl:not(.hidden)) .ytmy{grid-column:2;grid-row:3}
+    #yt:has(#ytPl:not(.hidden)) .ytch{grid-column:2;grid-row:4}
+    #yt:has(#ytPl:not(.hidden)) #ytList{grid-column:2;grid-row:5;grid-template-columns:1fr}
+  }
+}
+/* বেতন: চলমান মাস */
+.slrow.run{border-left-color:#3b82f6}.slrow.run .c{color:#3b82f6}
+</style>
 <script>
 /* ===== মোবাইলের ব্যাক বাটন: সব ফিচারে এক ধাপ করে পেছনে আসবে ===== */
 (function(){
@@ -11010,15 +11054,16 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
     return a;
   }
   function info(y,m){
-    var k=ym(y,m), r=rows[k], future=(y>CY)||(y===CY&&m>CM), before=!!cfg.start&&k<cfg.start&&!r;
+    var k=ym(y,m), r=rows[k], future=(y>CY)||(y===CY&&m>CM), cur=(y===CY&&m===CM), before=!!cfg.start&&k<cfg.start&&!r;
     var amount=r?(+r.amount||0):stepAmt(k), paid=r?(+r.paid||0):0, st;
     if(before) st='before';
     else if(future&&!r) st='future';
+    else if(cur&&paid<=0) st='run';
     else if(amount<=0&&paid<=0) st='none';
     else if(amount>0&&paid>=amount) st='paid';
     else if(paid>0) st='part';
     else st='due';
-    return {k:k,r:r,amount:amount,paid:paid,st:st,counts:st!=='future'&&st!=='none'&&st!=='before'};
+    return {k:k,r:r,amount:amount,paid:paid,st:st,counts:st!=='future'&&st!=='none'&&st!=='before'&&st!=='run'};
   }
   function yearTot(y){
     var t=0,g=0,d=0;
@@ -11046,12 +11091,13 @@ html body #splash button.hm-t#spIsl span,html body #splash[data-tt] button.hm-t#
       var i=info(sy,m);
       var row=mk('div','slrow '+i.st+((sy===CY&&m===CM)?' cur':''));
       var l=mk('div','m'); l.appendChild(mk('b',null,MN[m-1]));
-      var sub=(i.st==='before'?'নিয়োগের আগে':(i.st==='none'?'বেতন ঠিক করা নেই':'বেতন '+money(i.amount)))+((i.r&&i.r.note)?' · '+i.r.note:'')+((cfg.steps||[]).some(function(x){ return x.from===i.k; })?' · 📈 বেতন বেড়েছে':'')+((cfg.start===i.k)?' · 🎉 নিয়োগ':'');
+      var sub=(i.st==='before'?'নিয়োগের আগে':(i.st==='none'?'বেতন ঠিক করা নেই':'বেতন '+money(i.amount)))+((i.r&&i.r.note)?' · '+i.r.note:'')+((cfg.steps||[]).some(function(x){ return x.from===i.k; })?' · 📈 বেতন বেড়েছে':'')+((cfg.start===i.k)?' · 🎉 নিয়োগ':'')+(i.st==='run'?' · মাস শেষে হিসাবে ধরা হবে':'');
       l.appendChild(mk('small',null,sub)); row.appendChild(l);
       var c=mk('div','c');
       if(i.st==='paid') c.textContent='✅ পেয়েছি';
       else if(i.st==='part'){ c.textContent='◐ আংশিক'; c.appendChild(mk('small',null,'পেয়েছি '+money(i.paid)+' · বাকি '+money(i.amount-i.paid))); }
       else if(i.st==='due') c.textContent='❌ পাইনি';
+      else if(i.st==='run') c.textContent='🕐 চলমান';
       else if(i.st==='future') c.textContent='⏳ আসছে';
       else c.textContent='— ';
       row.appendChild(c);
