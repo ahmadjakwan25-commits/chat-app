@@ -1458,7 +1458,8 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
   <div class="islb"><div class="islm" id="islM">লোড হচ্ছে…<small>পাতা না খুললে ওপরের ↗ চাপুন</small></div><iframe id="islF" title="ইসলামিক সমাহার" referrerpolicy="strict-origin-when-cross-origin" allow="fullscreen; autoplay; encrypted-media; picture-in-picture"></iframe></div>
 </div>
 <div id="slr" class="hidden">
-  <div class="slh"><button id="slrX" type="button" aria-label="ফিরে যান">←</button><b>বেতনের হিসাব</b><button id="slrCfg" type="button" aria-label="মাসিক বেতন ঠিক করুন">⚙️</button></div>
+  <div class="slh"><button id="slrX" type="button" aria-label="ফিরে যান">←</button><b id="slTitle">বেতনের হিসাব</b><button id="slrCfg" type="button" aria-label="মাসিক বেতন ঠিক করুন">⚙️</button></div>
+  <div class="sltabs" id="slTabs"><button type="button" data-t="sal" class="on">💰 বেতনের হিসাব</button><button type="button" data-t="amal">🕌 সারাদিনের আমল</button></div>
   <div class="slb">
     <div class="sly"><button id="slPrev" type="button">‹</button><b id="slYear"></b><button id="slNext" type="button">›</button></div>
     <div class="slsec2" id="slYT"></div>
@@ -1472,6 +1473,22 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
     <div id="slYears"></div>
     <div class="slhint" id="slHint"></div>
   </div>
+  <div class="amb hidden" id="amB">
+    <div class="amd"><button id="amPrev" type="button" aria-label="আগের দিন">‹</button><div class="amdt" id="amDate"></div><button id="amNext" type="button" aria-label="পরের দিন">›</button></div>
+    <div class="amsum" id="amSum"></div>
+    <div class="amwk" id="amWk"></div>
+    <div id="amList"></div>
+    <div class="amnote" id="amNote">আল্লাহ আমাদের সবার আমল কবুল করুন। আমিন। দোয়ার উচ্চারণ শুদ্ধ করে কোনো আলেমের কাছ থেকে শিখে নিন।</div>
+  </div>
+  <div id="amC" class="hidden"><div class="sle">
+    <div class="sleh"><b>আমল তালিকা ঠিক করুন</b><button id="amCX" type="button" aria-label="বন্ধ">✕</button></div>
+    <small>যে আমল আপনার তালিকায় রাখতে চান না তার টিক তুলে দিন। নিজের আমলও যোগ করতে পারবেন।</small>
+    <div id="amCL"></div>
+    <div class="slsec">＋ নিজের আমল যোগ করুন</div>
+    <div class="slad"><select id="amCS" aria-label="সময়"></select></div>
+    <div class="slad"><input id="amCT" type="text" maxlength="60" placeholder="আমলের নাম"><button id="amCA" type="button">যোগ</button></div>
+    <div class="sleq"><button id="amCSave" type="button" class="pri">সংরক্ষণ</button></div>
+  </div></div>
   <div id="slrE" class="hidden"><div class="sle">
     <div class="sleh"><b id="slET"></b><button id="slEX" type="button" aria-label="বন্ধ">✕</button></div>
     <label>বেতন (৳)<input id="slEA" type="number" inputmode="decimal" min="0" step="any"></label>
@@ -11030,6 +11047,51 @@ html body #splash .hm-logo{width:54px;height:54px;border-radius:50%!important;ba
 #yt[data-yth="paper"] #ytList .vc small,#yt[data-yth="paper"] #ytList .vc small.dt{background:#efe0bf;color:#5e4520;border-radius:4px}
 #yt[data-yth="paper"] #ytList .more{background:#8b5a2b;box-shadow:none;border-radius:6px}
 </style>
+<style>
+.sltabs{display:flex;background:var(--panel,#fff);border-bottom:1px solid var(--line,#dfe5e2);flex:none}
+.sltabs button{flex:1;padding:11px 6px;border:0;background:transparent;color:var(--muted,#667570);font:inherit;font-size:14.5px;font-weight:700;border-bottom:3px solid transparent;font-family:inherit}
+.sltabs button.on{color:#0a5f44;border-bottom-color:#0a5f44}
+.amb{flex:1;overflow-y:auto;padding:12px 12px calc(24px + env(safe-area-inset-bottom))}
+.amb.hidden{display:none!important}
+.amd{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px}
+.amd button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line,#dfe5e2);background:var(--panel,#fff);color:inherit;font-size:20px;flex:none}
+.amd button:disabled{opacity:.35}
+.amdt{flex:1;text-align:center;font-weight:800;font-size:15px;line-height:1.35}
+.amdt small{display:block;font-weight:500;color:var(--muted,#667570);font-size:12px}
+.amsum{background:linear-gradient(135deg,#0a5f44,#16a34a);color:#fff;border-radius:16px;padding:14px;box-shadow:0 6px 16px rgba(10,95,68,.25)}
+.amsum .r1{display:flex;justify-content:space-between;align-items:flex-end}
+.amsum b{font-size:30px;line-height:1}
+.amsum small{opacity:.9;font-size:12.5px}
+.amsum .bar{height:9px;border-radius:5px;background:rgba(255,255,255,.28);margin:10px 0 8px;overflow:hidden}
+.amsum .bar i{display:block;height:100%;background:#fde68a;border-radius:5px;transition:width .35s}
+.amsum .r2{display:flex;justify-content:space-between;font-size:12.5px;gap:8px}
+.amwk{display:flex;gap:6px;align-items:flex-end;height:74px;margin:12px 2px 6px;padding:8px 8px 4px;background:var(--panel,#fff);border:1px solid var(--line,#dfe5e2);border-radius:14px}
+.amwk div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:10.5px;color:var(--muted,#667570);gap:3px}
+.amwk i{display:block;width:100%;max-width:24px;border-radius:5px 5px 2px 2px;background:#bbf7d0;min-height:3px}
+.amwk div.cur i{background:#16a34a}
+.amwk div.cur{color:var(--text,#16211e);font-weight:700}
+.amsec{background:var(--panel,#fff);border:1px solid var(--line,#dfe5e2);border-radius:14px;margin-top:10px;overflow:hidden}
+.amsh{display:flex;align-items:center;gap:8px;padding:10px 12px;background:linear-gradient(90deg,rgba(10,95,68,.1),transparent);font-weight:800;font-size:14.5px}
+.amsh span.n{margin-left:auto;font-size:12px;font-weight:700;color:#0a5f44}
+.amsh.ok span.n{color:#16a34a}
+.ami{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-top:1px solid var(--line,#dfe5e2);cursor:pointer}
+.ami .ck{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid #9ca3af;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;margin-top:1px;transition:.15s}
+.ami.on .ck{background:#16a34a;border-color:#16a34a}
+.ami .tx{flex:1;min-width:0;font-size:14.5px;line-height:1.4;word-break:break-word}
+.ami.on .tx{color:var(--muted,#667570);text-decoration:line-through;text-decoration-color:rgba(22,163,74,.6)}
+.ami .bk{flex:none;border:0;background:var(--bg,#f3f5f4);border-radius:8px;padding:3px 8px;font-size:13px;color:inherit}
+.amdu{padding:10px 12px 12px 48px;border-top:1px dashed var(--line,#dfe5e2);background:var(--bg,#f3f5f4)}
+.amdu .ar{font-size:20px;line-height:1.9;text-align:right;direction:rtl;font-family:"Amiri","Scheherazade New","Noto Naskh Arabic",serif}
+.amdu .bn{font-size:12.5px;color:var(--muted,#667570);margin-top:4px;line-height:1.5}
+.amnote{color:var(--muted,#667570);font-size:12px;text-align:center;padding:14px 10px;line-height:1.6}
+#amC{position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.45);display:flex;align-items:flex-end}
+#amC.hidden{display:none!important}
+.amcs{font-weight:800;font-size:13.5px;margin:8px 0 4px;color:#0a5f44}
+.amcr{display:flex;align-items:center;gap:8px;padding:6px 2px;font-size:14px}
+.amcr input{width:20px;height:20px;flex:none}
+.amcr span{flex:1;min-width:0;word-break:break-word}
+.amcr button{border:0;background:transparent;font-size:16px}
+</style>
 <script>
 /* ===== মোবাইলের ব্যাক বাটন: সব ফিচারে এক ধাপ করে পেছনে আসবে ===== */
 (function(){
@@ -11074,6 +11136,7 @@ html body #splash .hm-logo{width:54px;height:54px;border-radius:50%!important;ba
     ['vlA',btn('vlAX')],
     ['vp',btn('vpX')],
     ['vl',btn('vlX')],
+    ['amC',btn('amCX')],
     ['slrC',btn('slCX')],
     ['slrE',btn('slEX')],
     ['slr',btn('slrX')],
@@ -11566,6 +11629,188 @@ async function callQuality(){
     try{ r.applyConstraints({advanced:[{torch:E.torch}]}).catch(function(){ E.torch=false; capsUI(); }); }catch(e){ E.torch=false; }
     capsUI();
   };
+})();
+</script>
+<script>
+/* ===== সারাদিনের আমল ট্র্যাকার ===== */
+(function(){
+  function $(i){ return document.getElementById(i); }
+  function mk(tag,cls,txt){ var e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e; }
+  function say(m){ try{ toast(m); }catch(e){} }
+  var SECS=[['wake','🌅','ঘুম থেকে উঠে'],['fajr','🕌','ফজর'],['morn','☀️','সকালের আমল'],['dhuhr','🌤️','জোহর'],['asr','🌇','আসর'],['mag','🌆','মাগরিব'],['isha','🌙','ইশা'],['day','📿','সারাদিনের নফল আমল'],['food','🍽️','খাওয়া-দাওয়া'],['sleep','🛏️','ঘুমের আগে']];
+  var ITEMS=[
+    ['w_dua','wake','ঘুম থেকে উঠার দোয়া পড়া','اَلْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ','সমস্ত প্রশংসা আল্লাহর, যিনি আমাদের মৃত্যুর (ঘুমের) পর জীবিত করেছেন, আর তাঁরই কাছে ফিরে যেতে হবে।'],
+    ['w_mis','wake','মিসওয়াক / দাঁত ব্রাশ করা'],
+    ['w_wudu','wake','ওযু করা'],
+    ['w_tahaj','wake','তাহাজ্জুদ নামাজ'],
+    ['f_sun','fajr','ফজরের ২ রাকআত সুন্নত'],
+    ['f_far','fajr','ফজরের ফরজ নামাজ (জামাতে)'],
+    ['f_zikr','fajr','নামাজের পর তাসবিহ ও দোয়া'],
+    ['f_ishraq','fajr','ইশরাকের নামাজ (সূর্য উঠার কিছুক্ষণ পর)'],
+    ['m_azkar','morn','সকালের জিকির (আয়াতুল কুরসি, সূরা ইখলাস-ফালাক-নাস ৩ বার ইত্যাদি)'],
+    ['m_quran','morn','কুরআন তিলাওয়াত'],
+    ['m_chasht','morn','চাশতের নামাজ'],
+    ['d_sun4','dhuhr','জোহরের ৪ রাকআত সুন্নত (ফরজের আগে)'],
+    ['d_far','dhuhr','জোহরের ফরজ নামাজ (জামাতে)'],
+    ['d_sun2','dhuhr','জোহরের ২ রাকআত সুন্নত (ফরজের পরে)'],
+    ['a_far','asr','আসরের ফরজ নামাজ (জামাতে)'],
+    ['a_zikr','asr','নামাজের পর তাসবিহ ও দোয়া'],
+    ['g_far','mag','মাগরিবের ফরজ নামাজ (জামাতে)'],
+    ['g_sun','mag','মাগরিবের ২ রাকআত সুন্নত'],
+    ['g_awa','mag','আওয়াবিনের নামাজ'],
+    ['g_ev','mag','সন্ধ্যার জিকির'],
+    ['i_far','isha','ইশার ফরজ নামাজ (জামাতে)'],
+    ['i_sun','isha','ইশার ২ রাকআত সুন্নত'],
+    ['i_witr','isha','বিতর নামাজ'],
+    ['y_istig','day','ইস্তিগফার ১০০ বার','أَسْتَغْفِرُ اللَّهَ','আমি আল্লাহর কাছে ক্ষমা চাচ্ছি।'],
+    ['y_durud','day','দরূদ শরীফ ১০০ বার','اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ','হে আল্লাহ, মুহাম্মদ ﷺ এর ওপর রহমত বর্ষণ করুন।'],
+    ['y_tasbih','day','সুবহানাল্লাহি ওয়া বিহামদিহি ১০০ বার','سُبْحَانَ اللَّهِ وَبِحَمْدِهِ','আল্লাহ পবিত্র, সমস্ত প্রশংসা তাঁর।'],
+    ['y_book','day','হাদিস বা দ্বীনি বই পড়া'],
+    ['y_sadaqa','day','সদকা করা (সামান্য হলেও)'],
+    ['y_parents','day','পিতা-মাতার সেবা ও দোয়া'],
+    ['y_good','day','কারও উপকার করা, সালাম দেওয়া, ভালো ব্যবহার'],
+    ['y_fast','day','নফল রোজা (যেদিন রাখা হয়েছে)'],
+    ['e_bism','food','খাওয়ার আগে বিসমিল্লাহ বলা','بِسْمِ اللَّهِ','আল্লাহর নামে শুরু করছি।'],
+    ['e_right','food','ডান হাতে খাওয়া'],
+    ['e_dua','food','খাওয়ার পরের দোয়া পড়া','اَلْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ','সমস্ত প্রশংসা আল্লাহর, যিনি আমাদের খাওয়ালেন, পান করালেন এবং মুসলিম বানালেন।'],
+    ['s_wudu','sleep','ওযু করে ঘুমানো'],
+    ['s_kursi','sleep','আয়াতুল কুরসি পড়া'],
+    ['s_3qul','sleep','সূরা ইখলাস, ফালাক, নাস (হাতে ফুঁ দিয়ে শরীরে মোছা)'],
+    ['s_mulk','sleep','সূরা মুলক বা সাজদাহ পড়া'],
+    ['s_tasbih','sleep','তাসবিহে ফাতিমি (সুবহানাল্লাহ ৩৩, আলহামদুলিল্লাহ ৩৩, আল্লাহু আকবার ৩৪)'],
+    ['s_dua','sleep','ঘুমানোর দোয়া পড়া','بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا','হে আল্লাহ, আপনার নামেই আমি মরি (ঘুমাই) ও বাঁচি (জাগি)।'],
+    ['s_right','sleep','ডান কাতে শোয়া'],
+    ['s_muh','sleep','দিনের হিসাব নেওয়া ও তওবা (মুহাসাবা)']
+  ];
+  var FARD=['f_far','d_far','a_far','g_far','i_far'];
+  var pad=function(n){ return n<10?'0'+n:''+n; };
+  function ymd(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function parse(k){ var p=k.split('-'); return new Date(+p[0],+p[1]-1,+p[2]); }
+  function shift(k,n){ var d=parse(k); d.setDate(d.getDate()+n); return ymd(d); }
+  var TODAY=ymd(new Date()), day=TODAY, logs={}, cfg={hidden:[],custom:[]}, draft=null, openDua=null, busy=false, pend={}, tm=null, loaded=false;
+  function ckey(){ return 'amal_'+(window.me&&me.id); }
+  function cacheSave(){ try{ localStorage.setItem(ckey(),JSON.stringify({logs:logs,cfg:cfg,pend:pend})); }catch(e){} }
+  function cacheLoad(){ try{ var d=JSON.parse(localStorage.getItem(ckey())||'null'); if(d){ logs=d.logs||{}; cfg=d.cfg||cfg; pend=d.pend||{}; if(!Array.isArray(cfg.hidden)) cfg.hidden=[]; if(!Array.isArray(cfg.custom)) cfg.custom=[]; } }catch(e){} }
+  function allItems(c){ c=c||cfg; return ITEMS.map(function(x){ return {id:x[0],sec:x[1],t:x[2],ar:x[3]||'',bn:x[4]||'',cu:false}; }).concat((c.custom||[]).map(function(x){ return {id:x.id,sec:x.sec,t:x.t,ar:'',bn:'',cu:true}; })); }
+  function visible(){ var h=cfg.hidden||[]; return allItems().filter(function(x){ return h.indexOf(x.id)<0; }); }
+  function doneOf(d){ return Array.isArray(logs[d])?logs[d]:[]; }
+  function pctOf(d,vis){ vis=vis||visible(); if(!vis.length) return 0; var dn=doneOf(d); var n=vis.filter(function(x){ return dn.indexOf(x.id)>=0; }).length; return Math.round(n/vis.length*100); }
+  function fardCnt(d){ var dn=doneOf(d); return FARD.filter(function(x){ return dn.indexOf(x)>=0; }).length; }
+  function streak(){ var d=TODAY, n=0; if(fardCnt(d)<5) d=shift(d,-1); while(fardCnt(d)===5&&n<400){ n++; d=shift(d,-1); } return n; }
+  function render(){
+    var dt=parse(day);
+    var dd=mk('div'); dd.appendChild(document.createTextNode(day===TODAY?'আজ':(day===shift(TODAY,-1)?'গতকাল':dt.toLocaleDateString('bn-BD',{weekday:'long'}))));
+    var sm=mk('small',null,dt.toLocaleDateString('bn-BD',{day:'numeric',month:'long',year:'numeric'})); 
+    var D=$('amDate'); D.textContent=''; D.appendChild(dd.firstChild); D.appendChild(sm);
+    $('amNext').disabled=(day>=TODAY);
+    var vis=visible(), dn=doneOf(day), done=vis.filter(function(x){ return dn.indexOf(x.id)>=0; }).length, pc=vis.length?Math.round(done/vis.length*100):0;
+    var S=$('amSum'); S.textContent='';
+    var r1=mk('div','r1'); var l=mk('div'); l.appendChild(mk('small',null,day===TODAY?'আজকের আমল':'এই দিনের আমল')); l.appendChild(document.createElement('br')); l.appendChild(mk('b',null,bn(pc)+'%')); r1.appendChild(l);
+    r1.appendChild(mk('small',null,bn(done)+' / '+bn(vis.length)+' টি সম্পন্ন')); S.appendChild(r1);
+    var bar=mk('div','bar'); var bi=mk('i'); bi.style.width=pc+'%'; bar.appendChild(bi); S.appendChild(bar);
+    var r2=mk('div','r2'); r2.appendChild(mk('span',null,'🕌 ফরজ নামাজ: '+bn(fardCnt(day))+'/৫')); r2.appendChild(mk('span',null,'🔥 টানা ফরজ ৫/৫: '+bn(streak())+' দিন')); S.appendChild(r2);
+    var W=$('amWk'); W.textContent='';
+    for(var i=6;i>=0;i--){ var k=shift(TODAY,-i), c=mk('div',k===day?'cur':''), b=mk('i'); b.style.height=Math.max(3,Math.round(pctOf(k,vis)*0.46))+'px'; c.appendChild(b); c.appendChild(mk('span',null,bn(parse(k).getDate()))); (function(kk){ c.onclick=function(){ day=kk; openDua=null; render(); }; })(k); W.appendChild(c); }
+    var L=$('amList'); L.textContent='';
+    SECS.forEach(function(sc){
+      var its=vis.filter(function(x){ return x.sec===sc[0]; }); if(!its.length) return;
+      var n=its.filter(function(x){ return dn.indexOf(x.id)>=0; }).length;
+      var box=mk('div','amsec'), h=mk('div','amsh'+(n===its.length?' ok':'')); h.appendChild(mk('span',null,sc[1]+' '+sc[2])); h.appendChild(mk('span','n',bn(n)+'/'+bn(its.length))); box.appendChild(h);
+      its.forEach(function(it){
+        var on=dn.indexOf(it.id)>=0, row=mk('div','ami'+(on?' on':'')); row.appendChild(mk('span','ck',on?'✓':'')); row.appendChild(mk('span','tx',it.t));
+        if(it.ar){ var bk=mk('button','bk','📖'); bk.type='button'; bk.setAttribute('aria-label','দোয়া দেখুন'); bk.onclick=function(e){ e.stopPropagation(); openDua=(openDua===it.id?null:it.id); render(); }; row.appendChild(bk); }
+        row.onclick=function(){ toggle(it.id); };
+        box.appendChild(row);
+        if(it.ar&&openDua===it.id){ var du=mk('div','amdu'); du.appendChild(mk('div','ar',it.ar)); du.appendChild(mk('div','bn',it.bn)); box.appendChild(du); }
+      });
+      L.appendChild(box);
+    });
+  }
+  function toggle(id){
+    var a=doneOf(day).slice(), i=a.indexOf(id); if(i>=0) a.splice(i,1); else a.push(id);
+    logs[day]=a; pend[day]=1; cacheSave(); render(); sched();
+  }
+  function sched(){ clearTimeout(tm); tm=setTimeout(flush,600); }
+  async function flush(){
+    if(!window.sb||!window.me||!navigator.onLine) return;
+    var ds=Object.keys(pend); if(!ds.length) return;
+    for(var i=0;i<ds.length;i++){
+      var d=ds[i];
+      var r=await sb.from('amal_log').upsert({user_id:me.id,day:d,done:doneOf(d),updated_at:new Date().toISOString()},{onConflict:'user_id,day'});
+      if(r.error){ say('সংরক্ষণ হয়নি — আগে amal.sql চালান'); return; }
+      delete pend[d];
+    }
+    cacheSave();
+  }
+  async function load(){
+    cacheLoad(); render();
+    if(!window.sb||!window.me||!navigator.onLine) return;
+    try{
+      var from=shift(TODAY,-60);
+      var a=await sb.from('amal_log').select('*').gte('day',from), b=await sb.from('amal_cfg').select('*').limit(1);
+      if(a.error||b.error){ $('amNote').textContent='ডেটা আনা যায়নি — Supabase-এ amal.sql চালানো হয়েছে কি?'; return; }
+      (a.data||[]).forEach(function(r){ if(!pend[r.day]) logs[r.day]=Array.isArray(r.done)?r.done:[]; });
+      if(b.data&&b.data[0]) cfg={hidden:Array.isArray(b.data[0].hidden)?b.data[0].hidden:[],custom:Array.isArray(b.data[0].custom)?b.data[0].custom:[]};
+      cacheSave(); render(); flush();
+    }catch(e){}
+  }
+  /* ---- আমল তালিকা ঠিক করা ---- */
+  function cfgList(){
+    var L=$('amCL'); L.textContent='';
+    var items=allItems(draft);
+    SECS.forEach(function(sc){
+      var its=items.filter(function(x){ return x.sec===sc[0]; }); if(!its.length) return;
+      L.appendChild(mk('div','amcs',sc[1]+' '+sc[2]));
+      its.forEach(function(it){
+        var row=mk('label','amcr'), cb=document.createElement('input'); cb.type='checkbox'; cb.checked=draft.hidden.indexOf(it.id)<0;
+        cb.onchange=function(){ var i=draft.hidden.indexOf(it.id); if(cb.checked){ if(i>=0) draft.hidden.splice(i,1); } else if(i<0) draft.hidden.push(it.id); };
+        row.appendChild(cb); row.appendChild(mk('span',null,it.t));
+        if(it.cu){ var x=mk('button',null,'🗑'); x.type='button'; x.onclick=function(e){ e.preventDefault(); draft.custom=draft.custom.filter(function(c){ return c.id!==it.id; }); cfgList(); }; row.appendChild(x); }
+        L.appendChild(row);
+      });
+    });
+  }
+  function openCfg(){
+    draft={hidden:(cfg.hidden||[]).slice(),custom:(cfg.custom||[]).map(function(x){ return {id:x.id,sec:x.sec,t:x.t}; })};
+    var sel=$('amCS'); if(!sel.options.length){ SECS.forEach(function(sc){ var o=document.createElement('option'); o.value=sc[0]; o.textContent=sc[1]+' '+sc[2]; sel.appendChild(o); }); }
+    sel.value='day'; $('amCT').value=''; cfgList(); $('amC').classList.remove('hidden');
+  }
+  $('amCA').onclick=function(){
+    var t=$('amCT').value.trim(); if(!t){ say('আমলের নাম লিখুন'); return; }
+    draft.custom.push({id:'c_'+Date.now().toString(36)+Math.floor(Math.random()*1000),sec:$('amCS').value,t:t}); $('amCT').value=''; cfgList();
+  };
+  $('amCSave').onclick=async function(){
+    if(busy) return; if(!navigator.onLine){ say('নেট ছাড়া সংরক্ষণ হবে না'); return; }
+    busy=true;
+    var r=await sb.from('amal_cfg').upsert({user_id:me.id,hidden:draft.hidden,custom:draft.custom},{onConflict:'user_id'});
+    busy=false;
+    if(r.error){ say('সংরক্ষণ হয়নি — আগে amal.sql চালান'); return; }
+    cfg={hidden:draft.hidden,custom:draft.custom}; cacheSave(); render(); $('amC').classList.add('hidden');
+  };
+  $('amCX').onclick=function(){ $('amC').classList.add('hidden'); };
+  $('amC').onclick=function(e){ if(e.target===this) this.classList.add('hidden'); };
+  $('amPrev').onclick=function(){ day=shift(day,-1); openDua=null; render(); };
+  $('amNext').onclick=function(){ if(day<TODAY){ day=shift(day,1); openDua=null; render(); } };
+  /* ---- ট্যাব ---- */
+  var tab='sal', origCfg=$('slrCfg').onclick;
+  function setTab(t){
+    tab=t; try{ localStorage.setItem('slTab',t); }catch(e){}
+    [].forEach.call($('slTabs').children,function(b){ b.classList.toggle('on',b.dataset.t===t); });
+    $('slTitle').textContent=t==='amal'?'সারাদিনের আমল':'বেতনের হিসাব';
+    document.querySelector('#slr .slb').style.display=t==='amal'?'none':'';
+    $('amB').classList.toggle('hidden',t!=='amal');
+    $('slrCfg').setAttribute('aria-label',t==='amal'?'আমল তালিকা ঠিক করুন':'মাসিক বেতন ঠিক করুন');
+    if(t==='amal'){ TODAY=ymd(new Date()); if(day>TODAY) day=TODAY; load(); }
+  }
+  $('slTabs').onclick=function(e){ var b=e.target.closest('button'); if(b) setTab(b.dataset.t); };
+  $('slrCfg').onclick=function(ev){ if(tab==='amal') openCfg(); else if(origCfg) origCfg.call(this,ev); };
+  var wasHidden=true;
+  new MutationObserver(function(){
+    var hid=$('slr').classList.contains('hidden');
+    if(!hid&&wasHidden){ var t='sal'; try{ t=localStorage.getItem('slTab')||'sal'; }catch(e){} setTab(t==='amal'?'amal':'sal'); }
+    wasHidden=hid;
+  }).observe($('slr'),{attributes:true,attributeFilter:['class']});
+  window.addEventListener('online',function(){ try{ flush(); }catch(e){} });
 })();
 </script>
 </body>
