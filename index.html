@@ -11913,7 +11913,20 @@ async function callQuality(){
 'use strict';
 function g(i){return document.getElementById(i);}
 function say(m){try{if(window.toast){window.toast(m);return;}}catch(e){}alert(m);}
-var MODELS=['gemini-2.5-flash','gemini-2.0-flash','gemini-1.5-flash'];
+var MODELS=['gemini-flash-latest','gemini-2.5-flash','gemini-2.0-flash'],mcache=null;
+async function models(key){
+  if(mcache)return mcache;
+  try{
+    var r=await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=200&key='+encodeURIComponent(key));
+    var j=await r.json();
+    if(r.ok&&j.models){
+      var l=j.models.filter(function(m){return (m.supportedGenerationMethods||[]).indexOf('generateContent')>-1&&/^models\/gemini-[\d.]+-flash(-\d+)?$/.test(m.name);}).map(function(m){return m.name.replace('models/','');});
+      l.sort(function(x,y){return parseFloat(y.split('-')[1])-parseFloat(x.split('-')[1]);});
+      if(l.length){mcache=l.slice(0,4);return mcache;}
+    }
+  }catch(e){}
+  return MODELS;
+}
 var SYS='তুমি একজন বিনয়ী ও সহায়ক সহকারী। সব উত্তর সহজ, শুদ্ধ বাংলায় দাও (ব্যবহারকারী অন্য ভাষায় লিখলে সেই ভাষায়)। ইসলামি বিষয়ে প্রশ্ন এলে কুরআন-সুন্নাহর আলোকে সংক্ষেপে বলো এবং জটিল মাসআলায় কোনো নির্ভরযোগ্য আলেমের কাছে যাচাই করতে বলো। উত্তর ছোট ও পরিষ্কার রাখো।';
 var hist=[],busy=false,L=g('askL'),T=g('askT');
 
@@ -11977,12 +11990,14 @@ async function send(){
   add(q,'u');hist.push({role:'user',parts:[{text:q}]});
   var wait=add('ভাবছি…','b');
   try{
-    var res=null;
-    for(var i=0;i<MODELS.length;i++){
-      res=await call(MODELS[i],key);
-      if(res.ok||(res.status!==404&&res.status!==400))break;
-      if(res.status===400&&/API key/i.test(JSON.stringify(res.j)))break;
+    var res=null,best=null,ms=await models(key);
+    for(var i=0;i<ms.length;i++){
+      res=await call(ms[i],key);
+      if(res.ok)break;
+      if(!best||(best.status===404&&res.status!==404))best=res;
+      if(res.status===403||(res.status===400&&/API key/i.test(JSON.stringify(res.j))))break;
     }
+    if(!res.ok&&best&&res.status===404)res=best;
     if(!res.ok){
       var msg=(res.j&&res.j.error&&res.j.error.message)||('ত্রুটি '+res.status);
       if(res.status===429)msg='আজকের ফ্রি সীমা বা প্রতি মিনিটের সীমা শেষ। একটু পরে আবার চেষ্টা করুন।';
