@@ -11885,138 +11885,328 @@ async function callQuality(){
 #splash[data-tt="pearl"] button#spAsk.hm-t{background:linear-gradient(145deg,#ffffff,#e8edf3)!important;color:#334155!important;border:1.5px solid #fff!important;border-radius:22px!important;box-shadow:6px 6px 12px #cbd5e1,-4px -4px 10px #ffffff!important;text-shadow:none!important}
 #splash[data-tt="pearl"] button#spAsk.hm-t span{background:linear-gradient(145deg,#f1f5f9,#dfe6ee)!important;color:#334155!important;box-shadow:none!important;border-radius:50%!important;width:46px;height:46px;display:flex;align-items:center;justify-content:center}
 #splash[data-tt="pearl"] button#spAsk.hm-t small{color:#64748b!important;text-shadow:none!important}
-#ask{position:fixed;inset:0;z-index:740;background:var(--bg,#f3f5f4);color:var(--text,#16211e);display:flex;flex-direction:column;font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}
+#ask .ah .tt b i.aph2{display:inline-block;vertical-align:middle;width:30px;height:30px;margin-right:8px;border-radius:50%;background:var(--meimg) center/cover no-repeat;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+#ask{position:fixed;inset:0;z-index:740;background:var(--bg,#eef3f1);color:var(--text,#16211e);display:flex;flex-direction:column;font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}
 #ask.hidden{display:none!important}
-#ask button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-#ask .ah{display:flex;align-items:center;gap:8px;padding:10px 10px;padding-top:calc(10px + env(safe-area-inset-top));background:linear-gradient(135deg,#0a5f44,#0d9488);color:#fff;flex:none}
-#ask .ah b{flex:1;font-size:18px}
-#ask .ah button{min-width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.2);color:#fff;font-size:18px;font-weight:700}
-#askL{flex:1;overflow-y:auto;padding:12px 12px 8px;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch}
-#askL .m{max-width:88%;padding:10px 13px;border-radius:16px;font-size:16px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
-#askL .m.u{align-self:flex-end;background:#0a5f44;color:#fff;border-bottom-right-radius:4px}
-#askL .m.b{align-self:flex-start;background:var(--panel,#fff);border:1px solid var(--line,#dfe5e2);border-bottom-left-radius:4px}
-#askL .m.err{background:#fee2e2;color:#991b1b;border-color:#fecaca}
-#askL .hi{margin:auto;text-align:center;color:var(--muted,#667570);line-height:1.8;padding:20px}
-#askL .hi b{display:block;font-size:20px;color:var(--text,#16211e);margin-bottom:6px}
-#ask .af{display:flex;gap:8px;align-items:flex-end;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:var(--panel,#fff);border-top:1px solid var(--line,#dfe5e2);flex:none}
-#askT{flex:1;min-width:0;border:1.5px solid var(--line,#dfe5e2);background:var(--bg,#f3f5f4);color:var(--text,#16211e);border-radius:20px;padding:10px 14px;font:inherit;font-size:16px;resize:none;max-height:120px;outline:none}
-#askS{width:44px;height:44px;border-radius:50%;background:#0a5f44!important;color:#fff!important;font-size:18px;flex:none}
-#askS:disabled{opacity:.5}
+#ask button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#ask .ah{display:flex;align-items:center;gap:6px;padding:10px 10px 12px;padding-top:calc(10px + env(safe-area-inset-top));background:linear-gradient(135deg,#064e3b,#0a5f44 45%,#0d9488);color:#fff;flex:none;box-shadow:0 4px 16px rgba(6,78,59,.28);position:relative;z-index:1}
+#ask .ah .tt{flex:1;min-width:0;line-height:1.25;padding-left:2px}
+#ask .ah .tt b{display:block;font-size:18px}
+#ask .ah .tt small{font-size:12px;opacity:.85}
+#ask .ah button{min-width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.16);color:#fff;font-size:18px;font-weight:700}
+#ask .ah button:active{background:rgba(255,255,255,.32)}
+#askL{flex:1;overflow-y:auto;padding:14px 12px 10px;display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch}
+#askL .row{display:flex;gap:8px;align-items:flex-start}
+#askL .row.u{justify-content:flex-end}
+#askL .av{flex:none;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#0a5f44,#0d9488);display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 2px 6px rgba(10,95,68,.3)}
+#askL .col{max-width:calc(100% - 42px);min-width:0;display:flex;flex-direction:column;gap:3px}
+#askL .m{padding:10px 14px;border-radius:18px;font-size:16px;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+#askL .m.u{max-width:86%;background:linear-gradient(135deg,#0a5f44,#0b7a5c);color:#fff;border-bottom-right-radius:5px;box-shadow:0 3px 10px rgba(10,95,68,.25)}
+#askL .m.b{background:var(--panel,#fff);border:1px solid var(--line,#dce5e1);border-top-left-radius:5px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+#askL .m.err{background:#fef2f2;color:#991b1b;border-color:#fecaca}
+#askL .m b{font-weight:700}
+#askL .m b.hd{display:block;font-size:17px;margin:4px 0 2px;color:#0a5f44}
+#askL .m code{background:rgba(10,95,68,.1);padding:1px 6px;border-radius:6px;font-size:14px;font-family:ui-monospace,Menlo,monospace}
+#askL .m pre{background:#0f1f1a;color:#d1fae5;padding:10px 12px;border-radius:12px;overflow-x:auto;font-size:13.5px;line-height:1.5;white-space:pre;margin:6px 0;font-family:ui-monospace,Menlo,monospace}
+#askL .tools{display:flex;gap:6px;padding-left:6px}
+#askL .tools button{font-size:12.5px;color:var(--muted,#667570);padding:3px 9px;border-radius:10px;background:rgba(10,95,68,.08)}
+#askL .dots{display:inline-flex;gap:5px;padding:6px 2px}
+#askL .dots i{width:8px;height:8px;border-radius:50%;background:#0d9488;animation:askd 1s infinite ease-in-out}
+#askL .dots i:nth-child(2){animation-delay:.15s}
+#askL .dots i:nth-child(3){animation-delay:.3s}
+@keyframes askd{0%,80%,100%{transform:scale(.55);opacity:.4}40%{transform:scale(1);opacity:1}}
+#askL .hi{margin:auto;text-align:center;color:var(--muted,#667570);line-height:1.7;padding:16px 8px;max-width:420px}
+#askL .hi .big{width:70px;height:70px;margin:0 auto 10px;border-radius:50%;background:linear-gradient(135deg,#0a5f44,#0d9488);display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 8px 22px rgba(10,95,68,.35)}
+#askL .hi b{display:block;font-size:21px;color:var(--text,#16211e);margin-bottom:4px}
+#askL .hi small{display:block;margin-top:6px;font-size:13px;opacity:.85}
+#askL .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+#askL .chips button{padding:9px 14px;border-radius:20px;background:var(--panel,#fff);border:1.5px solid var(--line,#dce5e1);font-size:14.5px;color:var(--text,#16211e);box-shadow:0 2px 6px rgba(0,0,0,.04)}
+#askL .chips button:active{background:rgba(10,95,68,.1)}
+#ask .af{display:flex;gap:8px;align-items:flex-end;padding:8px 10px calc(10px + env(safe-area-inset-bottom));background:var(--panel,#fff);border-top:1px solid var(--line,#dce5e1);flex:none}
+#askT{flex:1;min-width:0;border:1.5px solid var(--line,#dce5e1);background:var(--bg,#eef3f1);color:var(--text,#16211e);border-radius:22px;padding:11px 16px;font:inherit;font-size:16px;line-height:1.4;resize:none;max-height:130px;outline:none;transition:border-color .15s}
+#askT:focus{border-color:#0d9488}
+#askS{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#0a5f44,#0d9488)!important;color:#fff!important;font-size:19px;flex:none;box-shadow:0 4px 12px rgba(10,95,68,.35)}
+#askS.stop{background:#dc2626!important}
+#askH{position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.45);display:flex;align-items:flex-end}
+#askH.hidden{display:none}
+#askH .hp{background:var(--panel,#fff);width:100%;max-height:78%;border-radius:22px 22px 0 0;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom)}
+#askH .hh{display:flex;align-items:center;gap:8px;padding:14px 16px 8px}
+#askH .hh b{flex:1;font-size:18px}
+#askH .hh button{padding:6px 12px;border-radius:10px;background:rgba(10,95,68,.1);font-size:14px}
+#askHL{overflow-y:auto;padding:4px 12px 14px}
+#askHL .it{display:flex;align-items:center;gap:8px;padding:11px 12px;border-radius:14px;margin-top:6px;background:var(--bg,#eef3f1);border:1.5px solid transparent}
+#askHL .it.on{border-color:#0d9488}
+#askHL .it .tx{flex:1;min-width:0;cursor:pointer}
+#askHL .it .tx b{display:block;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#askHL .it .tx small{color:var(--muted,#667570);font-size:12.5px}
+#askHL .it button{padding:6px 8px;font-size:16px}
+#askHL .em{text-align:center;color:var(--muted,#667570);padding:24px}
 </style>
 <div id="ask" class="hidden">
-  <div class="ah"><button id="askBack" type="button" aria-label="ফিরে যান">←</button><b>🤖 প্রশ্ন করুন</b><button id="askNew" type="button" aria-label="নতুন কথোপকথন">🗑</button><button id="askKey" type="button" aria-label="API কী">🔑</button></div>
+  <div class="ah"><button id="askBack" type="button" aria-label="ফিরে যান">←</button><div class="tt"><b><i class="aph2"></i>প্রশ্ন করুন</b><small>Gemini AI · দ্রুত উত্তর</small></div><button id="askHist" type="button" aria-label="আগের প্রশ্ন">🕘</button><button id="askNew" type="button" aria-label="নতুন চ্যাট">✚</button><button id="askKey" type="button" aria-label="API কী">🔑</button></div>
   <div id="askL"></div>
   <div class="af"><textarea id="askT" rows="1" placeholder="আপনার প্রশ্ন লিখুন…"></textarea><button id="askS" type="button" aria-label="পাঠান">➤</button></div>
+  <div id="askH" class="hidden"><div class="hp"><div class="hh"><b>🕘 আগের প্রশ্নগুলো</b><button id="askHAll" type="button">সব মুছুন</button><button id="askHX" type="button" aria-label="বন্ধ">✕</button></div><div id="askHL"></div></div></div>
 </div>
 <script>
 (function(){
 'use strict';
 function g(i){return document.getElementById(i);}
 function say(m){try{if(window.toast){window.toast(m);return;}}catch(e){}alert(m);}
-var MODELS=['gemini-flash-latest','gemini-2.5-flash','gemini-2.0-flash'],mcache=null;
-async function models(key){
-  if(mcache)return mcache;
-  try{
-    var r=await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=200&key='+encodeURIComponent(key));
-    var j=await r.json();
-    if(r.ok&&j.models){
-      var l=j.models.filter(function(m){return (m.supportedGenerationMethods||[]).indexOf('generateContent')>-1&&/^models\/gemini-[\d.]+-flash(-\d+)?$/.test(m.name);}).map(function(m){return m.name.replace('models/','');});
-      l.sort(function(x,y){return parseFloat(y.split('-')[1])-parseFloat(x.split('-')[1]);});
-      if(l.length){mcache=l.slice(0,4);return mcache;}
-    }
-  }catch(e){}
-  return MODELS;
-}
+function ls(k){try{return localStorage.getItem(k)||'';}catch(e){return '';}}
+function lss(k,v){try{if(v)localStorage.setItem(k,v);else localStorage.removeItem(k);}catch(e){}}
+var API='https://generativelanguage.googleapis.com/v1beta/models';
+var DEF=['gemini-2.5-flash','gemini-flash-latest','gemini-2.0-flash'],mcache=null;
 var SYS='তুমি একজন বিনয়ী ও সহায়ক সহকারী। সব উত্তর সহজ, শুদ্ধ বাংলায় দাও (ব্যবহারকারী অন্য ভাষায় লিখলে সেই ভাষায়)। ইসলামি বিষয়ে প্রশ্ন এলে কুরআন-সুন্নাহর আলোকে সংক্ষেপে বলো এবং জটিল মাসআলায় কোনো নির্ভরযোগ্য আলেমের কাছে যাচাই করতে বলো। উত্তর ছোট ও পরিষ্কার রাখো।';
-var hist=[],busy=false,L=g('askL'),T=g('askT');
+var L=g('askL'),T=g('askT'),S=g('askS'),busy=false,ctl=null,chats=[],cur=null;
+
+/* ---- সংরক্ষণ (ফোনেই থাকে) ---- */
+try{chats=JSON.parse(ls('askChats')||'[]')||[];}catch(e){chats=[];}
+if(!Array.isArray(chats))chats=[];
+function save(){
+  if(chats.length>80)chats=chats.slice(0,80);
+  for(;;){
+    try{localStorage.setItem('askChats',JSON.stringify(chats));break;}catch(e){if(chats.length<=1)break;chats.pop();}
+  }
+  lss('askCur',cur?String(cur.id):'');
+}
+(function(){var id=ls('askCur');cur=chats.filter(function(c){return String(c.id)===id;})[0]||chats[0]||null;})();
 
 /* ---- হোমে বোতাম বসানো ---- */
 var grids=document.querySelectorAll('#splash .hm-tiles'),last=grids[grids.length-1];
 if(last){
   var row=document.createElement('div');row.className='hm-tiles';
   var b=document.createElement('button');b.type='button';b.className='hm-t';b.id='spAsk';
-  b.innerHTML='<span>🤖</span>প্রশ্ন করুন<small>Gemini AI</small>';
+  b.innerHTML='<span>❓</span>প্রশ্ন করুন<small>Gemini AI</small>';
   row.appendChild(b);last.parentNode.insertBefore(row,last.nextSibling);
   b.onclick=openAsk;
 }
 
-function getKey(){try{return localStorage.getItem('gemKey')||'';}catch(e){return '';}}
-function askKey(force){
+function getKey(){return ls('gemKey');}
+function askKey(){
   var k=prompt('Google AI Studio (aistudio.google.com/apikey) থেকে বিনামূল্যে নেওয়া Gemini API কী বসান:',getKey());
   if(k===null)return getKey();
-  k=k.trim();try{if(k)localStorage.setItem('gemKey',k);else localStorage.removeItem('gemKey');}catch(e){}
-  return k;
+  k=k.trim();lss('gemKey',k);return k;
 }
-function hi(){L.innerHTML='';var d=document.createElement('div');d.className='hi';d.innerHTML='<b>আসসালামু আলাইকুম 🌙</b>যা জানতে চান নিচে লিখুন।<br>উত্তর আসবে Gemini AI থেকে।';L.appendChild(d);}
-function add(txt,cls){var d=document.createElement('div');d.className='m '+cls;d.textContent=txt;var h=L.querySelector('.hi');if(h)h.remove();L.appendChild(d);L.scrollTop=L.scrollHeight;return d;}
 
+/* ---- লেখা সাজানো (নিরাপদ) ---- */
+function md(s){
+  s=s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  var bl=[];
+  s=s.replace(/```[a-zA-Z]*\n?([\s\S]*?)```/g,function(_,c){bl.push(c.replace(/\n$/,''));return '\u0001'+(bl.length-1)+'\u0001';});
+  s=s.replace(/`([^`\n]+)`/g,'<code>$1</code>');
+  s=s.replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>');
+  s=s.replace(/^#{1,4}[ \t]*(.+)$/gm,'<b class="hd">$1</b>');
+  s=s.replace(/^[ \t]*[*\-][ \t]+/gm,'• ');
+  s=s.replace(/\u0001(\d+)\u0001/g,function(_,i){return '<pre>'+bl[i]+'</pre>';});
+  return s;
+}
+
+/* ---- বাবল ---- */
+function near(){return L.scrollHeight-L.scrollTop-L.clientHeight<140;}
+function bottom(){L.scrollTop=L.scrollHeight;}
+function addUser(t){
+  var r=document.createElement('div');r.className='row u';
+  var d=document.createElement('div');d.className='m u';d.textContent=t;r.appendChild(d);L.appendChild(r);return d;
+}
+function addBot(t,isErr){
+  var r=document.createElement('div');r.className='row';
+  var av=document.createElement('div');av.className='av';av.textContent='❓';
+  var col=document.createElement('div');col.className='col';
+  var d=document.createElement('div');d.className='m b'+(isErr?' err':'');
+  d._t=t||'';
+  if(t)d.innerHTML=md(t);
+  col.appendChild(d);
+  r.appendChild(av);r.appendChild(col);L.appendChild(r);
+  r._col=col;r._d=d;return r;
+}
+function tools(r){
+  if(r._tl)return;
+  var tl=document.createElement('div');tl.className='tools';
+  var cp=document.createElement('button');cp.type='button';cp.textContent='📋 কপি';
+  cp.onclick=function(){
+    var t=r._d._t||'';
+    try{navigator.clipboard.writeText(t).then(function(){say('কপি হয়েছে');},function(){say('কপি হয়নি');});}catch(e){say('কপি হয়নি');}
+  };
+  tl.appendChild(cp);r._col.appendChild(tl);r._tl=tl;
+}
+function hint(){
+  L.innerHTML='<div class="hi"><div class="big">❓</div><b>আসসালামু আলাইকুম</b>যা জানতে চান লিখুন — উত্তর সঙ্গে সঙ্গে আসবে।<small>আপনার প্রশ্ন-উত্তর এই ফোনে সংরক্ষিত থাকে।</small><div class="chips"></div></div>';
+  var ch=L.querySelector('.chips');
+  ['একটি দুআ শিখাও','ওযুর নিয়ম সহজে বলো','একটি ছোট শিক্ষামূলক গল্প বলো','ইংরেজি থেকে বাংলা অনুবাদ করো'].forEach(function(q){
+    var x=document.createElement('button');x.type='button';x.textContent=q;
+    x.onclick=function(){T.value=q;send();};ch.appendChild(x);
+  });
+}
+function renderChat(){
+  L.innerHTML='';
+  if(!cur||!cur.msgs.length){hint();return;}
+  cur.msgs.forEach(function(m){if(m.r==='u')addUser(m.t);else{var r=addBot(m.t);tools(r);}});
+  bottom();
+}
+
+/* ---- খুলুন / বন্ধ ---- */
 function openAsk(){
   var sp=g('splash');if(sp)sp.classList.add('away');
   g('ask').classList.remove('hidden');
-  if(!L.children.length)hi();
+  if(!L.children.length)renderChat();
   try{history.pushState({nb:1},'');}catch(e){}
   if(!getKey())askKey();
+  setTimeout(bottom,50);
 }
 function closeAsk(){
+  g('askH').classList.add('hidden');
   g('ask').classList.add('hidden');
   if(window.__spShow)window.__spShow();
 }
 g('askBack').onclick=function(){closeAsk();};
 g('askKey').onclick=function(){askKey();};
-g('askNew').onclick=function(){if(!hist.length||confirm('নতুন কথোপকথন শুরু করবেন?')){hist=[];hi();}};
-/* মোবাইলের ব্যাক বাটন */
+g('askNew').onclick=function(){
+  if(busy&&ctl)ctl.abort();
+  cur=null;lss('askCur','');renderChat();T.focus();
+};
 window.addEventListener('popstate',function(e){
   if(g('ask').classList.contains('hidden'))return;
-  e.stopImmediatePropagation();closeAsk();
+  e.stopImmediatePropagation();
+  if(!g('askH').classList.contains('hidden'))g('askH').classList.add('hidden');else closeAsk();
   try{history.pushState({nb:1},'');}catch(x){}
 },true);
 
-T.oninput=function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px';};
-T.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey&&!('ontouchstart' in window)){e.preventDefault();send();}});
-g('askS').onclick=send;
-
-async function call(model,key){
-  var body={systemInstruction:{parts:[{text:SYS}]},contents:hist,generationConfig:{temperature:.7,maxOutputTokens:2048}};
-  var r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent?key='+encodeURIComponent(key),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  var j=await r.json().catch(function(){return {};});
-  return {ok:r.ok,status:r.status,j:j};
+/* ---- আগের প্রশ্নের তালিকা ---- */
+function dt(ts){try{return new Date(ts).toLocaleString('bn-BD',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'});}catch(e){return '';}}
+function histList(){
+  var hl=g('askHL');hl.innerHTML='';
+  if(!chats.length){hl.innerHTML='<div class="em">এখনো কোনো প্রশ্ন নেই।</div>';return;}
+  chats.forEach(function(c){
+    var it=document.createElement('div');it.className='it'+(cur&&cur.id===c.id?' on':'');
+    var tx=document.createElement('div');tx.className='tx';
+    var b=document.createElement('b');b.textContent=c.title||'নতুন চ্যাট';
+    var sm=document.createElement('small');sm.textContent=dt(c.ts)+' · '+Math.ceil(c.msgs.length/2)+'টি প্রশ্ন';
+    tx.appendChild(b);tx.appendChild(sm);
+    tx.onclick=function(){if(busy&&ctl)ctl.abort();cur=c;lss('askCur',String(c.id));renderChat();g('askH').classList.add('hidden');};
+    var del=document.createElement('button');del.type='button';del.textContent='🗑';
+    del.onclick=function(){
+      if(!confirm('এই কথোপকথন মুছবেন?'))return;
+      chats=chats.filter(function(x){return x!==c;});
+      if(cur===c){cur=null;renderChat();}
+      save();histList();
+    };
+    it.appendChild(tx);it.appendChild(del);hl.appendChild(it);
+  });
 }
+g('askHist').onclick=function(){histList();g('askH').classList.remove('hidden');};
+g('askHX').onclick=function(){g('askH').classList.add('hidden');};
+g('askH').onclick=function(e){if(e.target===this)this.classList.add('hidden');};
+g('askHAll').onclick=function(){
+  if(!chats.length||!confirm('সব কথোপকথন মুছে ফেলবেন?'))return;
+  chats=[];cur=null;save();renderChat();histList();
+};
+
+T.oninput=function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,130)+'px';};
+T.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey&&!('ontouchstart' in window)){e.preventDefault();send();}});
+S.onclick=send;
+function btn(stop){busy=stop;S.classList.toggle('stop',stop);S.textContent=stop?'■':'➤';S.setAttribute('aria-label',stop?'থামান':'পাঠান');}
+
+/* ---- মডেল ---- */
+async function models(key){
+  if(mcache)return mcache;
+  try{
+    var r=await fetch(API+'?pageSize=200&key='+encodeURIComponent(key));
+    var j=await r.json();
+    if(r.ok&&j.models){
+      var l=j.models.filter(function(m){return (m.supportedGenerationMethods||[]).indexOf('generateContent')>-1&&/^models\/gemini-[\d.]+-flash(-\d+)?$/.test(m.name);}).map(function(m){return m.name.replace('models/','');});
+      l.sort(function(x,y){return parseFloat(y.split('-')[1])-parseFloat(x.split('-')[1]);});
+      mcache=l.slice(0,4);return mcache;
+    }
+  }catch(e){}
+  mcache=[];return mcache;
+}
+
+/* ---- স্ট্রিমিং (উত্তর লিখতে লিখতেই দেখায়) ---- */
+async function stream(model,key,contents,onText,signal){
+  var gc={temperature:.7,maxOutputTokens:2048};
+  if(/2\.5/.test(model))gc.thinkingConfig={thinkingBudget:0};
+  var r=await fetch(API+'/'+model+':streamGenerateContent?alt=sse&key='+encodeURIComponent(key),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({systemInstruction:{parts:[{text:SYS}]},contents:contents,generationConfig:gc}),signal:signal});
+  if(!r.ok){var j=await r.json().catch(function(){return {};});return {ok:false,status:r.status,j:j};}
+  var txt='',blocked=false,buf='';
+  function ev(line){
+    if(line.indexOf('data:')!==0)return;
+    try{
+      var j=JSON.parse(line.slice(5)),c=j.candidates&&j.candidates[0];
+      if(c&&c.content&&c.content.parts){c.content.parts.forEach(function(q){if(q.text&&!q.thought)txt+=q.text;});onText(txt);}
+      if(j.promptFeedback&&j.promptFeedback.blockReason)blocked=true;
+    }catch(e){}
+  }
+  function feed(s){
+    buf+=s;var p=buf.split(/\r?\n/);buf=p.pop();p.forEach(ev);
+  }
+  if(r.body&&r.body.getReader){
+    var rd=r.body.getReader(),dec=new TextDecoder();
+    try{for(;;){var x=await rd.read();if(x.done)break;feed(dec.decode(x.value,{stream:true}));}}
+    catch(e){if(!txt)throw e;}
+  }else{feed(await r.text());}
+  if(buf)ev(buf);
+  return {ok:true,text:txt,blocked:blocked};
+}
+
 async function send(){
-  if(busy)return;
+  if(busy){if(ctl)ctl.abort();return;}
   var q=T.value.trim();if(!q)return;
   var key=getKey();if(!key){key=askKey();if(!key)return;}
   if(!navigator.onLine){say('নেট নেই');return;}
-  busy=true;g('askS').disabled=true;T.value='';T.style.height='';
-  add(q,'u');hist.push({role:'user',parts:[{text:q}]});
-  var wait=add('ভাবছি…','b');
+  if(!cur){cur={id:Date.now(),title:q.slice(0,45),ts:Date.now(),msgs:[]};chats.unshift(cur);}
+  var chat=cur;
+  chat.msgs.push({r:'u',t:q});chat.ts=Date.now();
+  chats=[chat].concat(chats.filter(function(c){return c!==chat;}));
+  save();
+  T.value='';T.style.height='';
+  var h=L.querySelector('.hi');if(h)h.remove();
+  addUser(q);
+  var rw=addBot('');rw._d.innerHTML='<span class="dots"><i></i><i></i><i></i></span>';
+  bottom();btn(true);ctl=new AbortController();
+  var contents=chat.msgs.slice(-24).map(function(m){return {role:m.r==='u'?'user':'model',parts:[{text:m.t}]};});
+  while(contents.length&&contents[0].role!=='user')contents.shift();
+  var shown='',aborted=false,res=null,best=null;
   try{
-    var res=null,best=null,ms=await models(key);
-    for(var i=0;i<ms.length;i++){
-      res=await call(ms[i],key);
-      if(res.ok)break;
+    var order=[],sv=ls('gemModel'),listed=false;
+    if(sv)order.push(sv);DEF.forEach(function(m){if(order.indexOf(m)<0)order.push(m);});
+    for(var i=0;i<order.length;i++){
+      res=await stream(order[i],key,contents,function(t){
+        shown=t;var stick=near();rw._d._t=t;rw._d.innerHTML=md(t);if(stick)bottom();
+      },ctl.signal);
+      if(res.ok){lss('gemModel',order[i]);break;}
       if(!best||(best.status===404&&res.status!==404))best=res;
       if(res.status===403||(res.status===400&&/API key/i.test(JSON.stringify(res.j))))break;
+      if(i===order.length-1&&!listed){listed=true;(await models(key)).forEach(function(m){if(order.indexOf(m)<0)order.push(m);});}
     }
-    if(!res.ok&&best&&res.status===404)res=best;
     if(!res.ok){
+      res=best||res;
       var msg=(res.j&&res.j.error&&res.j.error.message)||('ত্রুটি '+res.status);
       if(res.status===429)msg='আজকের ফ্রি সীমা বা প্রতি মিনিটের সীমা শেষ। একটু পরে আবার চেষ্টা করুন।';
       else if(res.status===400&&/API key/i.test(msg))msg='API কী ঠিক নেই। ওপরের 🔑 চেপে নতুন কী দিন।';
       else if(res.status===403)msg='এই কী দিয়ে অনুমতি নেই। 🔑 চেপে ঠিক কী দিন।';
       throw new Error(msg);
     }
-    var c=res.j.candidates&&res.j.candidates[0],t=c&&c.content&&c.content.parts?c.content.parts.map(function(p){return p.text||'';}).join(''):'';
-    if(!t)t=(res.j.promptFeedback&&res.j.promptFeedback.blockReason)?'এই প্রশ্নের উত্তর দেওয়া যাচ্ছে না। অন্যভাবে লিখে দেখুন।':'উত্তর পাওয়া যায়নি।';
-    wait.textContent=t.trim();hist.push({role:'model',parts:[{text:t}]});
-    if(hist.length>24)hist=hist.slice(-24);
+    shown=(res.text||shown).trim();
+    if(!shown)shown=res.blocked?'এই প্রশ্নের উত্তর দেওয়া যাচ্ছে না। অন্যভাবে লিখে দেখুন।':'উত্তর পাওয়া যায়নি।';
   }catch(e){
-    hist.pop();wait.className='m b err';wait.textContent='⚠️ '+(e&&e.message&&e.message!=='Failed to fetch'?e.message:'ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।');
+    if(e&&e.name==='AbortError'){aborted=true;}
+    else{
+      chat.msgs.pop();save();
+      rw._d.className='m b err';rw._d.textContent='⚠️ '+(e&&e.message&&e.message!=='Failed to fetch'?e.message:'ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।');
+      T.value=q;btn(false);ctl=null;bottom();return;
+    }
   }
-  busy=false;g('askS').disabled=false;L.scrollTop=L.scrollHeight;
+  btn(false);ctl=null;
+  shown=(shown||'').trim();
+  if(aborted&&!shown){chat.msgs.pop();save();rw.remove();T.value=q;return;}
+  rw._d._t=shown;rw._d.innerHTML=md(shown)+(aborted?'\n<small style="opacity:.6">(থামানো হয়েছে)</small>':'');
+  tools(rw);
+  chat.msgs.push({r:'m',t:shown});chat.ts=Date.now();save();
+  if(cur===chat)bottom();
 }
 })();
 </script>
 <!-- ===== প্রশ্ন করুন — শেষ ===== -->
-
 </body>
 </html>
