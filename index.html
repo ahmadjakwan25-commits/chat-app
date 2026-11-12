@@ -1298,6 +1298,8 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
       <h3>আপনার নাম</h3>
       <input id="setName" type="text" maxlength="30">
       <button class="btn" id="saveName">নাম সংরক্ষণ</button>
+      <div id="thNote" class="hidden" style="background:#fef3c7;color:#78350f;border-radius:12px;padding:10px 12px;margin:10px 0;font-size:14px;line-height:1.6">🔒 থিম ও ডিজাইন শুধু মালিক বদলাতে পারেন। তিনি বদলালে ১–২ মিনিটের মধ্যে এখানে নিজে থেকেই চলে আসবে।</div>
+      <button class="btn alt hidden" id="ownClaim" type="button">👑 আমি থিমের মালিক (শুধু আমি বদলাতে পারব)</button>
       <h3>থিম</h3>
       <div class="seg" id="themeSeg"><button data-v="auto">অটো</button><button data-v="light">দিন</button><button data-v="dark">রাত</button></div>
       <h3>অ্যাপের রং</h3>
@@ -1826,8 +1828,8 @@ function applyTheme(){
   R.style.setProperty('--ff', '"' + ff + '","Hind Siliguri"');
   if (settings.tm) R.style.setProperty('--tm', settings.tm); else R.style.removeProperty('--tm');
   if (settings.tt) R.style.setProperty('--tt', settings.tt); else R.style.removeProperty('--tt');
-  ['soft', 'grad', 'card', 'bold', 'glass'].forEach(function(x){ document.body.classList.remove('bs-' + x); });
-  document.body.classList.add('bs-' + (settings.bs || 'soft'));
+  ['soft', 'grad', 'card', 'bold', 'glass', 'mint'].forEach(function(x){ document.body.classList.remove('bs-' + x); });
+  document.body.classList.add('bs-' + (settings.bs || 'mint'));
   ['pol', 'round', 'plain'].forEach(function(x){ document.body.classList.remove('ph-' + x); });
   document.body.classList.add('ph-' + (settings.ph || 'pol'));
 }
@@ -3821,7 +3823,7 @@ function openSettings(){
   $('setBio').checked = !!(lockCfg && lockCfg.bio);
   $('setTtl').value = String(settings.ttl || 0);
   $('setPray').checked = !!settings.prayerRemind;
-  colorSettings(); $('setSync').checked = !settings.syncOff; fillRing(); fillAppear(); syncStatus(false); $('ringTest').textContent = '▶ শুনে দেখুন';
+  colorSettings(); $('setSync').checked = !settings.syncOff; fillRing(); fillAppear(); lockUi(); syncStatus(false); $('ringTest').textContent = '▶ শুনে দেখুন';
   $('verLine').textContent = 'অ্যাপের সংস্করণ: ' + APP_VER;
   $('settings').classList.remove('hidden');
 }
@@ -3876,7 +3878,7 @@ $('ringFile').onchange = async function(){
 /* ---------- ফন্ট, রং, ডিজাইন ---------- */
 var FONTS = [['Hind Siliguri', 'হিন্দ সিলিগুড়ি (ডিফল্ট)'], ['SutonnyOMJ', 'সুতন্নি ওএমজে (ফাইল লাগে)'], ['Noto Sans Bengali', 'নোটো সানস বাংলা'], ['Anek Bangla', 'আনেক বাংলা'], ['Mina', 'মিনা (নরম ও পরিষ্কার)'], ['Baloo Da 2', 'বালু দা (গোলগাল)'], ['Noto Serif Bengali', 'নোটো সেরিফ (বইয়ের মতো)'], ['Tiro Bangla', 'তিরো বাংলা'], ['Galada', 'গালাদা (হাতের লেখার মতো)'], ['Atma', 'আত্মা (মজার ধাঁচ)']];
 var TCOL = ['', '#16211e', '#0b5a54', '#1d4ed8', '#7c3aed', '#be123c', '#c2410c', '#92400e', '#ffffff'];
-var BSTYLES = [['soft', 'নরম (ডিফল্ট)'], ['grad', 'রঙিন গ্রেডিয়েন্ট'], ['card', 'কার্ডের মতো'], ['bold', 'গোলগাল ছায়াসহ'], ['glass', 'কাচের মতো স্বচ্ছ']];
+var BSTYLES = [['mint', 'মিন্ট কার্ড (সবুজ ধার) — ডিফল্ট'], ['soft', 'নরম'], ['grad', 'রঙিন গ্রেডিয়েন্ট'], ['card', 'কার্ডের মতো'], ['bold', 'গোলগাল ছায়াসহ'], ['glass', 'কাচের মতো স্বচ্ছ']];
 var PSTYLES = [['pol', 'পোলারয়েড (ফিতা লাগানো)'], ['round', 'গোল ফ্রেম'], ['plain', 'সাধারণ']];
 function fillSel(id, list, cur){
   var s = $(id); s.textContent = '';
@@ -3909,7 +3911,7 @@ async function updFfPrev(){
   st.textContent = ok ? '✅ এই ফোনে ফন্টটি লোড হয়েছে' : (nm === 'SutonnyOMJ' ? '⚠️ SutonnyOMJ.ttf ফাইল পাওয়া যায়নি, তাই ডিফল্ট ফন্ট দেখাচ্ছে' : '⚠️ এই ফোনে ফন্টটি লোড হয়নি (নেট ঠিক আছে কিনা দেখে পেজ রিফ্রেশ করুন), তাই ডিফল্ট ফন্ট দেখাচ্ছে');
 }
 function fillAppear(){
-  fillSel('setFF', FONTS, settings.ff || 'Hind Siliguri'); fillSel('setBS', BSTYLES, settings.bs || 'soft'); fillSel('setPH', PSTYLES, settings.ph || 'pol');
+  fillSel('setFF', FONTS, settings.ff || 'Hind Siliguri'); fillSel('setBS', BSTYLES, settings.bs || 'mint'); fillSel('setPH', PSTYLES, settings.ph || 'pol');
   colSw('tmSw', 'tm'); colSw('ttSw', 'tt'); updFfPrev();
 }
 $('setFF').onchange = function(){
@@ -3919,13 +3921,15 @@ $('setFF').onchange = function(){
 $('setBS').onchange = function(){ settings.bs = this.value; lsSet('settings', settings); applyTheme(); pushShared(); };
 $('setPH').onchange = function(){ settings.ph = this.value; lsSet('settings', settings); applyTheme(); pushShared(); };
 /* ---------- দুজনের ডিজাইন সিঙ্ক ---------- */
-var SHARED_KEYS = ['spTheme', 'ff', 'bs', 'ph', 'accent', 'theme', 'wp', 'font', 'anim', 'tm', 'tt'];
+var SHARED_KEYS = ['spTheme', 'ff', 'bs', 'ph', 'accent', 'theme', 'wp', 'font', 'anim', 'tm', 'tt', 'hmThm'];
 var styleCh = null, styleTs = 0, pushT = null, pushWarned = false, lastStyleT = 0;
 function pushShared(force){
-  if (!sb || !me || settings.syncOff || !navigator.onLine) return;
+  if (!sb || !me || settings.syncOff || !navigator.onLine || !canTheme()) return;
   clearTimeout(pushT);
   pushT = setTimeout(async function(){
+    try { settings.hmThm = localStorage.getItem('hmThm') || ''; } catch(e){}
     var d = { by: me.id };
+    if (ownerState() === 'yes' || styleOwner === me.id) { styleOwner = me.id; lsSet('styleOwner', me.id); d.owner = me.id; }
     SHARED_KEYS.forEach(function(k){ if (settings[k] !== undefined) d[k] = settings[k]; });
     if (d.wp === 'custom') { if (settings.wpPath) d.wpPath = settings.wpPath; else delete d.wp; }
     var ts = Date.now(); styleTs = ts; lastStyleT = ts;
@@ -3939,8 +3943,11 @@ function pushShared(force){
   }, 500);
 }
 function applyShared(row){
-  if (!row || !row.data || !me || settings.syncOff) return;
+  if (!row || !row.data || !me) return;
   var d = row.data, mine = row.updated_by === me.id, t = Date.parse(row.updated_at) || 0;
+  if (d.owner && d.owner !== styleOwner) { styleOwner = d.owner; lsSet('styleOwner', styleOwner); }
+  if (settings.syncOff && canTheme()) return;
+  if (!mine && ownerState() === 'yes') return;
   if (mine && styleTs && t <= styleTs) return;
   if (t && t <= lastStyleT) return;
   lastStyleT = t;
@@ -3949,7 +3956,10 @@ function applyShared(row){
   if ('tm' in d || 'tt' in d) { settings.tm = (mine ? d.tm : d.tt) || ''; settings.tt = (mine ? d.tt : d.tm) || ''; }
   lsSet('settings', settings); applyTheme(); applyWallpaper(); if (window.spApplyTheme) spApplyTheme(); if (window.spBuildPicker) spBuildPicker();
   if (d.ff !== undefined && $('ffStat')) updFfPrev();
-  if (!mine) toast('সাথী ডিজাইন বদলেছেন ✨', 2500);
+  if (d.hmThm !== undefined) { try { if (d.hmThm) localStorage.setItem('hmThm', d.hmThm); else localStorage.removeItem('hmThm'); } catch(e){} if (window.hmThApply) window.hmThApply(); }
+  lockUi();
+  if (!mine && !quietStyle) toast('ডিজাইন বদলেছে ✨', 2500);
+  quietStyle = false;
 }
 async function shareWall(blob){
   if (!sb || !me || settings.syncOff || !navigator.onLine) return;
@@ -3973,6 +3983,8 @@ async function fetchWall(path){
   } catch(e){}
 }
 async function loadShared(){
+  ownerMigrate();
+  if (me && !canTheme() && !forcedOnce) { forcedOnce = true; lastStyleT = 0; styleTs = 0; quietStyle = true; }
   try { var r = await sb.from('app_style').select('*').eq('id', 'main').maybeSingle(); if (!r.error && r.data) applyShared(r.data); } catch(e){}
 }
 async function syncStatus(force){
@@ -3987,8 +3999,8 @@ async function syncStatus(force){
     box.textContent = '✅ সিঙ্ক ঠিক আছে। শেষ বদল: ' + who + ', ' + fmtDay(r.data.updated_at) + ' ' + fmtTime(r.data.updated_at);
   } catch(e){ box.textContent = '❌ সিঙ্কের অবস্থা জানা যায়নি (নেট দেখুন)'; }
 }
-setInterval(function(){ if (sb && me && !document.hidden && !settings.syncOff && navigator.onLine) loadShared(); }, 20000);
-document.addEventListener('visibilitychange', function(){ if (!document.hidden && sb && me && !settings.syncOff) loadShared(); });
+setInterval(function(){ if (sb && me && !document.hidden && !syncOffNow() && navigator.onLine) loadShared(); }, 20000);
+document.addEventListener('visibilitychange', function(){ if (!document.hidden && sb && me && !syncOffNow()) loadShared(); });
 function startStyleRt(){
   try {
     if (styleCh) sb.removeChannel(styleCh);
@@ -3998,6 +4010,37 @@ function startStyleRt(){
 $('setSync').onchange = function(){ settings.syncOff = !this.checked; lsSet('settings', settings); if (this.checked) { loadShared(); } };
 $('syncGet').onclick = function(){ syncStatus(true); };
 $('syncNow').onclick = function(){ if (settings.syncOff) { toast('আগে "একসাথে বদলাবে" চালু করুন'); return; } if (settings.wp === 'custom' && settings.wpImg && !settings.wpPath) { fetch(settings.wpImg).then(function(r){ return r.blob(); }).then(function(b){ return shareWall(b); }).then(function(){ pushShared(true); }); return; } pushShared(true); };
+/* ---------- থিমের মালিক: শুধু মালিক বদলাতে পারবেন ---------- */
+var styleOwner = lsGet('styleOwner', '') || '', forcedOnce = false, quietStyle = false;
+var OWN_RE = /যাকওয়ান|zak?wan|jak?wan|zakowan/i;
+function ownerState(){
+  if (!me) return 'unknown';
+  if (styleOwner) return styleOwner === me.id ? 'yes' : 'no';
+  var mn = (myProf && myProf.name) || (me.user_metadata && me.user_metadata.name) || '', pn = (peer && peer.name) || '';
+  if (OWN_RE.test(mn)) return 'yes';
+  if (OWN_RE.test(pn)) return 'no';
+  return 'unknown';
+}
+function canTheme(){ return ownerState() !== 'no'; }
+function syncOffNow(){ return !!settings.syncOff && canTheme(); }
+window.thLocked = function(){ return !canTheme(); };
+window.hmThSync = function(){ if (!canTheme()) return; try { settings.hmThm = localStorage.getItem('hmThm') || ''; } catch(e){} lsSet('settings', settings); pushShared(); };
+function ownerMigrate(){
+  if (me && ownerState() === 'yes' && !settings.bsV2) { settings.bsV2 = 1; settings.bs = 'mint'; lsSet('settings', settings); applyTheme(); pushShared(); }
+}
+function lockUi(){
+  var st = $('settings'); if (!st) return;
+  var lock = !canTheme();
+  st.classList.toggle('thLock', lock);
+  $('thNote').classList.toggle('hidden', !lock);
+  $('ownClaim').classList.toggle('hidden', ownerState() !== 'unknown');
+  ['setFont', 'setAnim', 'setFF', 'setBS', 'setPH', 'setSync'].forEach(function(i){ var e = $(i); if (e) e.disabled = lock; });
+  if (lock) { $('setSync').checked = true; if (settings.syncOff) { settings.syncOff = false; lsSet('settings', settings); } }
+}
+$('ownClaim').onclick = function(){
+  if (!me || !confirm('আপনি কি এই অ্যাপের থিমের মালিক?\nএরপর শুধু আপনিই থিম বদলাতে পারবেন, সাথী পারবেন না।')) return;
+  styleOwner = me.id; lsSet('styleOwner', styleOwner); lockUi(); pushShared(true);
+};
 $('backupBtn').onclick = backupChat;
 $('checkBtn').onclick = function(){ $('settings').classList.add('hidden'); openChecks(); };
 
@@ -9127,7 +9170,7 @@ var TH=[{"k": "", "n": "ডিফল্ট", "pv": ["linear-gradient(135deg,#fff
 TH.push.apply(TH,[{"k": "forest", "n": "বনের সবুজ", "pv": ["linear-gradient(135deg,#166534,#14532d)", "linear-gradient(135deg,#14532d,#166534)", "linear-gradient(135deg,#052e16,#22c55e)"], "a": ["forest", "forest", "forest"]}, {"k": "coral", "n": "প্রবাল", "pv": ["linear-gradient(135deg,#fdba74,#fb7185)", "linear-gradient(135deg,#ffedd5,#fda4af)", "linear-gradient(135deg,#fff1f2,#fb7185)"], "a": ["coral", "coral", "coral"]}, {"k": "sand", "n": "মরুর বালি", "pv": ["linear-gradient(135deg,#f5e6c8,#e7c98f)", "linear-gradient(135deg,#fdf3d8,#ecd29a)", "linear-gradient(135deg,#fdf3d8,#b45309)"], "a": ["sand", "sand", "sand"]}, {"k": "aurora", "n": "মেরুজ্যোতি", "pv": ["linear-gradient(135deg,#14b8a6,#6366f1,#a855f7)", "linear-gradient(135deg,#0f172a,#312e81)", "linear-gradient(135deg,#0f172a,#14b8a6)"], "a": ["aurora", "aurora", "aurora"]}, {"k": "cherry", "n": "চেরি ফুল", "pv": ["linear-gradient(135deg,#fff1f6,#f9a8d4)", "linear-gradient(135deg,#fff1f2,#fbcfe8)", "linear-gradient(135deg,#fff5f8,#ec4899)"], "a": ["cherry", "cherry", "cherry"]}, {"k": "slate", "n": "আধুনিক ধূসর", "pv": ["linear-gradient(135deg,#f1f5f9,#cbd5e1)", "linear-gradient(135deg,#f8fafc,#e2e8f0)", "linear-gradient(135deg,#f8fafc,#334155)"], "a": ["slate", "slate", "slate"]}, {"k": "tropic", "n": "ক্রান্তীয়", "pv": ["linear-gradient(135deg,#34d399,#f97316,#e11d48)", "linear-gradient(135deg,#fef9c3,#bbf7d0)", "linear-gradient(135deg,#f0fdf4,#f97316)"], "a": ["tropic", "tropic", "tropic"]}, {"k": "ink", "n": "কালি ও কাগজ", "pv": ["linear-gradient(135deg,#fff,#fde047)", "linear-gradient(135deg,#fde047,#fde047)", "linear-gradient(135deg,#fff,#111)"], "a": ["ink", "ink", "ink"]}, {"k": "pearl", "n": "মুক্তা", "pv": ["linear-gradient(135deg,#fff,#e2e8f0)", "linear-gradient(135deg,#fff,#e2e8f0)", "linear-gradient(135deg,#f1f5f9,#64748b)"], "a": ["pearl", "pearl", "pearl"]}]);
 var AT=['tt','ct','nt'],KEY='hmThm';
 function get(){try{return localStorage.getItem(KEY)||'';}catch(e){return '';}}
-function put(v){try{if(v)localStorage.setItem(KEY,v);else localStorage.removeItem(KEY);}catch(e){}}
+function put(v){try{if(v)localStorage.setItem(KEY,v);else localStorage.removeItem(KEY);}catch(e){}if(window.hmThSync)window.hmThSync();}
 try{['hmTt','hmCt','hmNt'].forEach(function(k){localStorage.removeItem(k);});}catch(e){}
 var sp=$('splash');
 function find(k){for(var i=0;i<TH.length;i++)if(TH[i].k===k)return TH[i];return TH[0];}
@@ -9146,10 +9189,11 @@ TH.forEach(function(t){
   var n=document.createElement('span');n.textContent=t.n;
   b.appendChild(pv);b.appendChild(n);b.onclick=function(){put(t.k);apply();};box.appendChild(b);
 });
-var tb=$('hmThB');if(tb)tb.onclick=function(){$('hmTh').classList.remove('hidden');mark();};
+var tb=$('hmThB');if(tb)tb.onclick=function(){if(window.thLocked&&window.thLocked()){if(window.toast)window.toast('🔒 থিম শুধু মালিক বদলাতে পারেন');return;}$('hmTh').classList.remove('hidden');mark();};
 $('hmThX').onclick=function(){$('hmTh').classList.add('hidden');};
 $('hmThR').onclick=function(){put('');apply();};
 $('hmThD').onclick=function(){var l=TH.filter(function(t){return t.k;});put(l[Math.floor(Math.random()*l.length)].k);apply();};
+window.hmThApply=apply;
 apply();
 })();
 </script>
@@ -12234,5 +12278,23 @@ async function send(){
 })();
 </script>
 <!-- ===== প্রশ্ন করুন — শেষ ===== -->
+<!-- ===== মিন্ট কার্ড মেসেজ ও থিম-লক — শুরু ===== -->
+<style>
+.bs-mint .bubble:not(.stk):not(.sty){
+  background:linear-gradient(180deg,#ffffff 0%,#f0faf3 45%,#d9efe0 100%)!important;color:var(--tt,#123d2a);
+  border:1px solid rgba(255,255,255,.95);border-radius:12px;padding:9px 14px 5px 22px;isolation:isolate;
+  box-shadow:0 12px 18px -10px rgba(6,60,35,.5),0 2px 0 rgba(255,255,255,.95) inset,0 -4px 8px rgba(110,170,135,.28) inset,0 0 0 1px rgba(150,200,170,.5)}
+.bs-mint .row.mine .bubble:not(.stk):not(.sty){background:linear-gradient(180deg,#f7fff9 0%,#dff6e6 45%,#c6ecd3 100%)!important;color:var(--tm,#0d3a26);border-bottom-right-radius:12px}
+.bs-mint .row.theirs .bubble:not(.stk):not(.sty){border-bottom-left-radius:12px}
+.bs-mint .bubble:not(.stk):not(.sty)::before{content:"";position:absolute;left:-2px;top:-1px;bottom:-1px;width:11px;z-index:1;border-radius:12px 0 0 12px;
+  background:linear-gradient(180deg,#5dff8f,#12c256 50%,#5dff8f);
+  clip-path:polygon(0 0,100% 0,60% 7%,100% 14%,56% 22%,100% 30%,62% 39%,100% 47%,56% 56%,100% 64%,60% 73%,100% 81%,58% 90%,100% 100%,0 100%)}
+.bs-mint .bubble:not(.stk):not(.sty)::after{content:"";position:absolute;left:-4px;top:6%;bottom:6%;width:8px;z-index:-1;background:#3dff7a;filter:blur(6px);opacity:.75;border-radius:8px}
+.bs-mint .row.mine .bubble:not(.stk):not(.sty)::after{opacity:.95}
+.bs-mint .bubble:not(.stk):not(.sty) .meta{color:#4b7a62}
+.bs-mint .bubble:not(.stk):not(.sty) .tick.read{color:#0b9d4a}
+#settings.thLock #themeSeg,#settings.thLock #acSw,#settings.thLock #tmSw,#settings.thLock #ttSw,#settings.thLock #wpSw,#settings.thLock #spThemes,#settings.thLock #wpPick,#settings.thLock #spPick,#settings.thLock #syncNow,#settings.thLock #setFont,#settings.thLock #setAnim,#settings.thLock #setFF,#settings.thLock #setBS,#settings.thLock #setPH,#settings.thLock #setSync{pointer-events:none;opacity:.45}
+</style>
+<!-- ===== মিন্ট কার্ড মেসেজ ও থিম-লক — শেষ ===== -->
 </body>
 </html>
