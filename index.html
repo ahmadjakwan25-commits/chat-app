@@ -12123,30 +12123,56 @@ async function models(key){
 }
 
 /* ---- স্ট্রিমিং (উত্তর লিখতে লিখতেই দেখায়) ---- */
+function gcfg(model){var gc={temperature:.7,maxOutputTokens:2048};if(/2\.5/.test(model))gc.thinkingConfig={thinkingBudget:0};return gc;}
+function mkbody(model,contents){return JSON.stringify({systemInstruction:{parts:[{text:SYS}]},contents:contents,generationConfig:gcfg(model)});}
 async function stream(model,key,contents,onText,signal){
-  var gc={temperature:.7,maxOutputTokens:2048};
-  if(/2\.5/.test(model))gc.thinkingConfig={thinkingBudget:0};
-  var r=await fetch(API+'/'+model+':streamGenerateContent?alt=sse&key='+encodeURIComponent(key),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({systemInstruction:{parts:[{text:SYS}]},contents:contents,generationConfig:gc}),signal:signal});
-  if(!r.ok){var j=await r.json().catch(function(){return {};});return {ok:false,status:r.status,j:j};}
-  var txt='',blocked=false,buf='';
-  function ev(line){
-    if(line.indexOf('data:')!==0)return;
-    try{
-      var j=JSON.parse(line.slice(5)),c=j.candidates&&j.candidates[0];
-      if(c&&c.content&&c.content.parts){c.content.parts.forEach(function(q){if(q.text&&!q.thought)txt+=q.text;});onText(txt);}
-      if(j.promptFeedback&&j.promptFeedback.blockReason)blocked=true;
-    }catch(e){}
-  }
-  function feed(s){
-    buf+=s;var p=buf.split(/\r?\n/);buf=p.pop();p.forEach(ev);
-  }
-  if(r.body&&r.body.getReader){
-    var rd=r.body.getReader(),dec=new TextDecoder();
-    try{for(;;){var x=await rd.read();if(x.done)break;feed(dec.decode(x.value,{stream:true}));}}
-    catch(e){if(!txt)throw e;}
-  }else{feed(await r.text());}
-  if(buf)ev(buf);
-  return {ok:true,text:txt,blocked:blocked};
+  var ic=new AbortController(),tm=setTimeout(function(){ic.abort();},15000);
+  if(signal)signal.addEventListener('abort',function(){ic.abort();});
+  try{
+    var r=await fetch(API+'/'+model+':streamGenerateContent?alt=sse&key='+encodeURIComponent(key),{method:'POST',headers:{'Content-Type':'application/json'},body:mkbody(model,contents),signal:ic.signal});
+    if(!r.ok){var j=await r.json().catch(function(){return {};});return {ok:false,status:r.status,j:j};}
+    var txt='',blocked=false,buf='';
+    var ev=function(line){
+      if(line.indexOf('data:')!==0)return;
+      try{
+        var j=JSON.parse(line.slice(5)),c=j.candidates&&j.candidates[0];
+        if(c&&c.content&&c.content.parts){c.content.parts.forEach(function(q){if(q.text&&!q.thought)txt+=q.text;});onText(txt);}
+        if(j.promptFeedback&&j.promptFeedback.blockReason)blocked=true;
+      }catch(e){}
+    };
+    var feed=function(s2){buf+=s2;var p=buf.split(/\r?\n/);buf=p.pop();p.forEach(ev);};
+    if(r.body&&r.body.getReader){
+      var rd=r.body.getReader(),dec=new TextDecoder();
+      try{for(;;){var x=await rd.read();if(x.done)break;clearTimeout(tm);feed(dec.decode(x.value,{stream:true}));}}
+      catch(e){if(!txt)throw e;}
+    }else{feed(await r.text());}
+    if(buf)ev(buf);
+    return {ok:true,text:txt,blocked:blocked};
+  }finally{clearTimeout(tm);}
+}
+/* সাধারণ পদ্ধতি — স্ট্রিম না চললে এটা চলবে */
+async function once(model,key,contents,signal){
+  var ic=new AbortController(),tm=setTimeout(function(){ic.abort();},45000);
+  if(signal)signal.addEventListener('abort',function(){ic.abort();});
+  try{
+    var r=await fetch(API+'/'+model+':generateContent?key='+encodeURIComponent(key),{method:'POST',headers:{'Content-Type':'application/json'},body:mkbody(model,contents),signal:ic.signal});
+    var j=await r.json().catch(function(){return {};});
+    if(!r.ok)return {ok:false,status:r.status,j:j};
+    var c=j.candidates&&j.candidates[0],t=c&&c.content&&c.content.parts?c.content.parts.map(function(q){return q.thought?'':(q.text||'');}).join(''):'';
+    return {ok:true,text:t,blocked:!!(j.promptFeedback&&j.promptFeedback.blockReason)};
+  }catch(e){
+    if(signal&&signal.aborted)throw e;
+    throw new Error('সময়মতো উত্তর আসেনি। নেট দেখে আবার চেষ্টা করুন।');
+  }finally{clearTimeout(tm);}
+}
+async function tryModel(model,key,contents,onText,signal){
+  var r=null;
+  try{r=await stream(model,key,contents,onText,signal);}
+  catch(e){if(signal&&signal.aborted)throw e;r=null;}
+  if(r&&(!r.ok||r.text))return r;
+  var o=await once(model,key,contents,signal);
+  if(o.ok&&o.text)onText(o.text);
+  return o;
 }
 
 async function send(){
@@ -12171,7 +12197,7 @@ async function send(){
     var order=[],sv=ls('gemModel'),listed=false;
     if(sv)order.push(sv);DEF.forEach(function(m){if(order.indexOf(m)<0)order.push(m);});
     for(var i=0;i<order.length;i++){
-      res=await stream(order[i],key,contents,function(t){
+      res=await tryModel(order[i],key,contents,function(t){
         shown=t;var stick=near();rw._d._t=t;rw._d.innerHTML=md(t);if(stick)bottom();
       },ctl.signal);
       if(res.ok){lss('gemModel',order[i]);break;}
