@@ -1728,6 +1728,7 @@ async function getIce(){
       var ctl = new AbortController(), tm = setTimeout(function(){ ctl.abort(); }, 5000);
       var r = await fetch('https://' + TURN_APP + '.metered.live/api/v1/turn/credentials?apiKey=' + encodeURIComponent(TURN_KEY), { signal: ctl.signal });
       clearTimeout(tm);
+      window.__iceFetch = r.ok ? 'ok' : ('http' + r.status);
       if (r.ok) {
         var list = await r.json();
         if (Array.isArray(list) && list.length) {
@@ -1736,7 +1737,7 @@ async function getIce(){
           return iceCache.cfg;
         }
       }
-    } catch(e){}
+    } catch(e){ window.__iceFetch = 'net'; }
     var old = lsGet('ice_cache', null);
     if (old && old.cfg && old.exp > Date.now() - 6 * 3600000) return old.cfg;
   }
@@ -2888,9 +2889,15 @@ function dbg(){
   if (!call || !call.pc || call.state === 'connected') { $('callDbg').textContent = ''; return; }
   var c = call.cand || { host: 0, srflx: 0, relay: 0 };
   var relay = c.relay ? 'আছে ✔' : (call.hasTurn ? 'পাওয়া যায়নি ✗' : 'সেট করা নেই ✗');
-  $('callDbg').textContent = 'নেটওয়ার্ক: ' + (ICE_BN[call.pc.iceConnectionState] || call.pc.iceConnectionState) + ' · রিলে সার্ভার: ' + relay;
+  var why = '';
+  if (!c.relay && call.hasTurn) {
+    if (window.__iceFetch && window.__iceFetch !== 'ok') why += ' [কী/অ্যাপ ত্রুটি: ' + window.__iceFetch + ']';
+    if (call.iceErr) why += ' [ত্রুটি ' + call.iceErr + ']';
+  }
+  $('callDbg').textContent = 'নেটওয়ার্ক: ' + (ICE_BN[call.pc.iceConnectionState] || call.pc.iceConnectionState) + ' · রিলে সার্ভার: ' + relay + why;
 }
 function failText(c){
+  try { if (c.hasTurn && (!c.cand || !c.cand.relay)) { iceCache = null; localStorage.removeItem('ice_cache'); } } catch(e){}
   if (!c.hasTurn) return 'কল লাগেনি: রিলে সার্ভার সেট করা নেই';
   if (!c.cand || !c.cand.relay) return 'কল লাগেনি: রিলে সার্ভারে পৌঁছানো যায়নি';
   return 'কল লাগেনি: নেটওয়ার্ক সংযোগ আটকে আছে';
@@ -2908,6 +2915,10 @@ async function makePC(){
     dbg();
     var cid = call.id, cj = e.candidate.toJSON();
     (call.gate || Promise.resolve()).then(function(){ return sendSignal('ice', { callId: cid, candidate: cj }); });
+  };
+  pc.onicecandidateerror = function(e){
+    if (!call || call.pc !== pc) return;
+    if (e.url && /^turns?:/.test(e.url)) { call.iceErr = e.errorCode + ' ' + (e.url || '').replace(/^turns?:/, '').split('?')[0]; dbg(); }
   };
   pc.oniceconnectionstatechange = dbg;
   pc.ontrack = function(e){ $('remoteV').srcObject = e.streams[0]; $('remoteV').play().catch(function(){}); };
@@ -3921,17 +3932,19 @@ $('setFF').onchange = function(){
 $('setBS').onchange = function(){ settings.bs = this.value; lsSet('settings', settings); applyTheme(); pushShared(); };
 $('setPH').onchange = function(){ settings.ph = this.value; lsSet('settings', settings); applyTheme(); pushShared(); };
 /* ---------- দুজনের ডিজাইন সিঙ্ক ---------- */
-var SHARED_KEYS = ['spTheme', 'ff', 'bs', 'ph', 'accent', 'theme', 'wp', 'font', 'anim', 'tm', 'tt', 'hmThm'];
+var SHARED_KEYS = ['spTheme', 'ff', 'bs', 'ph', 'accent', 'theme', 'wp', 'font', 'anim', 'tm', 'tt', 'hmThm', 'ytTheme', 'nbTheme', 'nbFont'];
 var styleCh = null, styleTs = 0, pushT = null, pushWarned = false, lastStyleT = 0;
 function pushShared(force){
   if (!sb || !me || settings.syncOff || !navigator.onLine || !canTheme()) return;
   clearTimeout(pushT);
   pushT = setTimeout(async function(){
     try { settings.hmThm = localStorage.getItem('hmThm') || ''; } catch(e){}
+    try { settings.ytTheme = localStorage.getItem('ytTheme') || 'default'; } catch(e){}
     var d = { by: me.id };
     if (ownerState() === 'yes' || styleOwner === me.id) { styleOwner = me.id; lsSet('styleOwner', me.id); d.owner = me.id; }
     SHARED_KEYS.forEach(function(k){ if (settings[k] !== undefined) d[k] = settings[k]; });
     if (d.wp === 'custom') { if (settings.wpPath) d.wpPath = settings.wpPath; else delete d.wp; }
+    if (d.spTheme === 'custom') { if (settings.spPath) d.spPath = settings.spPath; else delete d.spTheme; }
     var ts = Date.now(); styleTs = ts; lastStyleT = ts;
     try {
       var r = await sb.from('app_style').upsert({ id: 'main', data: d, updated_by: me.id, updated_at: new Date(ts).toISOString() }, { onConflict: 'id' });
@@ -3953,10 +3966,16 @@ function applyShared(row){
   lastStyleT = t;
   SHARED_KEYS.forEach(function(k){ if (k === 'tm' || k === 'tt' || d[k] === undefined) return; if (k === 'wp' && d.wp === 'custom') return; if (k === 'spTheme' && d.spTheme === 'custom') return; settings[k] = d[k]; });
   if (d.wp === 'custom' && d.wpPath && d.wpPath !== settings.wpPath) fetchWall(d.wpPath);
+  if (d.spTheme === 'custom' && d.spPath) {
+    if (d.spPath !== settings.spPath || !lsGet('spCustom', '')) fetchSp(d.spPath);
+    else settings.spTheme = 'custom';
+  }
   if ('tm' in d || 'tt' in d) { settings.tm = (mine ? d.tm : d.tt) || ''; settings.tt = (mine ? d.tt : d.tm) || ''; }
   lsSet('settings', settings); applyTheme(); applyWallpaper(); if (window.spApplyTheme) spApplyTheme(); if (window.spBuildPicker) spBuildPicker();
   if (d.ff !== undefined && $('ffStat')) updFfPrev();
   if (d.hmThm !== undefined) { try { if (d.hmThm) localStorage.setItem('hmThm', d.hmThm); else localStorage.removeItem('hmThm'); } catch(e){} if (window.hmThApply) window.hmThApply(); }
+  if (d.ytTheme !== undefined) { try { localStorage.setItem('ytTheme', d.ytTheme); } catch(e){} if (window.ythApply) { try { window.ythApply(); } catch(e){} } }
+  if ((d.nbTheme !== undefined || d.nbFont !== undefined) && window.nbApply) { try { window.nbApply(); } catch(e){} }
   lockUi();
   if (!mine && !quietStyle) toast('ডিজাইন বদলেছে ✨', 2500);
   quietStyle = false;
@@ -3972,6 +3991,39 @@ async function shareWall(blob){
     pushShared();
   } catch(e){ toast('ব্যাকগ্রাউন্ড সাথীর ফোনে যায়নি: ' + ((e && e.message) || ''), 4500); }
 }
+async function shareSp(blob){
+  if (!sb || !me || settings.syncOff || !navigator.onLine || !canTheme()) return;
+  try {
+    var old = settings.spPath, path = me.id + '/sp-' + Date.now() + '.jpg';
+    var up = await sb.storage.from('media').upload(path, blob, { contentType: 'image/jpeg', upsert: false });
+    if (up.error) throw up.error;
+    settings.spPath = path; lsSet('settings', settings);
+    if (old && old.indexOf(me.id + '/') === 0) sb.storage.from('media').remove([old]).then(function(){}, function(){});
+    pushShared(true);
+  } catch(e){ toast('স্বাগত পাতার ছবি সাথীর ফোনে যায়নি: ' + ((e && e.message) || ''), 4500); }
+}
+async function fetchSp(path){
+  try {
+    var r = await sb.storage.from('media').createSignedUrl(path, 600);
+    if (r.error) throw r.error;
+    var blob = await (await fetch(r.data.signedUrl)).blob();
+    var rd = new FileReader();
+    rd.onload = function(){
+      try { localStorage.setItem('spCustom', JSON.stringify(rd.result)); } catch(e){ return; }
+      settings.spTheme = 'custom'; settings.spPath = path; lsSet('settings', settings);
+      if (window.spApplyTheme) spApplyTheme(); if (window.spBuildPicker) spBuildPicker();
+    };
+    rd.readAsDataURL(blob);
+  } catch(e){}
+}
+/* মালিকের আগে থেকে বসানো ছবি (যেটা এখনো সাথীর কাছে যায়নি) একবার পাঠিয়ে দেওয়া */
+function spMigrate(){
+  try {
+    if (!canTheme() || ownerState() !== 'yes' || settings.spTheme !== 'custom' || settings.spPath) return;
+    var u = lsGet('spCustom', ''); if (!u) return;
+    fetch(u).then(function(r){ return r.blob(); }).then(shareSp).catch(function(){});
+  } catch(e){}
+}
 async function fetchWall(path){
   try {
     var r = await sb.storage.from('media').createSignedUrl(path, 600);
@@ -3986,6 +4038,7 @@ async function loadShared(){
   ownerMigrate();
   if (me && !canTheme() && !forcedOnce) { forcedOnce = true; lastStyleT = 0; styleTs = 0; quietStyle = true; }
   try { var r = await sb.from('app_style').select('*').eq('id', 'main').maybeSingle(); if (!r.error && r.data) applyShared(r.data); } catch(e){}
+  spMigrate();
 }
 async function syncStatus(force){
   var box = $('syncStat'); if (!box) return;
@@ -4406,18 +4459,23 @@ window.addEventListener('focus', function(){ if (me) markSeen(); });
       var b = el('button', 'spTile' + (t.id === cur ? ' on' : ''), t.n); b.type = 'button';
       var bg = t.img ? "url('" + SPIMG[t.img] + "')" : t.id === 'custom' ? "url('" + lsGet('spCustom', '') + "')" : (t.tile || t.bg);
       b.style.backgroundImage = bg;
-      b.onclick = function(){ settings.spTheme = t.id; lsSet('settings', settings); spApplyTheme(); spBuildPicker(); if (window.pushShared) pushShared(); };
+      b.onclick = function(){ if (window.thLocked && window.thLocked()) { toast('🔒 থিম শুধু মালিক বদলাতে পারেন'); return; } settings.spTheme = t.id; lsSet('settings', settings); spApplyTheme(); spBuildPicker(); if (window.pushShared) pushShared(); };
       w.appendChild(b);
     });
   };
-  $('spPick').onclick = function(){ $('spFile').click(); };
+  $('spPick').onclick = function(){
+    if (window.thLocked && window.thLocked()) { toast('🔒 থিম শুধু মালিক বদলাতে পারেন'); return; }
+    $('spFile').click();
+  };
   $('spFile').onchange = function(){
     var f = this.files && this.files[0]; this.value = ''; if (!f) return;
+    if (window.thLocked && window.thLocked()) { toast('🔒 থিম শুধু মালিক বদলাতে পারেন'); return; }
     compressImage(f, 1300, .86).then(function(bl){
       var r = new FileReader();
       r.onload = function(){
         try { localStorage.setItem('spCustom', JSON.stringify(r.result)); } catch(e){ toast('ছবিটা বড় — ছোট ছবি বেছে নিন'); return; }
         settings.spTheme = 'custom'; lsSet('settings', settings); spApplyTheme(); spBuildPicker(); toast('স্বাগত পাতায় আপনার ছবি বসেছে 🖼');
+        if (window.shareSp) shareSp(bl);
       };
       r.readAsDataURL(bl);
     }, function(){ toast('ছবিটা পড়া যায়নি'); });
@@ -7950,7 +8008,7 @@ function thList(){
     var b=document.createElement('button');b.type='button';b.className='yth'+(x[0]===cur?' on':'');
     var sw=document.createElement('span');sw.className='sw';sw.style.background='linear-gradient(90deg,'+x[2]+' 0 34%,'+x[3]+' 34% 67%,'+x[4]+' 67%)';b.appendChild(sw);
     var t=document.createElement('b');t.textContent=x[1];b.appendChild(t);
-    b.onclick=function(){try{localStorage.setItem('ytTheme',x[0]);}catch(e){}applyYth();thList();};
+    b.onclick=function(){if(window.thLocked&&window.thLocked()){if(window.toast)window.toast('🔒 থিম শুধু মালিক বদলাতে পারেন');return;}try{localStorage.setItem('ytTheme',x[0]);}catch(e){}applyYth();thList();if(window.pushShared)pushShared();};
     L.appendChild(b);
   });
 }
@@ -7960,7 +8018,7 @@ $('ytThB').onclick=openTh;$('ythX').onclick=closeTh;
 $('ytTh').addEventListener('click',function(e){if(e.target===this)closeTh();});
 $('ytForm').addEventListener('submit',function(){myAct='';myBar();});
 $('ytCh').addEventListener('click',function(e){if(e.target.closest&&e.target.closest('button')){myAct='';myBar();}});
-applyYth();
+applyYth();window.ythApply=function(){applyYth();if(thOpen)thList();};
 $('ycAdd').onclick=myAdd;$('ycX').onclick=closeMy;
 $('ycIn').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();myAdd();}});
 $('ycS').addEventListener('click',function(e){if(e.target===this)closeMy();});
@@ -9441,7 +9499,7 @@ apply();
     FT.forEach(function(f){var b=document.createElement('button');b.type='button';b.className='ftB'+(f[0]===cf?' on':'');
       b.style.fontFamily='"'+f[0]+'","Tiro Bangla","Hind Siliguri",sans-serif';
       b.innerHTML='আমার সোনার বাংলা<small>'+f[1]+'</small>';
-      b.onclick=function(){if(!window.settings)window.settings={};settings.nbFont=f[0];try{lsSet('settings',settings);}catch(e){}applyFont();buildFonts();};
+      b.onclick=function(){if(window.thLocked&&window.thLocked()){if(window.toast)window.toast('🔒 থিম শুধু মালিক বদলাতে পারেন');return;}if(!window.settings)window.settings={};settings.nbFont=f[0];try{lsSet('settings',settings);}catch(e){}applyFont();buildFonts();if(window.pushShared)pushShared();};
       g.appendChild(b);});
   }
   function buildSettings(){
@@ -9453,8 +9511,9 @@ apply();
     var cid=(window.settings&&settings.nbTheme)||'cream',g=G('nbThG');g.innerHTML='';
     TH.forEach(function(t){var b=document.createElement('button');b.type='button';b.className='spTile'+(t.id===cid?' on':'');b.textContent=t.n;
       b.style.background=t.tile||(t.v.bar);
-      b.onclick=function(){if(!window.settings)window.settings={};settings.nbTheme=t.id;try{lsSet('settings',settings);}catch(e){}applyTheme();buildThemes();};g.appendChild(b);});
+      b.onclick=function(){if(window.thLocked&&window.thLocked()){if(window.toast)window.toast('🔒 থিম শুধু মালিক বদলাতে পারেন');return;}if(!window.settings)window.settings={};settings.nbTheme=t.id;try{lsSet('settings',settings);}catch(e){}applyTheme();buildThemes();if(window.pushShared)pushShared();};g.appendChild(b);});
   }
+  window.nbApply=function(){try{applyTheme();applyFont();buildThemes();buildFonts();}catch(e){}};
   /* ---------- টিক চিহ্ন (হোয়াটসঅ্যাপের মতো) ---------- */
   function ts(x){return x?new Date(x).getTime():0;}
   function peerId(){return window.peer&&peer.id;}
