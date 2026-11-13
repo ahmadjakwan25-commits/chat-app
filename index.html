@@ -2918,7 +2918,13 @@ async function makePC(){
   };
   pc.onicecandidateerror = function(e){
     if (!call || call.pc !== pc) return;
-    if (e.url && /^turns?:/.test(e.url)) { call.iceErr = e.errorCode + ' ' + (e.url || '').replace(/^turns?:/, '').split('?')[0]; dbg(); }
+    if (e.url && /^turns?:/.test(e.url)) {
+      var u = e.url.replace('global.relay.metered.ca', 'metered').replace(/^turn:/, 'T:').replace(/^turns:/, 'TLS:').replace('?transport=', ' ');
+      call.errList = call.errList || [];
+      var one = e.errorCode + ' ' + u;
+      if (call.errList.indexOf(one) < 0) call.errList.push(one);
+      call.iceErr = call.errList.join(' | '); dbg();
+    }
   };
   pc.oniceconnectionstatechange = dbg;
   pc.ontrack = function(e){ $('remoteV').srcObject = e.streams[0]; $('remoteV').play().catch(function(){}); };
