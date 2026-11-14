@@ -1428,6 +1428,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
       <button class="hm-t" id="spNew" type="button"><span>📝</span>নতুন পাতা</button>
       <button class="hm-t" id="hmYt" type="button"><span>▶️</span>ভিডিও</button>
     </div>
+    
     <div class="hidden" id="hmPr" aria-hidden="true">
       <button class="hm-city" id="hmCity" type="button">📍 <span id="hmCityT">Dhaka</span> ▾</button>
       <div class="hm-cf hidden" id="hmCf"><input id="hmCityIn" type="text" placeholder="শহর (ইংরেজিতে, যেমন Dhaka)"><button id="hmCityOk" type="button">ঠিক আছে</button></div>
@@ -1442,6 +1443,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
       <button class="hm-t" id="spSadBtn" type="button"><span>💞</span>সাদিয়া<small>বিবাহের পর</small></button>
       <button class="hm-t" id="spNote" type="button"><span>📒</span>নোট খাতা<small>অনলাইনে সেভ</small></button>
       <button class="hm-t" id="spIsl" type="button"><span><img alt="" width="38" height="38" decoding="sync" draggable="false" src="data:image/jpeg;base64,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"></span>ইসলামিক সমাহার</button>
+      <button class="hm-t" id="hmDict" type="button"><span>📚</span>অভিধান<small>আরবি ⇄ বাংলা</small></button>
     </div>
     <div class="sp-card"><div class="ar2" id="spAr2"></div><div id="spStatus"></div><small id="spRef"></small></div>
   </div>
@@ -12573,5 +12575,352 @@ async function send(){
   })();
 })();
 </script>
+<style id="dictCss">
+#dictOv{position:fixed;inset:0;z-index:2147483000;background:var(--bg);color:var(--text);display:flex;flex-direction:column;font-family:inherit}
+#dictOv.hidden{display:none}
+#dictOv .dh{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:var(--accent);color:var(--on-accent,#fff);font-weight:800;font-size:16px}
+#dictOv .dh b{flex:1}#dictOv .dh button{border:0;background:rgba(255,255,255,.18);color:inherit;border-radius:9px;min-width:34px;height:34px;padding:0 8px;font-size:15px;font-weight:700}
+#dictOv .ds{padding:10px 14px 4px}#dictOv .ds input{width:100%;box-sizing:border-box;padding:12px 14px;border:2px solid var(--accent);border-radius:14px;font-size:16px;background:var(--panel);color:var(--text);outline:none}
+#dictOv .dc{padding:2px 16px 6px;font-size:12px;color:var(--muted)}
+#dictOv .dl{flex:1;overflow:auto;padding:4px 14px 14px}
+#dictOv .de{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:16px;padding:10px 14px;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;align-items:center;gap:10px}
+#dictOv .de .m{flex:1;min-width:0}
+#dictOv .de .ar{font-family:"Amiri","Noto Naskh Arabic","Scheherazade New",serif;font-size:26px;direction:rtl;text-align:right;color:var(--accent);line-height:1.6}
+#dictOv .de .tr{font-size:12px;color:var(--muted);font-style:italic}#dictOv .de .bn{font-size:15px;font-weight:700;margin-top:2px}
+#dictOv .de button{border:0;background:var(--line);color:var(--text);border-radius:10px;padding:6px 9px;font-size:14px}
+#dictOv .dt{font-size:10px;color:var(--muted)}
+#dictOv .df{border-top:1px solid var(--line);background:var(--panel);padding:8px 12px calc(8px + env(safe-area-inset-bottom));display:flex;gap:8px;flex-wrap:wrap}
+#dictOv .df button,#dictOv .dp button{border:0;border-radius:12px;padding:9px 12px;font-size:13px;font-weight:700;background:var(--accent);color:var(--on-accent,#fff)}
+#dictOv .dp{border-top:1px solid var(--line);background:var(--panel);color:var(--text);padding:10px 12px;display:flex;flex-direction:column;gap:6px;max-height:48vh;overflow:auto}
+#dictOv .dp.hidden{display:none}
+#dictOv .dp input{padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;font-size:14px;background:var(--bg);color:var(--text)}
+#dictOv .dp small{color:var(--muted);font-size:12px;line-height:1.5}
+</style>
+<div id="dictOv" class="hidden">
+ <div class="dh"><button id="dictX" type="button" aria-label="ফিরে যান">←</button><button id="dictH" type="button" aria-label="স্বাগত পাতা">🏠</button><b>📚 আরবি ⇄ বাংলা অভিধান</b></div>
+ <div class="ds"><input id="dictQ" type="search" placeholder="আরবি, বাংলা বা ইংরেজি উচ্চারণ লিখুন…" autocomplete="off"></div>
+ <div class="dc" id="dictCnt"></div>
+ <div class="dl" id="dictList"></div>
+ <div class="dp hidden" id="dictAdd">
+  <b>➕ নিজের শব্দ যোগ করুন</b>
+  <input id="dAr" dir="rtl" placeholder="আরবি শব্দ"><input id="dTr" placeholder="উচ্চারণ (ঐচ্ছিক)"><input id="dBn" placeholder="বাংলা অর্থ">
+  <button id="dSave" type="button">সেভ করুন</button>
+ </div>
+ <div class="dp hidden" id="dictDl">
+  <b>⬇️ বড় অভিধান অফলাইনে রাখুন</b>
+  <small>JSON, CSV বা TSV ফাইল নিন। প্রতি লাইনে: <code>আরবি, উচ্চারণ, বাংলা</code> (উচ্চারণ না থাকলে আরবি, বাংলা)। JSON হলে <code>[["আরবি","উচ্চারণ","বাংলা"],…]</code> বা <code>{ar,tr,bn}</code> অবজেক্টের তালিকা। একবার নিলে ফোনেই জমা থাকে, নেট ছাড়াই চলে।</small>
+  <button id="dFileB" type="button">📁 ফাইল থেকে নিন</button><input type="file" id="dFile" accept=".json,.csv,.tsv,.txt" hidden>
+  <input id="dUrl" placeholder="অথবা ফাইলের লিংক (https://…)"><button id="dUrlB" type="button">🌐 লিংক থেকে ডাউনলোড</button>
+  <input id="dEm" type="email" placeholder="ইমেইল (ঐচ্ছিক) — অনলাইনে খোঁজার দৈনিক সীমা বাড়ায়"><small id="dStat"></small><button id="dClr" type="button" style="background:var(--danger,#c0392b);color:#fff">🗑 ডাউনলোড করা অভিধান মুছুন</button>
+ </div>
+ <div class="df"><button id="dAddB" type="button">➕ শব্দ যোগ</button><button id="dDlB" type="button">⬇️ অফলাইন অভিধান</button></div>
+</div>
+<script>
+(function(){
+  var BUILT=`اللّٰه|Allah|আল্লাহ
+رَبّ|rabb|প্রতিপালক, মালিক
+إِلٰه|ilāh|উপাস্য, মাবুদ
+رَحْمَن|raḥmān|পরম দয়ালু
+رَحِيم|raḥīm|অতি মেহেরবান, পরম করুণাময়
+كِتَاب|kitāb|বই, কিতাব
+قُرْآن|qur'ān|কুরআন
+نَبِيّ|nabiyy|নবী
+رَسُول|rasūl|রাসূল, বার্তাবাহক
+مَلَك|malak|ফেরেশতা
+إِيمَان|īmān|ঈমান, বিশ্বাস
+إِسْلَام|islām|ইসলাম, আত্মসমর্পণ
+مُسْلِم|muslim|মুসলিম
+مُؤْمِن|mu'min|মুমিন, বিশ্বাসী
+كَافِر|kāfir|কাফির, অস্বীকারকারী
+صَلَاة|ṣalāh|নামাজ
+زَكَاة|zakāh|যাকাত
+صَوْم|ṣawm|রোজা
+حَجّ|ḥajj|হজ
+دُعَاء|du'ā'|দোয়া, প্রার্থনা
+ذِكْر|dhikr|জিকির, স্মরণ
+تَوْبَة|tawbah|তওবা
+جَنَّة|jannah|জান্নাত, বাগান
+نَار|nār|আগুন, জাহান্নাম
+آخِرَة|ākhirah|আখিরাত, পরকাল
+دُنْيَا|dunyā|দুনিয়া, ইহকাল
+غُسْل|ghusl|গোসল
+وُضُوء|wuḍū'|অজু
+قِبْلَة|qiblah|কিবলা
+أَذَان|adhān|আজান
+إِمَام|imām|ইমাম, নেতা
+سُنَّة|sunnah|সুন্নাহ, রীতি
+حَدِيث|ḥadīth|হাদিস, বাণী
+حَلَال|ḥalāl|হালাল, বৈধ
+حَرَام|ḥarām|হারাম, নিষিদ্ধ
+صَدَقَة|ṣadaqah|সদকা, দান
+بَرَكَة|barakah|বরকত
+عِبَادَة|'ibādah|ইবাদত
+تَقْوَى|taqwā|তাকওয়া, আল্লাহভীতি
+مَغْفِرَة|maghfirah|ক্ষমা
+رَحْمَة|raḥmah|দয়া, রহমত
+رِزْق|rizq|রিজিক, জীবিকা
+قَدَر|qadar|তাকদির, ভাগ্য
+مَوْت|mawt|মৃত্যু
+حَيَاة|ḥayāh|জীবন
+يَوْم|yawm|দিন
+لَيْل|layl|রাত
+نَهَار|nahār|দিবস
+صَبْر|ṣabr|ধৈর্য
+شُكْر|shukr|কৃতজ্ঞতা
+حَمْد|ḥamd|প্রশংসা
+عِلْم|'ilm|জ্ঞান, বিদ্যা
+عَالِم|'ālim|জ্ঞানী, আলেম
+حِكْمَة|ḥikmah|প্রজ্ঞা
+حَقّ|ḥaqq|সত্য, অধিকার
+بَاطِل|bāṭil|মিথ্যা, বাতিল
+خَيْر|khayr|কল্যাণ, ভালো
+شَرّ|sharr|অকল্যাণ, মন্দ
+حُبّ|ḥubb|ভালোবাসা
+قَلْب|qalb|হৃদয়, অন্তর
+نَفْس|nafs|আত্মা, প্রবৃত্তি
+رُوح|rūḥ|রূহ, আত্মা
+عَيْن|'ayn|চোখ, ঝরনা
+يَد|yad|হাত
+رَأْس|ra's|মাথা
+وَجْه|wajh|মুখ, চেহারা
+أُذُن|udhun|কান
+لِسَان|lisān|জিহ্বা, ভাষা
+أَب|ab|বাবা
+أُمّ|umm|মা
+ابْن|ibn|ছেলে, পুত্র
+بِنْت|bint|মেয়ে, কন্যা
+أَخ|akh|ভাই
+أُخْت|ukht|বোন
+زَوْج|zawj|স্বামী, জোড়া
+زَوْجَة|zawjah|স্ত্রী
+وَلَد|walad|সন্তান, ছেলে
+أَهْل|ahl|পরিবার, অধিবাসী
+صَدِيق|ṣadīq|বন্ধু
+ضَيْف|ḍayf|অতিথি
+بَيْت|bayt|ঘর, বাড়ি
+مَسْجِد|masjid|মসজিদ
+مَدْرَسَة|madrasah|বিদ্যালয়, মাদ্রাসা
+مَاء|mā'|পানি
+خُبْز|khubz|রুটি
+طَعَام|ṭa'ām|খাবার
+لَبَن|laban|দুধ
+تَمْر|tamr|খেজুর
+عَسَل|'asal|মধু
+مَال|māl|সম্পদ, টাকা
+شَمْس|shams|সূর্য
+قَمَر|qamar|চাঁদ
+نَجْم|najm|তারা
+سَمَاء|samā'|আকাশ
+أَرْض|arḍ|পৃথিবী, জমিন
+بَحْر|baḥr|সাগর, সমুদ্র
+جَبَل|jabal|পাহাড়
+نَهْر|nahr|নদী
+شَجَرَة|shajarah|গাছ
+زَهْرَة|zahrah|ফুল
+مَطَر|maṭar|বৃষ্টি
+رِيح|rīḥ|বাতাস
+نُور|nūr|আলো
+ظُلْمَة|ẓulmah|অন্ধকার
+وَقْت|waqt|সময়
+سَنَة|sanah|বছর
+شَهْر|shahr|মাস
+أُسْبُوع|usbū'|সপ্তাহ
+كَبِير|kabīr|বড়
+صَغِير|ṣaghīr|ছোট
+جَمِيل|jamīl|সুন্দর
+قَبِيح|qabīḥ|কুৎসিত
+جَدِيد|jadīd|নতুন
+قَدِيم|qadīm|পুরাতন
+طَوِيل|ṭawīl|লম্বা
+قَصِير|qaṣīr|খাটো
+كَثِير|kathīr|অনেক
+قَلِيل|qalīl|অল্প
+سَهْل|sahl|সহজ
+صَعْب|ṣa'b|কঠিন
+قَرِيب|qarīb|কাছে, নিকটবর্তী
+بَعِيد|ba'īd|দূরে
+حَارّ|ḥārr|গরম
+بَارِد|bārid|ঠান্ডা
+سَلَام|salām|শান্তি, সালাম
+مَرْحَبًا|marḥaban|স্বাগতম, হ্যালো
+شُكْرًا|shukran|ধন্যবাদ
+عَفْوًا|'afwan|ক্ষমা করবেন, কিছু না
+نَعَمْ|na'am|হ্যাঁ
+لَا|lā|না
+مِنْ|min|থেকে
+إِلَى|ilā|প্রতি, দিকে
+فِي|fī|মধ্যে, -এ
+عَلَى|'alā|উপর, ওপর
+مَعَ|ma'a|সাথে
+هَذَا|hādhā|এটি, এই (পুং)
+ذٰلِكَ|dhālika|ঐটি, সেটি
+مَنْ|man|কে
+مَا|mā|কী, যা
+أَيْنَ|ayna|কোথায়
+كَيْفَ|kayfa|কীভাবে
+لِمَاذَا|limādhā|কেন
+مَتَى|matā|কখন
+كَمْ|kam|কত
+أَنَا|anā|আমি
+أَنْتَ|anta|তুমি (পুং)
+هُوَ|huwa|সে (পুং)
+هِيَ|hiya|সে (স্ত্রী)
+نَحْنُ|naḥnu|আমরা
+ذَهَبَ|dhahaba|সে গিয়েছে
+جَاءَ|jā'a|সে এসেছে
+أَكَلَ|akala|সে খেয়েছে
+شَرِبَ|shariba|সে পান করেছে
+قَالَ|qāla|সে বলেছে
+كَتَبَ|kataba|সে লিখেছে
+قَرَأَ|qara'a|সে পড়েছে
+عَلِمَ|'alima|সে জেনেছে
+فَعَلَ|fa'ala|সে করেছে
+نَامَ|nāma|সে ঘুমিয়েছে
+وَاحِد|wāḥid|এক (১)
+اثْنَان|ithnān|দুই (২)
+ثَلَاثَة|thalāthah|তিন (৩)
+أَرْبَعَة|arba'ah|চার (৪)
+خَمْسَة|khamsah|পাঁচ (৫)
+سِتَّة|sittah|ছয় (৬)
+سَبْعَة|sab'ah|সাত (৭)
+ثَمَانِيَة|thamāniyah|আট (৮)
+تِسْعَة|tis'ah|নয় (৯)
+عَشَرَة|'asharah|দশ (১০)`.split('\n').map(function(l){var a=l.split('|');return [a[0],a[1]||'',a[2]||'',0];});
+  var $=function(i){return document.getElementById(i);},ov=$('dictOv'),btn=$('hmDict');
+  if(!ov||!btn)return;
+
+  (function(){var tries=0;(function mv(){var isl=document.getElementById('spIsl'),ask=document.getElementById('spAsk'),dt=document.getElementById('hmDict');
+    if(!isl||!isl.parentNode)return;var row=isl.parentNode,done=true;
+    if(dt&&dt.parentNode!==row){row.appendChild(dt);}
+    if(ask){if(ask.parentNode!==row){var old=ask.parentNode;row.insertBefore(ask,isl.nextSibling);if(old&&old!==row&&!old.children.length)old.remove();}}
+    else done=false;
+    if(!done&&tries++<8)setTimeout(mv,400);})();})();
+  var imp=[],usr=[],onl=[],all=null,tm=null,ot=null;
+  function t(m){try{if(window.toast)toast(m);}catch(_){}}
+  function nAr(x){return String(x||'').replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g,'').replace(/[إأآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ؤ/g,'و').replace(/ئ/g,'ي');}
+  function nLa(x){return String(x||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[\u0323\u0304'’ʿʾ`-]/g,'').toLowerCase();}
+  function build(){
+    all=usr.map(function(e){return [e[0],e[1],e[2],1];}).concat(BUILT,imp.map(function(e){return [e[0],e[1],e[2],2];}),onl.map(function(e){return [e[0],e[1],e[2],3];}));
+    all.forEach(function(e){e.na=nAr(e[0]);e.nl=nLa(e[1]);e.nb=String(e[2]).toLowerCase();});
+  }
+  function score(e,q,mode){
+    var f=mode==='a'?e.na:mode==='b'?e.nb:e.nl;
+    var i=f.indexOf(q);if(i<0)return 0;
+    return f===q?4:i===0?3:2;
+  }
+  function run(){
+    if(!all)build();
+    var raw=$('dictQ').value.trim(),res=[],mode;
+    if(!raw){res=all.slice(0,60);}
+    else{
+      var mode=/[\u0600-\u06FF]/.test(raw)?'a':/[\u0980-\u09FF]/.test(raw)?'b':'l',q=mode==='a'?nAr(raw):mode==='b'?raw.toLowerCase():nLa(raw);
+      var sc=[];all.forEach(function(e){var s=score(e,q,mode);if(s)sc.push([s,e]);});
+      sc.sort(function(a,b){return b[0]-a[0];});res=sc.slice(0,80).map(function(x){return x[1];});
+    }
+    $('dictCnt').textContent=(raw?res.length+'টি ফলাফল · ':'')+'মোট '+all.length+'টি শব্দ';
+    var L=$('dictList');L.textContent='';
+    if(raw){var ob=document.createElement('button');ob.id='dOnB';ob.textContent='🌐 অনলাইনে খুঁজুন (সব ধরনের শব্দ)';ob.style.cssText='width:100%;border:0;border-radius:12px;padding:11px;margin-bottom:8px;font-weight:700;background:var(--accent);color:var(--on-accent,#fff);font-size:14px';ob.onclick=function(){online(raw);};L.appendChild(ob);}
+    if(!res.length){var nf=document.createElement('div');nf.style.cssText='text-align:center;color:var(--muted);padding:24px 0';nf.textContent='স্থানীয় অভিধানে নেই'+(raw&&navigator.onLine?' — অনলাইনে খোঁজা হচ্ছে…':'');L.appendChild(nf);
+      clearTimeout(ot);if(raw&&raw.length>=2&&navigator.onLine)ot=setTimeout(function(){if($('dictQ').value.trim()===raw)online(raw);},700);return;}
+    res.forEach(function(e){
+      var d=document.createElement('div');d.className='de';
+      var m=document.createElement('div');m.className='m';
+      var a=document.createElement('div');a.className='ar';a.textContent=e[0];m.appendChild(a);
+      if(e[1]){var r=document.createElement('div');r.className='tr';r.textContent=e[1];m.appendChild(r);}
+      var b=document.createElement('div');b.className='bn';b.textContent=e[2];m.appendChild(b);
+      if(e[3]===1||e[3]===3){var tg=document.createElement('div');tg.className='dt';tg.textContent=e[3]===1?'আমার যোগ করা':'অনলাইন থেকে নেওয়া (অফলাইনেও থাকবে)';m.appendChild(tg);}
+      d.appendChild(m);
+      var c=document.createElement('button');c.textContent='📋';c.setAttribute('aria-label','কপি');
+      c.onclick=function(){try{navigator.clipboard.writeText(e[0]);t('আরবি শব্দ কপি হয়েছে');}catch(_){}};d.appendChild(c);
+      if(e[3]===1||e[3]===3){var x=document.createElement('button');x.textContent='🗑';x.onclick=function(){
+        if(!confirm('শব্দটি মুছবেন?'))return;
+        var ne=function(u){return !(u[0]===e[0]&&u[2]===e[2]);};
+        if(e[3]===1){usr=usr.filter(ne);idbSet('dictUser',usr);}else{onl=onl.filter(ne);idbSet('dictOnl',onl);}build();run();};d.appendChild(x);}
+      L.appendChild(d);
+    });
+  }
+  async function mm(q,pair,re){
+    var em='';try{em=localStorage.getItem('dictEmail')||'';}catch(_){}
+    var r=await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(q)+'&langpair='+encodeURIComponent(pair)+(em?'&de='+encodeURIComponent(em):''));
+    var j=await r.json(),txt=(j.responseData&&j.responseData.translatedText)||'';
+    if(j.responseStatus==429||/MYMEMORY WARNING/i.test(txt))throw new Error('limit');
+    txt=txt.trim();if(j.responseStatus!=200||!txt||txt.toLowerCase()===q.toLowerCase())return '';
+    var list=[txt];
+    (j.matches||[]).forEach(function(m){var x=String(m.translation||'').trim();if(x&&x.length<=40&&re.test(x)&&list.length<3&&list.indexOf(x)<0)list.push(x);});
+    return list.join(', ');
+  }
+  var busyOn=false;
+  async function online(q){
+    if(busyOn)return;
+    if(!navigator.onLine){t('নেট নেই — অনলাইনে খোঁজা যাবে না');return;}
+    if(q.length>100){t('শব্দটি ছোট করে লিখুন');return;}
+    busyOn=true;var b=$('dOnB');if(b){b.disabled=true;b.textContent='খোঁজা হচ্ছে…';}
+    var AR=/[\u0600-\u06FF]/,BN=/[\u0980-\u09FF]/,e=null;
+    try{
+      if(AR.test(q)){var r=await mm(q,'ar|bn',BN);if(r)e=[q,'',r];}
+      else if(BN.test(q)){var r2=await mm(q,'bn|ar',AR);if(r2)e=[r2.split(', ')[0],'',q+(r2.indexOf(', ')>0?'':'')];}
+      else{var a=await mm(q,'en|ar',AR),n=await mm(q,'en|bn',BN);if(a||n)e=[(a||'—').split(', ')[0],q,n||'—'];}
+      if(!e){t('অনলাইনেও পাওয়া যায়নি');}
+      else{onl=onl.filter(function(u){return !(u[0]===e[0]&&u[2]===e[2]);});onl.unshift(e);onl=onl.slice(0,3000);idbSet('dictOnl',onl);build();}
+    }catch(err){t(err&&err.message==='limit'?'আজকের ফ্রি সীমা শেষ — "⬇️ অফলাইন অভিধান" প্যানেলে ইমেইল দিন, নয়তো কাল চেষ্টা করুন':'অনলাইনে খোঁজা যায়নি (নেট দেখুন)',5500);}
+    busyOn=false;if($('dictQ').value.trim()===q)run();
+  }
+  function parse(txt){
+    txt=txt.replace(/^\uFEFF/,'').trim();var out=[];
+    function push(a,tr,b){a=String(a||'').trim();b=String(b||'').trim();if(a&&b)out.push([a,String(tr||'').trim(),b]);}
+    if(txt[0]==='['||txt[0]==='{'){
+      var j=JSON.parse(txt);if(!Array.isArray(j))j=j.words||j.data||j.entries||[];
+      j.forEach(function(e){
+        if(Array.isArray(e))e.length>=3?push(e[0],e[1],e[2]):push(e[0],'',e[1]);
+        else if(e&&typeof e==='object')push(e.ar||e.arabic||e.word,e.tr||e.translit||e.pron,e.bn||e.bangla||e.meaning);
+      });
+    }else{
+      txt.split(/\r?\n/).forEach(function(l){
+        if(!l.trim())return;var sep=l.indexOf('\t')>=0?'\t':l.indexOf('|')>=0?'|':',';
+        var p=l.split(sep);p.length>=3?push(p[0],p[1],p.slice(2).join(', ')):push(p[0],'',p[1]);
+      });
+    }
+    return out;
+  }
+  function stat(){$('dStat').textContent=imp.length?'✅ ফোনে জমা আছে: '+imp.length+'টি শব্দ (অফলাইনে চলবে)':'এখনো কোনো বড় অভিধান নেওয়া হয়নি।';}
+  async function setImp(list){imp=list;await idbSet('dictImp',imp);build();run();stat();}
+  btn.addEventListener('click',async function(){
+    ov.classList.remove('hidden');
+    try{imp=(await idbGet('dictImp'))||[];usr=(await idbGet('dictUser'))||[];onl=(await idbGet('dictOnl'))||[];$('dEm').value=localStorage.getItem('dictEmail')||'';}catch(_){}
+    all=null;run();stat();
+  });
+  $('dictX').onclick=$('dictH').onclick=function(){ov.classList.add('hidden');};
+  $('dictQ').addEventListener('input',function(){clearTimeout(tm);tm=setTimeout(run,150);});
+  function tog(id){['dictAdd','dictDl'].forEach(function(k){$(k).classList.toggle('hidden',k!==id||!$(k).classList.contains('hidden'));});}
+  $('dAddB').onclick=function(){tog('dictAdd');};$('dDlB').onclick=function(){tog('dictDl');};
+  $('dSave').onclick=function(){
+    var a=$('dAr').value.trim(),b=$('dBn').value.trim();if(!a||!b){t('আরবি শব্দ ও বাংলা অর্থ দিন');return;}
+    usr.unshift([a,$('dTr').value.trim(),b]);idbSet('dictUser',usr);$('dAr').value=$('dTr').value=$('dBn').value='';build();run();t('শব্দ সেভ হয়েছে ✅');
+  };
+  $('dFileB').onclick=function(){$('dFile').click();};
+  $('dFile').onchange=async function(){
+    var f=this.files&&this.files[0];this.value='';if(!f)return;
+    try{var l=parse(await f.text());if(!l.length){t('ফাইলে কোনো শব্দ পাওয়া যায়নি');return;}await setImp(l);t(l.length+'টি শব্দ অফলাইনে রাখা হয়েছে ✅');}catch(e){t('ফাইল পড়া যায়নি, ফরম্যাট দেখুন');}
+  };
+  $('dUrlB').onclick=async function(){
+    var u=$('dUrl').value.trim();if(!/^https?:\/\//.test(u)){t('সঠিক লিংক দিন');return;}
+    t('ডাউনলোড হচ্ছে…');
+    try{var r=await fetch(u);if(!r.ok)throw 0;var l=parse(await r.text());if(!l.length){t('কোনো শব্দ পাওয়া যায়নি');return;}await setImp(l);t(l.length+'টি শব্দ অফলাইনে রাখা হয়েছে ✅');}
+    catch(e){t('ডাউনলোড হয়নি — লিংক বা সাইটের অনুমতি (CORS) সমস্যা হতে পারে। ফাইল ডাউনলোড করে "ফাইল থেকে নিন" ব্যবহার করুন',6000);}
+  };
+  $('dEm').onchange=function(){try{localStorage.setItem('dictEmail',this.value.trim());}catch(_){}t('ইমেইল সেভ হয়েছে');};
+  $('dClr').onclick=async function(){if(!imp.length||!confirm('ডাউনলোড করা অভিধান মুছবেন? (নিজের যোগ করা শব্দ থাকবে)'))return;await setImp([]);};
+})();
+</script>
+<style id="dictTileCss">#splash button.hm-t#hmDict{background:#fff!important;color:#2a1f05!important;text-shadow:none!important;border:1.5px solid #f3e7b8!important;box-shadow:0 5px 14px rgba(184,134,11,.12)!important}#splash button.hm-t#hmDict span{background:#e0f2fe!important;box-shadow:none!important}#hmDict{color:#6d28d9;background:#fff;border:2px solid #a78bfa;box-shadow:0 8px 22px rgba(124,58,237,.18)}#hmDict{color:#a21caf;background:linear-gradient(135deg,#fff,#fdf2ff);border:2px solid #d946ef;box-shadow:0 8px 22px rgba(217,70,239,.25)}#hmDict{color:#be123c;background:#fff;border:2px solid #fb7185;box-shadow:0 8px 22px rgba(225,29,72,.16)}#splash button.hm-t#hmDict{background:linear-gradient(150deg,#fde047,#f59e0b)!important;color:#4a2c00!important;text-shadow:none;box-shadow:0 8px 18px rgba(245,158,11,.4)!important}#splash[data-tt="rainbow"] button.hm-t#hmDict{background:linear-gradient(150deg,#fde047,#f59e0b)!important;color:#fff!important;border:0!important;box-shadow:0 8px 18px rgba(245,158,11,0.4)!important;text-shadow:0 1px 3px rgba(0,0,0,.3)!important;}#splash[data-tt="rainbow"] button.hm-t#hmDict span{background:rgba(255,255,255,.58)!important;box-shadow:none!important;color:inherit!important}#splash[data-tt="rainbow"] button.hm-t#hmDict small{color:#fff!important;text-shadow:none!important}#splash[data-tt="glass"] button.hm-t#hmDict{background:linear-gradient(145deg,rgba(255,255,255,.8),rgba(255,255,255,.35))!important;color:#134a47!important;border:1.5px solid rgba(255,255,255,.95)!important;box-shadow:0 8px 22px rgba(15,118,110,.2)!important;text-shadow:none!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}#splash[data-tt="glass"] button.hm-t#hmDict span{background:rgba(255,255,255,.85)!important;box-shadow:none!important;color:inherit!important}#splash[data-tt="glass"] button.hm-t#hmDict small{color:#3f6b66!important;text-shadow:none!important}#splash[data-tt="neon"] button.hm-t#hmDict{background:linear-gradient(160deg,#0f172a,#020617)!important;color:#e2e8f0!important;border:1.5px solid #facc15!important;box-shadow:0 0 14px rgba(250,204,21,0.55)!important;text-shadow:none!important;}#splash[data-tt="neon"] button.hm-t#hmDict span{background:rgba(250,204,21,0.18)!important;box-shadow:none!important;color:inherit!important}#splash[data-tt="neon"] button.hm-t#hmDict small{color:#94a3b8!important;text-shadow:none!important}#splash[data-tt="pastel"] button.hm-t#hmDict{background:#fef9c3!important;color:#854d0e!important;border:0!important;box-shadow:0 5px 14px rgba(133,77,14,0.15)!important;text-shadow:none!important;}#splash[data-tt="pastel"] button.hm-t#hmDict span{background:#ffffff!important;box-shadow:none!important;color:inherit!important}#splash[data-tt="pastel"] button.hm-t#hmDict small{color:#854d0e!important;text-shadow:none!important}#splash[data-tt="emerald"] button.hm-t#hmDict{background:linear-gradient(160deg,#047857,#064e3b)!important;color:#fef3c7!important;border:1.5px solid rgba(253,230,138,.65)!important;box-shadow:0 8px 18px rgba(6,78,59,.4)!important;text-shadow:none!important;}#splash[data-tt="emerald"] button.hm-t#hmDict span{background:linear-gradient(135deg,#fde68a,#fbbf24)!important;box-shadow:none!important;color:#064e3b!important}#splash[data-tt="emerald"] button.hm-t#hmDict small{color:#fef3c7!important;text-shadow:none!important}#splash[data-tt="ocean"] button.hm-t#hmDict{background:linear-gradient(160deg,#38bdf8,#1d4ed8)!important;color:#ffffff!important;border:0!important;box-shadow:0 8px 18px rgba(29,78,216,.4)!important;text-shadow:none!important;}#splash[data-tt="ocean"] button.hm-t#hmDict span{background:rgba(255,255,255,.6)!important;box-shadow:none!important;color:#1e3a8a!important}#splash[data-tt="ocean"] button.hm-t#hmDict small{color:#ffffff!important;text-shadow:none!important}#splash[data-tt="rose"] button.hm-t#hmDict{background:linear-gradient(160deg,#fb7185,#be123c)!important;color:#ffffff!important;border:0!important;box-shadow:0 8px 18px rgba(190,18,60,.4)!important;text-shadow:none!important;}#splash[data-tt="rose"] button.hm-t#hmDict span{background:rgba(255,255,255,.6)!important;box-shadow:none!important;color:#9f1239!important}#splash[data-tt="rose"] button.hm-t#hmDict small{color:#ffffff!important;text-shadow:none!important}#splash[data-tt="sunset"] button.hm-t#hmDict{background:linear-gradient(160deg,#fbbf24,#f97316 50%,#db2777)!important;color:#fff!important;border:0!important;box-shadow:0 8px 18px rgba(249,115,22,.4)!important;text-shadow:0 1px 3px rgba(0,0,0,.25)!important;}#splash[data-tt="sunset"] button.hm-t#hmDict span{background:rgba(255,255,255,.6)!important;box-shadow:none!important;color:inherit!important}#splash[data-tt="sunset"] button.hm-t#hmDict small{color:#fff!important;text-shadow:none!important}#splash[data-tt="outline"] button.hm-t#hmDict{background:#ffffff!important;color:#854d0e!important;border:2px solid #f59e0b!important;box-shadow:0 4px 10px rgba(245,158,11,0.18)!important;text-shadow:none!important;}#splash[data-tt="outline"] button.hm-t#hmDict span{background:#fef9c3!important;box-shadow:none!important;color:inherit!important}#splash[data-tt="outline"] button.hm-t#hmDict small{color:#854d0e!important;text-shadow:none!important}#splash[data-tt="royal"] button.hm-t#hmDict{background:linear-gradient(160deg,#6d28d9,#3b0764)!important;color:#fde68a!important;border:1.5px solid rgba(253,230,138,.7)!important;box-shadow:0 8px 18px rgba(59,7,100,.45)!important;text-shadow:none!important;}#splash[data-tt="royal"] button.hm-t#hmDict span{background:linear-gradient(135deg,#fde68a,#f59e0b)!important;box-shadow:none!important;color:#3b0764!important}#splash[data-tt="royal"] button.hm-t#hmDict small{color:#fde68a!important;text-shadow:none!important}#splash[data-tt="blackgold"] button.hm-t#hmDict{background:linear-gradient(160deg,#27272a,#09090b)!important;color:#fcd34d!important;border:1.5px solid #b8860b!important;box-shadow:0 8px 18px rgba(0,0,0,.45)!important;text-shadow:none!important;}#splash[data-tt="blackgold"] button.hm-t#hmDict span{background:linear-gradient(135deg,#fde68a,#d4a82a)!important;box-shadow:none!important;color:#3a2a00!important}#splash[data-tt="blackgold"] button.hm-t#hmDict small{color:#fcd34d!important;text-shadow:none!important}#splash[data-tt="candy"] button.hm-t#hmDict{background:#fde68a!important;color:#3b1d4a!important;border:2px dashed rgba(255,255,255,.95)!important;box-shadow:0 6px 14px rgba(0,0,0,.1)!important;text-shadow:none!important;}#splash[data-tt="candy"] button.hm-t#hmDict span{background:rgba(255,255,255,.8)!important;box-shadow:none!important;color:inherit!important}#splash[data-tt="candy"] button.hm-t#hmDict small{color:#5b3a6b!important;text-shadow:none!important}#splash[data-tt="forest"] button#hmDict.hm-t{background:linear-gradient(160deg,#166534,#14532d)!important;color:#dcfce7!important;border:2px dashed rgba(187,247,208,.65)!important;border-radius:26px!important;box-shadow:0 8px 18px rgba(5,46,22,.4)!important;text-shadow:none!important}#splash[data-tt="forest"] button#hmDict.hm-t span{background:#bbf7d0!important;color:#14532d!important;box-shadow:none!important}#splash[data-tt="forest"] button#hmDict.hm-t small{color:#bbf7d0!important;text-shadow:none!important}#splash[data-tt="coral"] button#hmDict.hm-t{background:linear-gradient(150deg,#fdba74,#fb7185)!important;color:#fff!important;border:0!important;border-radius:30px!important;box-shadow:0 8px 18px rgba(244,63,94,.35)!important;text-shadow:0 1px 3px rgba(124,45,18,.35)!important}#splash[data-tt="coral"] button#hmDict.hm-t span{background:rgba(255,255,255,.72)!important;color:#9f1239!important;box-shadow:none!important}#splash[data-tt="coral"] button#hmDict.hm-t small{color:#fff!important;text-shadow:none!important}#splash[data-tt="sand"] button#hmDict.hm-t{background:linear-gradient(160deg,#f8ebcf,#e7c98f)!important;color:#5b3a0b!important;border:3px double #b7791f!important;border-radius:14px!important;box-shadow:0 6px 14px rgba(120,53,15,.22)!important;text-shadow:none!important}#splash[data-tt="sand"] button#hmDict.hm-t span{background:#fff8e6!important;color:#78350f!important;box-shadow:none!important;border-radius:8px!important;padding:6px 8px}#splash[data-tt="sand"] button#hmDict.hm-t small{color:#7a5314!important;text-shadow:none!important}#splash[data-tt="aurora"] button#hmDict.hm-t{background:linear-gradient(135deg,#14b8a6,#6366f1 60%,#a855f7)!important;color:#fff!important;border:1px solid rgba(255,255,255,.55)!important;border-radius:22px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 8px 20px rgba(99,102,241,.45)!important;text-shadow:none!important}#splash[data-tt="aurora"] button#hmDict.hm-t span{background:rgba(255,255,255,.28)!important;color:#fff!important;box-shadow:none!important}#splash[data-tt="aurora"] button#hmDict.hm-t small{color:#e0e7ff!important;text-shadow:none!important}#splash[data-tt="cherry"] button#hmDict.hm-t{background:#fff1f6!important;color:#9d174d!important;border:2px solid #f9a8d4!important;border-radius:28px!important;box-shadow:0 8px 18px rgba(236,72,153,.22)!important;text-shadow:none!important}#splash[data-tt="cherry"] button#hmDict.hm-t span{background:#fbcfe8!important;color:#be185d!important;box-shadow:none!important;border-radius:50%!important;width:46px;height:46px;display:flex;align-items:center;justify-content:center}#splash[data-tt="cherry"] button#hmDict.hm-t small{color:#9d174d!important;text-shadow:none!important}#splash[data-tt="slate"] button#hmDict.hm-t{background:#f1f5f9!important;color:#0f172a!important;border:1px solid #cbd5e1!important;border-radius:12px!important;box-shadow:0 3px 8px rgba(15,23,42,.1),inset 5px 0 0 #f59e0b!important;text-shadow:none!important}#splash[data-tt="slate"] button#hmDict.hm-t span{background:#e2e8f0!important;color:#0f172a!important;box-shadow:none!important;border-radius:10px!important;padding:6px 8px}#splash[data-tt="slate"] button#hmDict.hm-t small{color:#475569!important;text-shadow:none!important}#splash[data-tt="tropic"] button#hmDict.hm-t{background:linear-gradient(150deg,#f472b6,#e11d48)!important;color:#fff!important;border:2px solid rgba(255,255,255,.75)!important;border-radius:24px!important;box-shadow:0 8px 18px rgba(0,0,0,.22)!important;text-shadow:0 1px 3px rgba(0,0,0,.3)!important}#splash[data-tt="tropic"] button#hmDict.hm-t span{background:rgba(255,255,255,.55)!important;color:#064e3b!important;box-shadow:none!important}#splash[data-tt="tropic"] button#hmDict.hm-t small{color:#fff!important;text-shadow:none!important}#splash[data-tt="ink"] button#hmDict.hm-t{background:#fff!important;color:#111!important;border:2.5px solid #111!important;border-radius:16px!important;box-shadow:4px 4px 0 #111!important;text-shadow:none!important}#splash[data-tt="ink"] button#hmDict.hm-t span{background:#fbcfe8!important;color:#111!important;box-shadow:none!important;border-radius:12px!important;padding:6px 8px;border:2px solid #111!important}#splash[data-tt="ink"] button#hmDict.hm-t small{color:#374151!important;text-shadow:none!important}#splash[data-tt="pearl"] button#hmDict.hm-t{background:linear-gradient(145deg,#ffffff,#e8edf3)!important;color:#334155!important;border:1.5px solid #fff!important;border-radius:22px!important;box-shadow:6px 6px 12px #cbd5e1,-4px -4px 10px #ffffff!important;text-shadow:none!important}#splash[data-tt="pearl"] button#hmDict.hm-t span{background:linear-gradient(145deg,#f1f5f9,#dfe6ee)!important;color:#334155!important;box-shadow:none!important;border-radius:50%!important;width:46px;height:46px;display:flex;align-items:center;justify-content:center}#splash[data-tt="pearl"] button#hmDict.hm-t small{color:#64748b!important;text-shadow:none!important}</style>
+<style id="themeAlign">
+#ask .ah{background:var(--accent)!important;color:var(--on-accent,#fff)!important}
+#ask .ah button{color:var(--on-accent,#fff)!important}
+#askL .av,#askL .hi .big,#askS{background:var(--accent)!important}
+#askL .m.u{background:var(--accent)!important;color:var(--on-accent,#fff)!important}
+#askL .m b.hd{color:var(--accent)!important}
+#askL .dots i{background:var(--accent)!important}
+#askT:focus,#askHL .it.on{border-color:var(--accent)!important}
+</style>
 </body>
 </html>
