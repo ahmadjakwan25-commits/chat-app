@@ -1421,7 +1421,7 @@ input[type=checkbox],input[type=range]{accent-color:var(--accent)}
       <div class="hm-gr"><b>আসসালামু আলাইকুম!</b><span><i id="spHello" style="font-style:normal"></i> · যাকওয়ান ♥️ সাদিয়া</span></div>
       <button class="hm-bell" id="hmSet" type="button" aria-label="সেটিংস">⚙️</button><button class="hm-bell" id="hmThB" type="button" aria-label="থীম">🎨</button><button class="hm-bell" id="hmBell" type="button" aria-label="নামাজের সময় স্মরণ">🔔<i></i></button>
     </div>
-    <div class="hm-msg d0" id="hmMsg" role="button" aria-label="পরের লেখা"><span class="ct" id="hmMc"></span><div class="tx" id="hmMt"></div><small class="rf" id="hmMr"></small><i class="hint">প্রতি ১০ মিনিটে নতুন লেখা · চাপলে পরেরটি ➜</i></div>
+    <div class="hm-msg d0" id="hmMsg" role="button" aria-label="পরের লেখা"><span class="ct" id="hmMc"></span><div class="tx" id="hmMt"></div><small class="rf" id="hmMr"></small><div class="hm-sl"><div class="a" id="hmSlA"></div><div class="b" id="hmSlB"></div></div><div class="hm-empty" id="hmEmpty">📷<br>ছবি যোগ করতে উপরের ক্যামেরা বাটনে চাপুন</div><div class="hm-dots" id="hmDots"></div><button class="hm-ph" id="hmPh" type="button" aria-label="ছবি যোগ করুন">📷</button><button class="hm-ph x hidden" id="hmPhX" type="button" aria-label="এই ছবি মুছুন">🗑</button><input type="file" id="hmPhFile" accept="image/*" multiple hidden><i class="hint">প্রতি ১০ মিনিটে নতুন লেখা · চাপলে পরেরটি ➜</i></div>
     <div class="hm-tiles">
       <button class="hm-t" id="hmHadith" type="button"><span>📖</span>হাদিস</button>
       <button class="hm-t" id="hmDua" type="button"><span>🤲</span>দোয়া</button>
@@ -1719,8 +1719,16 @@ var VAPID_PUBLIC = 'BB8H0KoZJBbN5SniWKTVEGkEa3rKUwzAQdsmtOnxWbCY_cHOHRJu7VM8qXTG
 var TURN_APP = 'jakwan';   /* Metered অ্যাপের নাম (yourname.metered.live এর yourname অংশ) */
 var TURN_KEY = 'fc8dc4a9741fa2392ce2e25c23c7977ae103';   /* Metered API key */
 var STUN_ONLY = { iceServers: [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }] };
+/* দ্বিতীয় TURN সেবা (ঐচ্ছিক): অন্য কোথাও থেকে নেওয়া সার্ভার/ইউজার/পাসওয়ার্ড এখানে বসালে Metered-এর সাথে একসাথে চেষ্টা হবে। উদাহরণ:
+   var EXTRA_ICE = [{ urls: ['turn:HOST:3478', 'turn:HOST:3478?transport=tcp'], username: 'USER', credential: 'PASS' }]; */
+var EXTRA_ICE = [];
 var iceCache = null;
 async function getIce(){
+  var base = await getIce0();
+  if (!EXTRA_ICE.length || base === STUN_ONLY) return EXTRA_ICE.length ? { iceServers: STUN_ONLY.iceServers.concat(EXTRA_ICE) } : base;
+  return { iceServers: (base.iceServers || []).concat(EXTRA_ICE) };
+}
+async function getIce0(){
   if (window.__ICE_OVERRIDE) return window.__ICE_OVERRIDE;
   if (iceCache && iceCache.exp > Date.now()) return iceCache.cfg;
   if (TURN_APP && TURN_KEY) {
@@ -1731,6 +1739,7 @@ async function getIce(){
       window.__iceFetch = r.ok ? 'ok' : ('http' + r.status);
       if (r.ok) {
         var list = await r.json();
+        window.__iceInfo = Array.isArray(list) ? (list.length + 'টি, ইউজার ' + (list.some(function(x){ return x && x.username; }) ? '✔' : '✗') + ', পাসওয়ার্ড ' + (list.some(function(x){ return x && x.credential; }) ? '✔' : '✗')) : 'ভুল ফরম্যাট';
         if (Array.isArray(list) && list.length) {
           iceCache = { cfg: { iceServers: list }, exp: Date.now() + 20 * 60000 };
           lsSet('ice_cache', iceCache);
@@ -2893,6 +2902,7 @@ function dbg(){
   if (!c.relay && call.hasTurn) {
     if (window.__iceFetch && window.__iceFetch !== 'ok') why += ' [কী/অ্যাপ ত্রুটি: ' + window.__iceFetch + ']';
     if (call.iceErr) why += ' [ত্রুটি ' + call.iceErr + ']';
+    if (window.__iceInfo) why += ' [তালিকা: ' + window.__iceInfo + ']';
   }
   $('callDbg').textContent = 'নেটওয়ার্ক: ' + (ICE_BN[call.pc.iceConnectionState] || call.pc.iceConnectionState) + ' · রিলে সার্ভার: ' + relay + why;
 }
@@ -12361,5 +12371,207 @@ async function send(){
 #settings.thLock #themeSeg,#settings.thLock #acSw,#settings.thLock #tmSw,#settings.thLock #ttSw,#settings.thLock #wpSw,#settings.thLock #spThemes,#settings.thLock #wpPick,#settings.thLock #spPick,#settings.thLock #syncNow,#settings.thLock #setFont,#settings.thLock #setAnim,#settings.thLock #setFF,#settings.thLock #setBS,#settings.thLock #setPH,#settings.thLock #setSync{pointer-events:none;opacity:.45}
 </style>
 <!-- ===== মিন্ট কার্ড মেসেজ ও থিম-লক — শেষ ===== -->
+<style id="hmPhCss">
+#splash #hmMsg .ct,#splash #hmMsg .tx,#splash #hmMsg .rf,#splash #hmMsg .hint{display:none!important}
+#splash #hmMsg::before,#splash #hmMsg::after{content:none!important}
+#splash #hmMsg .hm-sl{position:absolute;inset:0;z-index:0}
+#splash #hmMsg .hm-sl>div{position:absolute;inset:0;background:center/cover no-repeat;opacity:0;transition:opacity .8s ease}
+#splash #hmMsg .hm-sl>div.on{opacity:1}
+#splash #hmMsg .hm-empty{position:relative;z-index:1;font-size:15px;font-weight:700;line-height:1.9;opacity:.8}
+#splash #hmMsg .hm-empty.hidden{display:none}
+#splash #hmMsg .hm-dots{position:absolute;left:0;right:0;bottom:9px;z-index:2;display:flex;justify-content:center;gap:5px;flex-wrap:wrap;padding:0 14px}
+#splash #hmMsg .hm-dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:0 0 3px rgba(0,0,0,.5)}
+#splash #hmMsg .hm-dots i.on{background:#fff;transform:scale(1.35)}
+#splash .hm-ph{position:absolute;top:10px;right:12px;z-index:3;width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.8);font-size:18px;line-height:36px;padding:0;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+#splash .hm-ph.x{right:54px;font-size:16px}
+#splash .hm-ph.hidden{display:none}
+</style>
+<script>
+(function(){
+  var box=document.getElementById('hmMsg'),b=document.getElementById('hmPh'),x=document.getElementById('hmPhX'),f=document.getElementById('hmPhFile'),
+      A=document.getElementById('hmSlA'),B=document.getElementById('hmSlB'),em=document.getElementById('hmEmpty'),dots=document.getElementById('hmDots');
+  if(!box||!b||!f)return;
+  var items=[],trash=[],dirty=false,urls=[],idx=0,front=A,timer=null,busy=false,SEC=5000,BK='media';
+  function t(m){try{if(window.toast)toast(m);}catch(_){}}
+  function save(){try{idbSet('hmState',{items:items,trash:trash,dirty:dirty});}catch(_){}}
+  function isMine(it){return it.pend||(window.me&&it.by===window.me.id);}
+  function render(){
+    var curP=items[idx]&&(items[idx].p||items[idx].t);
+    items.sort(function(a,c){return a.t-c.t;});
+    var k=items.findIndex(function(i){return (i.p||i.t)===curP;});idx=k>=0?k:Math.min(idx,Math.max(items.length-1,0));
+    urls.forEach(function(u){URL.revokeObjectURL(u);});
+    urls=items.map(function(i){return URL.createObjectURL(i.blob);});
+    var has=items.length>0;
+    em.classList.toggle('hidden',has);x.classList.toggle('hidden',!has);
+    clearInterval(timer);
+    if(!has){A.classList.remove('on');B.classList.remove('on');dots.textContent='';return;}
+    show(idx);
+    if(items.length>1)timer=setInterval(function(){show((idx+1)%items.length);},SEC);
+  }
+  function show(i){
+    idx=i;var next=(front===A)?B:A;
+    next.style.backgroundImage='url("'+urls[i]+'")';
+    next.classList.add('on');if(front!==next)front.classList.remove('on');front=next;
+    dots.textContent='';
+    if(items.length>1&&items.length<=15)items.forEach(function(_,k){var d=document.createElement('i');if(k===idx)d.className='on';dots.appendChild(d);});
+  }
+  function next(){if(items.length>1){show((idx+1)%items.length);clearInterval(timer);timer=setInterval(function(){show((idx+1)%items.length);},SEC);}}
+  async function getMan(sb,uid){
+    try{
+      var r=await sb.storage.from(BK).createSignedUrl(uid+'/home-manifest.json',60);
+      if(r.error||!r.data)return null;
+      var res=await fetch(r.data.signedUrl+'&_='+Date.now());if(!res.ok)return null;
+      var j=JSON.parse(await res.text());return Array.isArray(j)?j:null;
+    }catch(e){return null;}
+  }
+  async function sync(){
+    var sb=window.sb,me=window.me;
+    if(busy||!sb||!me||!navigator.onLine)return;busy=true;
+    try{
+      var changed=false;
+      for(var i=0;i<items.length;i++){
+        var it=items[i];if(!it.pend)continue;
+        var path=me.id+'/hm-'+it.t+'.jpg';
+        var up=await sb.storage.from(BK).upload(path,it.blob,{contentType:'image/jpeg',upsert:true});
+        if(up.error)throw up.error;
+        it.p=path;it.pend=false;it.by=me.id;dirty=true;
+      }
+      if(dirty){
+        var man=items.filter(function(z){return z.by===me.id&&!z.pend;}).map(function(z){return {p:z.p,t:z.t};});
+        var w=await sb.storage.from(BK).upload(me.id+'/home-manifest.json',new Blob([JSON.stringify(man)],{type:'text/plain'}),{contentType:'text/plain',upsert:true});
+        if(w.error)throw w.error;
+        dirty=false;
+        if(trash.length){sb.storage.from(BK).remove(trash).then(function(){},function(){});trash=[];}
+      }
+      var srcs=[me.id];if(window.peer&&window.peer.id)srcs.push(window.peer.id);
+      for(var s=0;s<srcs.length;s++){
+        var uid=srcs[s];if(uid===me.id&&dirty)continue;
+        var m=await getMan(sb,uid);if(m===null)continue;
+        var keep={};m.forEach(function(e){keep[e.p]=1;});
+        var before=items.length;
+        items=items.filter(function(z){return z.by!==uid||z.pend||keep[z.p];});
+        if(items.length!==before)changed=true;
+        var need=m.filter(function(e){return !items.some(function(z){return z.p===e.p;});});
+        if(need.length){
+          var sg=await sb.storage.from(BK).createSignedUrls(need.map(function(e){return e.p;}),3600);
+          if(sg.error||!sg.data)continue;
+          for(var n=0;n<need.length;n++){
+            var row=sg.data[n];if(!row||!row.signedUrl)continue;
+            try{var bl=await (await fetch(row.signedUrl)).blob();items.push({p:need[n].p,t:need[n].t,by:uid,blob:bl});changed=true;}catch(_){}
+          }
+        }
+      }
+      save();if(changed)render();
+    }catch(e){}finally{busy=false;}
+  }
+  box.onclick=null;
+  box.addEventListener('click',next);
+  b.addEventListener('click',function(e){e.stopPropagation();f.click();});
+  f.addEventListener('click',function(e){e.stopPropagation();});
+  x.addEventListener('click',function(e){
+    e.stopPropagation();
+    var it=items[idx];if(!it)return;
+    if(!isMine(it)){t('এটি সাথীর ছবি — শুধু তিনিই মুছতে পারবেন');return;}
+    if(!confirm('এই ছবিটি দুজনের কার্ড থেকেই মুছে যাবে। মুছবেন?'))return;
+    items.splice(idx,1);if(it.p){trash.push(it.p);dirty=true;}
+    save();render();t('ছবি মুছে গেছে');sync();
+  });
+  /* ---------- ছবি ছোট-বড় করে বসানোর এডিটর ---------- */
+  function editPhoto(file,n,total){
+    return new Promise(function(resolve){
+      var url=URL.createObjectURL(file),img=new Image();
+      img.onerror=function(){URL.revokeObjectURL(url);resolve(undefined);};
+      img.onload=function(){
+        var iw=img.naturalWidth,ih=img.naturalHeight;
+        var r=box.getBoundingClientRect(),ratio=Math.max(r.height,150)/Math.max(r.width,200);
+        var ov=document.createElement('div');
+        ov.style.cssText='position:fixed;inset:0;z-index:2147483000;background:rgba(10,12,20,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px;font-family:inherit;color:#fff;-webkit-user-select:none;user-select:none';
+        var cw=Math.min(window.innerWidth-32,480),ch=Math.round(cw*ratio);
+        ov.innerHTML='<div style="font-weight:700;font-size:15px">ছবি বসান'+(total>1?' ('+n+'/'+total+')':'')+'</div>'
+          +'<canvas style="border-radius:20px;touch-action:none;box-shadow:0 0 0 2px rgba(255,255,255,.5);background:#111"></canvas>'
+          +'<div style="font-size:12px;opacity:.75">আঙুলে টেনে সরান · দুই আঙুলে বা স্লাইডারে ছোট-বড় করুন</div>'
+          +'<div style="display:flex;align-items:center;gap:10px;width:'+cw+'px"><span>🔍−</span><input type="range" min="0" max="100" value="0" step="0.5" style="flex:1"><span>🔍+</span></div>'
+          +'<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">'
+          +'<button data-a="fit" type="button">▭ পুরো ছবি</button><button data-a="fill" type="button">⬛ ভরাট</button></div>'
+          +'<div style="display:flex;gap:10px;margin-top:4px">'
+          +(total>1?'<button data-a="skip" type="button">এটি বাদ</button>':'')
+          +'<button data-a="cancel" type="button">বাতিল</button><button data-a="ok" type="button" style="background:#10b981;color:#fff;font-weight:700">✔ ঠিক আছে</button></div>';
+        ov.querySelectorAll('button').forEach(function(bt){if(!bt.style.background)bt.style.background='rgba(255,255,255,.15)';bt.style.color='#fff';bt.style.border='0';bt.style.borderRadius='12px';bt.style.padding='10px 16px';bt.style.fontSize='14px';bt.style.cursor='pointer';});
+        document.body.appendChild(ov);
+        var cv=ov.querySelector('canvas'),sl=ov.querySelector('input'),dpr=window.devicePixelRatio||1;
+        cv.style.width=cw+'px';cv.style.height=ch+'px';cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);
+        var ctx=cv.getContext('2d');
+        var minS=Math.min(cw/iw,ch/ih),coverS=Math.max(cw/iw,ch/ih),maxS=Math.max(coverS*4,minS*4);
+        var sc=coverS,dx=0,dy=0;
+        function clamp(){var lx=iw*sc/2+cw/2-30,ly=ih*sc/2+ch/2-30;dx=Math.max(-lx,Math.min(lx,dx));dy=Math.max(-ly,Math.min(ly,dy));}
+        function paint(c2,k,W,H){
+          c2.fillStyle='#111';c2.fillRect(0,0,W,H);
+          c2.drawImage(img,(cw/2+dx-iw*sc/2)*k,(ch/2+dy-ih*sc/2)*k,iw*sc*k,ih*sc*k);
+        }
+        function draw(){clamp();sl.value=((sc-minS)/(maxS-minS))*100;paint(ctx,dpr*1,cv.width,cv.height);}
+        function setScale(v,fx,fy){
+          v=Math.max(minS,Math.min(maxS,v));var q=v/sc;
+          if(fx!==undefined){dx=fx-(fx-dx)*q;dy=fy-(fy-dy)*q;}else{dx*=q;dy*=q;}
+          sc=v;draw();
+        }
+        sl.oninput=function(){setScale(minS+(maxS-minS)*(sl.value/100));};
+        var pts={},last=null;
+        function rel(e){var rc=cv.getBoundingClientRect();return {x:e.clientX-rc.left-cw/2,y:e.clientY-rc.top-ch/2};}
+        cv.addEventListener('pointerdown',function(e){cv.setPointerCapture(e.pointerId);pts[e.pointerId]=rel(e);last=null;});
+        cv.addEventListener('pointermove',function(e){
+          if(!pts[e.pointerId])return;var np=rel(e),ids=Object.keys(pts);
+          if(ids.length===1){dx+=np.x-pts[e.pointerId].x;dy+=np.y-pts[e.pointerId].y;pts[e.pointerId]=np;draw();}
+          else{
+            pts[e.pointerId]=np;var p1=pts[ids[0]],p2=pts[ids[1]],d=Math.hypot(p1.x-p2.x,p1.y-p2.y),mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
+            if(last){dx+=mx-last.mx;dy+=my-last.my;if(last.d>0)setScale(sc*d/last.d,mx,my);else draw();}
+            last={d:d,mx:mx,my:my};
+          }
+        });
+        function up(e){delete pts[e.pointerId];last=null;}
+        cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+        cv.addEventListener('wheel',function(e){e.preventDefault();var p=rel(e);setScale(sc*(e.deltaY<0?1.08:1/1.08),p.x,p.y);},{passive:false});
+        function done(v){URL.revokeObjectURL(url);ov.remove();resolve(v);}
+        ov.addEventListener('click',function(e){
+          var a=e.target.getAttribute&&e.target.getAttribute('data-a');if(!a)return;
+          if(a==='fit'){dx=0;dy=0;sc=minS;draw();}
+          else if(a==='fill'){dx=0;dy=0;sc=coverS;draw();}
+          else if(a==='skip')done(null);
+          else if(a==='cancel')done(undefined);
+          else if(a==='ok'){
+            var W=1000,H=Math.round(1000*ch/cw),oc=document.createElement('canvas');oc.width=W;oc.height=H;
+            paint(oc.getContext('2d'),W/cw,W,H);
+            oc.toBlob(function(bl){done(bl||null);},'image/jpeg',.85);
+          }
+        });
+        draw();
+      };
+      img.src=url;
+    });
+  }
+  f.addEventListener('change',async function(){
+    var files=Array.prototype.slice.call(f.files||[]);f.value='';if(!files.length)return;
+    var ok=0,base=Date.now();
+    for(var k=0;k<files.length;k++){
+      var bl=await editPhoto(files[k],k+1,files.length);
+      if(bl===undefined)break;
+      if(bl){items.push({p:null,t:base+k,by:'me',blob:bl,pend:true});ok++;}
+    }
+    if(ok){save();idx=items.length;render();show(items.findIndex(function(z){return z.pend&&z.t>=base;}));t(ok+'টি ছবি যোগ হয়েছে, সাথীর ফোনেও যাচ্ছে 🖼');sync();}
+  });
+  (async function init(){
+    try{
+      var st=await idbGet('hmState');
+      if(st){items=st.items||[];trash=st.trash||[];dirty=!!st.dirty;}
+      var old=await idbGet('hmPhotos');
+      if(old&&old.length){var b0=Date.now();old.forEach(function(bl,k){items.push({p:null,t:b0+k,by:'me',blob:bl,pend:true});});idbSet('hmPhotos',null);save();}
+    }catch(_){}
+    render();
+    [2500,7000,15000].forEach(function(ms){setTimeout(sync,ms);});
+    setInterval(function(){if(!document.hidden)sync();},20000);
+    document.addEventListener('visibilitychange',function(){if(!document.hidden)sync();});
+    window.addEventListener('online',sync);
+  })();
+})();
+</script>
 </body>
 </html>
